@@ -1,6 +1,6 @@
 import React from 'react';
 import './brick.css';
-import DotsContainer from '../cube/dotsContainer.jsx';
+import DotsContainer from '../dotsContainer/dotsContainer.jsx';
 
 class Brick extends React.Component {
     constructor(props) {
@@ -13,9 +13,9 @@ class Brick extends React.Component {
    render() {
         return (
             <div direction={this.state.direction} className={'brick'}>
-                <DotsContainer/>
+                <DotsContainer num={prop.num1}/>
                 <hr/>
-                <DotsContainer/>
+                <DotsContainer num={prop.num2}/>
             </div>
 
         );
