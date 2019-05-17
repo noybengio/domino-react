@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './board.css'
 
 class Board extends React.Component {
 
@@ -15,13 +16,10 @@ class Board extends React.Component {
     render() {
 
         return (
-        <div className = "board">
-            <Player
-                id = "Board"
-                bricks = {this.state.playerBricks}/>
+	        <div className = "board">
 
 
-        </div>
+	        </div>
 
         );
     }
