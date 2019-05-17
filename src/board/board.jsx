@@ -16,10 +16,6 @@ class Board extends React.Component {
 
         return (
         <div className = "board">
-            <Player
-                id = "Board"
-                bricks = {this.state.playerBricks}/>
-
 
         </div>
 
