@@ -10,18 +10,17 @@ class Board extends React.Component {
         };
 
     }
-	onDragOver(e){
-        e.preventDefault();
-    }
+	onDragOver(ev){
+        ev.preventDefault();
+    };
 
     render() {
 
         return (
 
 	        <div 
-	        	className = {"board", "container-drag"}
-                onDragOver={(e)=>this.onDragOver(e)}                    
-                onDrop={(e)=>this.onDrop(e, "board")}
+	        	className = {"board container-drag"}
+                onDragOver={(ev)=>this.onDragOver(ev)}
 	        	>
 
 	        </div>
