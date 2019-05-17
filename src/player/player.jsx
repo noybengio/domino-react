@@ -12,19 +12,25 @@ class Player extends React.Component {
         };
 
     }
+    
+    onDragOver(ev) {
+        ev.preventDefault();
+    }
 
 
     render() {
         console.log(" player bricks: ", this.state.bricks);
         return (
 
-            <div className={'player'}>
+            <div 
+                className={"player"}
+                onDragOver={(e)=>this.onDragOver(e)}                    
+                onDrop={(e)=>this.onDrop(e, "player")}
+            >
                 {
                     this.state.bricks.map((brick, i) => {
                         return (
                             <Brick
-                                key = {`brick ${i}`}
-                                id = {`${this.state.bricks[i].num1},${this.state.bricks[i].num2}`}
                                 num1={this.state.bricks[i].num1}
                                 num2={this.state.bricks[i].num2}
                             /> );

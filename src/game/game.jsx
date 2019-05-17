@@ -69,12 +69,15 @@ class Game extends React.Component {
         return (
         <div id = "game">
             <Board 
+                className = "container-drag"
                 id = "board"
                 bricks = {this.state.boardBricks}
             />
             <Player
+                className = "container-drag"
                 id = "player1"
-                bricks = {this.state.playerBricks}/>
+                bricks = {this.state.playerBricks}
+                />
 
 
         </div>

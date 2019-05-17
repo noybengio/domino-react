@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './board.css'
 
 class Board extends React.Component {
@@ -11,12 +10,18 @@ class Board extends React.Component {
         };
 
     }
-
+	onDragOver(e){
+        e.preventDefault();
+    }
 
     render() {
 
         return (
-	        <div className = "board">
+	        <div 
+	        	className = {"board", "container-drag"}
+                onDragOver={(e)=>this.onDragOver(e)}                    
+                onDrop={(e)=>this.onDrop(e, "board")}
+	        	>
 
 
 	        </div>
