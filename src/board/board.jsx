@@ -17,12 +17,12 @@ class Board extends React.Component {
     render() {
 
         return (
+
 	        <div 
 	        	className = {"board", "container-drag"}
                 onDragOver={(e)=>this.onDragOver(e)}                    
                 onDrop={(e)=>this.onDrop(e, "board")}
 	        	>
-
 
 	        </div>
 
