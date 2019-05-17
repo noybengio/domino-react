@@ -1,5 +1,6 @@
 import React from 'react';
-import Brick from './brick/brick.jsx';
+import Brick from '../brick/brick.jsx';
+import './player.css';
 
 class Player extends React.Component {
 
@@ -17,7 +18,7 @@ class Player extends React.Component {
         console.log(" player bricks: ", this.state.bricks);
         return (
 
-            <div>
+            <div className={'player'}>
                 {
                     this.state.bricks.map((brick, i) => {
                         return (

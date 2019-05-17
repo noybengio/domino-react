@@ -1,5 +1,5 @@
 import React from 'react';
-import Player from "./player.jsx";
+import Player from "./player/player.jsx";
 
 class Game extends React.Component {
 
@@ -13,7 +13,6 @@ class Game extends React.Component {
             boardBricks: [],
 
         };
-        console.log(9123);
         this.createBricksArray();
         this.shuffleBricks();
         this.setPlayerBricks();
