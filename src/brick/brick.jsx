@@ -6,16 +6,19 @@ class Brick extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            direction: this.props.direction
+            direction: this.props.direction,
+            num1: this.props.num1,
+            num2: this.props.num2,
+
         };
     }
 
    render() {
         return (
             <div direction={this.state.direction} className={'brick'}>
-                <DotsContainer num={prop.num1}/>
+                <DotsContainer num={this.props.num1}/>
                 <hr/>
-                <DotsContainer num={prop.num2}/>
+                <DotsContainer num={this.props.num2}/>
             </div>
 
         );
