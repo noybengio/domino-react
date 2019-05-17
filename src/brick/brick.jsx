@@ -15,7 +15,9 @@ class Brick extends React.Component {
 
     onDragStart(ev, id){
         console.log('dragstart: ', id);
-        ev.dataTransfer.setData("id", id);
+        ev.dataTransfer.setData("num1", this.props.num1);
+        ev.dataTransfer.setData("num2", this.props.num2);
+
     };
 
    render() {
