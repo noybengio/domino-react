@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './board.css'
 
 class Board extends React.Component {
 
@@ -17,7 +18,7 @@ class Board extends React.Component {
         return (
         <div className = "board">
 
-        </div>
+	        </div>
 
         );
     }
