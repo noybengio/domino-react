@@ -1,5 +1,6 @@
 import React from 'react';
 import Player from "./player.jsx";
+import Board from "./board/board.jsx";
 
 class Game extends React.Component {
 
@@ -68,6 +69,10 @@ class Game extends React.Component {
 
         return (
         <div>
+            <Board 
+                id = "board"
+                bricks = {this.state.boardBricks}
+            />
             <Player
                 key = "player_1"
                 id = "player1"
