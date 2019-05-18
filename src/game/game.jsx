@@ -52,7 +52,7 @@ class Game extends React.Component {
 
         for (let i = 0; i < 7; i++)
             for (let j = i; j < 7; j++) {
-                this.state.bricksArr.push({num1: i, num2: j});
+                this.state.bricksArr.push({num1: i, num2: j, used: false});
             }
     }
 
@@ -104,8 +104,24 @@ class Game extends React.Component {
             num1: this.state.onDragBrick.num1,
             num2: this.state.onDragBrick.num2
         };
+        this.removeBrickFromPlayerDeck();
         this.setState({boardCells: boardCells})
+    }
 
+    removeBrickFromPlayerDeck() {
+        let playerBricks = this.state.playerBricks;
+        let i = 0;
+        while (i < playerBricks.length) {
+            const brick = playerBricks[i];
+            if (brick.num1 === this.state.onDragBrick.num1 &&
+                brick.num2 === this.state.onDragBrick.num2) {
+                playerBricks.splice(i, 1);
+                i = playerBricks.length;
+            } else
+                i++;
+        }
+
+        this.setState({playerBricks: playerBricks});
     }
 
     onDrag(num1, num2) {

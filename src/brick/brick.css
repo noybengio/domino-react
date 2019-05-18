@@ -1,12 +1,13 @@
 .brick {
     border-radius: 5px;
-    border: 1px;
     padding: 6px;
     display: flex;
     flex-direction: column;
-    background-color: blue;
+    background-color: white;
     margin: 10px;
-    height: fit-content;
+    height: 100px;
+    width: 40px;
+    border: 1px solid black;
 }
 
 .brick[direction="vertical"] {

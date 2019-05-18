@@ -24,10 +24,10 @@ class Player extends React.Component {
                 {
                     this.state.bricks.map((brick, i) => {
                         return (
-                            <Brick
+                            !brick.used && <Brick
                                 key={`brick-${i}`}
-                                num1={this.state.bricks[i].num1}
-                                num2={this.state.bricks[i].num2}
+                                num1={brick.num1}
+                                num2={brick.num2}
                                 onDrag={this.props.onDrag}
                             />);
                     })
