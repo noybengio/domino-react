@@ -2,4 +2,7 @@
 	background-color: green;
 	height: 500px;
 	width:100%;
+	display: grid;
+	grid-template-columns: repeat(10, 100px) ;
+	grid-template-rows: repeat(10, 100px) ;
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import Player from "../player/player.jsx";
 import Board from "../board/board.jsx";
-import Brick from "../brick/brick.jsx";
 
 class Game extends React.Component {
 
@@ -13,19 +12,46 @@ class Game extends React.Component {
             bricksArr: [],
             playerBricks: [],
             boardBricks: [],
+            boardCells: this.createBoard(),
+            onDragBrick: this
+
 
         };
         this.createBricksArray();
+
+        /*
+                //const boardCells = this.state.boardCells;
+                this.props.boardCells[10] = {
+                    index:  this.props.boardCells[10].index,
+                    brick: {num1: 2, num2: 5}
+                };
+                this.setState({
+                    boardCells:this.props.boardCells
+                });
+
+        */
         this.shuffleBricks();
         this.setPlayerBricks();
+        this.createBoard();
+        this.onDrag = this.onDrag.bind(this);
+        this.onBrickDropped = this.onBrickDropped.bind(this);
+    }
 
+    createBoard() {
+        let tempBoard = [];
+        for (let i = 0; i < 100; i++) {
+            tempBoard.push({
+                index: i,
+                brick: null
+            })
+        }
+        return tempBoard;
     }
 
     createBricksArray() {
-        //let bricksArr = this.state.bricksArr;
 
         for (let i = 0; i < 7; i++)
-            for (let j = i ; j < 7; j++) {
+            for (let j = i; j < 7; j++) {
                 this.state.bricksArr.push({num1: i, num2: j});
             }
     }
@@ -40,33 +66,22 @@ class Game extends React.Component {
         }
 
         return this.state.bricksArr;
-
-
     }
 
-    hitBrick ()
-    {
-        this.state.playerBricks.push( this.state.bricksArr.pop());
-
+    hitBrick() {
+        this.state.playerBricks.push(this.state.bricksArr.pop());
     }
 
     setPlayerBricks() {
-
-        for(let i = 0; i <6; i++)
-        {
+        for (let i = 0; i < 6; i++) {
             this.hitBrick();
         }
-        console.log ("game player bricks: " , this.state.playerBricks);
     }
 
     moveBrick(num1, num2) {
-        console.log("move brick this : ", this);
-
         let i = 0;
         while (i < this.state.playerBricks.length) {
 
-            console.log("player brick num - ", this.state.playerBricks[i].num1 ,this.state.playerBricks[i].num2 );
-            console.log("move brick brick num - ",num1 ,num2 );
             if (`${this.state.playerBricks[i].num1}` === num1 && `${this.state.playerBricks[i].num2}` === num2) {
 
                 this.state.boardBricks.push(this.state.playerBricks.splice(i, 1));
@@ -74,33 +89,50 @@ class Game extends React.Component {
             }
             i++;
         }
-        console.log("player bricks after move brick :", this.state.playerBricks);
-        console.log("board bricks after move brick :", this.state.boardBricks);
+    }
+
+    onBrickStartDragging(draggedBrick) {
+        this.setState((_) => {
+            return {draggedBrick};
+        });
+    }
+
+    onBrickDropped(droppedIndex) {
+
+        let boardCells = this.state.boardCells;
+        boardCells[droppedIndex].brick = {
+            num1: this.state.onDragBrick.num1,
+            num2: this.state.onDragBrick.num2
+        };
+        this.setState({boardCells: boardCells})
+
+    }
+
+    onDrag(num1, num2) {
+        this.setState({onDragBrick: {num1: num1, num2: num2}});
     }
 
     render() {
-
         return (
-        <div id = "game">
-            <Board 
-                className = "container-drag"
-                moveBrick = {this.moveBrick}
-                game = {this}
-                id = "board"
-                bricks = {this.state.boardBricks}
-            />
-            <Player
-                className = "container-drag"
-                id = "player1"
-                bricks = {this.state.playerBricks}
+            <div id="game">
+                <Board
+                    className="container-drag"
+                    moveBrick={this.moveBrick}
+                    game={this}
+                    id="board"
+                    boardCells={this.state.boardCells}
+                    bricks={this.state.boardBricks}
+                    onBrickDropped={this.onBrickDropped}
                 />
-
-
-        </div>
-
+                <Player
+                    className="container-drag"
+                    id="player1"
+                    bricks={this.state.playerBricks}
+                    onDrag={this.onDrag}
+                />
+            </div>
         );
     }
-
 }
 
 export default Game;

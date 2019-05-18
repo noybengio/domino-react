@@ -8,23 +8,18 @@ class Player extends React.Component {
         super(props);
         this.state = {
             bricks: this.props.bricks
-
         };
-
     }
-    
+
     onDragOver(ev) {
         ev.preventDefault();
     };
 
-
     render() {
-        console.log(" player bricks: ", this.state.bricks);
         return (
-
-            <div 
+            <div
                 className={"player"}
-                onDragOver={(ev)=>this.onDragOver(ev)}
+                onDragOver={(ev) => this.onDragOver(ev)}
             >
                 {
                     this.state.bricks.map((brick, i) => {
@@ -33,7 +28,8 @@ class Player extends React.Component {
                                 key={`brick-${i}`}
                                 num1={this.state.bricks[i].num1}
                                 num2={this.state.bricks[i].num2}
-                            /> );
+                                onDrag={this.props.onDrag}
+                            />);
                     })
                 }
             </div>
