@@ -11,9 +11,8 @@ class Game extends React.Component {
             score2: 0,
             bricksArr: [],
             playerBricks: [],
-            boardBricks: [],
             boardCells: this.createBoard(),
-            onDragBrick: this
+            onDragBrick:this
 
 
         };
@@ -78,6 +77,7 @@ class Game extends React.Component {
         }
     }
 
+    /*
     moveBrick(num1, num2) {
         let i = 0;
         while (i < this.state.playerBricks.length) {
@@ -90,15 +90,16 @@ class Game extends React.Component {
             i++;
         }
     }
-
+*/
     onBrickStartDragging(draggedBrick) {
+        console.log(" game onBrickStartDragging");
         this.setState((_) => {
             return {draggedBrick};
         });
     }
 
-    onBrickDropped(droppedIndex) {
-
+    onBrickDropped(droppedIndex,onNum, offNum) {
+        console.log(" game onBrickDropped");
         let boardCells = this.state.boardCells;
         boardCells[droppedIndex].brick = {
             num1: this.state.onDragBrick.num1,
@@ -124,8 +125,30 @@ class Game extends React.Component {
         this.setState({playerBricks: playerBricks});
     }
 
-    onDrag(num1, num2) {
-        this.setState({onDragBrick: {num1: num1, num2: num2}});
+    onDrag(num1, num2, direction) {
+        console.log("game on drag :" , num1,num2);
+        this.setState({onDragBrick: {num1: num1, num2: num2 , direction: direction}});
+    }
+
+    isLegalDrop(index)
+    {
+        if(this.state.onDragBrick.direction === "vertical"){
+
+            if(this.state.boardCells[index - 10])
+            {
+                if()
+            }
+
+        }
+
+        else
+        {
+
+        }
+
+
+
+
     }
 
     render() {
@@ -137,7 +160,6 @@ class Game extends React.Component {
                     game={this}
                     id="board"
                     boardCells={this.state.boardCells}
-                    bricks={this.state.boardBricks}
                     onBrickDropped={this.onBrickDropped}
                 />
                 <Player

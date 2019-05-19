@@ -13,6 +13,8 @@ class Player extends React.Component {
 
     onDragOver(ev) {
         ev.preventDefault();
+        console.log("player onDragOver");
+
     };
 
     render() {
@@ -25,10 +27,13 @@ class Player extends React.Component {
                     this.state.bricks.map((brick, i) => {
                         return (
                             !brick.used && <Brick
+                                direction={"vertical"}
                                 key={`brick-${i}`}
                                 num1={brick.num1}
                                 num2={brick.num2}
                                 onDrag={this.props.onDrag}
+                                belongTo = { "player"}
+
                             />);
                     })
                 }
