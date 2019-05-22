@@ -12,7 +12,7 @@ class Game extends React.Component {
             bricksArr: [],
             playerBricks: [],
             boardCells: this.createBoard(),
-            onDragBrick:this
+            onDragBrick: this
 
 
         };
@@ -98,13 +98,17 @@ class Game extends React.Component {
         });
     }
 
-    onBrickDropped(droppedIndex,onNum, offNum) {
+    onBrickDropped(droppedIndex, brick) {
         console.log(" game onBrickDropped");
         let boardCells = this.state.boardCells;
         boardCells[droppedIndex].brick = {
-            num1: this.state.onDragBrick.num1,
-            num2: this.state.onDragBrick.num2
-        };
+            onNum: brick.onNum,
+            offNum: brick.offNum,
+            sides: (brick.onNum === brick.offNum) ? 4 : 2,
+            direction: brick.direction,
+
+    }
+        ;
         this.removeBrickFromPlayerDeck();
         this.setState({boardCells: boardCells})
     }
@@ -126,30 +130,130 @@ class Game extends React.Component {
     }
 
     onDrag(num1, num2, direction) {
-        console.log("game on drag :" , num1,num2);
-        this.setState({onDragBrick: {num1: num1, num2: num2 , direction: direction}});
+        console.log("game on drag :", num1, num2);
+        this.setState({onDragBrick: {num1: num1, num2: num2, direction: direction}});
     }
 
-    isLegalDrop(index)
-    {
-        if(this.state.onDragBrick.direction === "vertical"){
+    isLegalDrop(index) {
 
-            if(this.state.boardCells[index - 10])
+        let brick;
+
+        brick = this.scanDown(index);
+        if(brick) {
+            if(this.state.boardCells[index-10].sides === 2){
+                if(this.state.boardCells[index-10].direction === "vertical")
+                    removeBrickFromPlayerDeck(index, brick);
+            }
+            else {
+
+            }
+        }
+
+        brick = this.scanUp(index);
+        if(brick) {
+
+        }
+
+        brick = this.scanLeft(index);
+        if(brick) {
+
+        }
+
+        brick = this.scanRight(index);
+        if(brick) {
+
+        }
+
+    }
+
+    scanUp(index) {
+
+       if(index-10 > 0 && this.state.boardCells[index - 10])
+       {
+           if(this.state.boardCells[index - 10].onNum === this.state.onDragBrick.num1)
+           {
+               return { onNum : this.state.onDragBrick.num2 ,
+                        offNum : this.state.onDragBrick.num1,
+                        direction: this.state.boardCells[index - 10].direction }
+
+           }
+           if(this.state.boardCells[index - 10].onNum === this.state.onDragBrick.num2)
+           {
+               return { onNum : this.state.onDragBrick.num1 ,
+                        offNum : this.state.onDragBrick.num2,
+                        direction: this.state.boardCells[index - 10].direction}
+           }
+
+       }
+           return false;
+    }
+
+    scanDown(index) {
+
+        if(index + 10 < 100 && this.state.boardCells[index + 10])
+        {
+            if(this.state.boardCells[index + 10].onNum === this.state.onDragBrick.num1)
             {
-                if()
+                return {onNum : this.state.onDragBrick.num2 ,
+                        offNum : this.state.onDragBrick.num1 ,
+                        direction: this.state.boardCells[index + 10].direction}
+
+            }
+            if(this.state.boardCells[index + 10].onNum === this.state.onDragBrick.num2)
+            {
+                return {onNum : this.state.onDragBrick.num1 ,
+                        offNum : this.state.onDragBrick.num1,
+                        direction: this.state.boardCells[index + 10].direction}
             }
 
         }
+        return false;
+    }
 
-        else
+    scanRight(index) {
+
+        if(index+1 < 10 && this.state.boardCells[index + 1])
         {
+            if(this.state.boardCells[index +1].onNum === this.state.onDragBrick.num1)
+            {
+                return {onNum : this.state.onDragBrick.num2 ,
+                        offNum : this.state.onDragBrick.num1,
+                        direction: this.state.boardCells[index +1].direction}
+
+            }
+            if(this.state.boardCells[index +1].onNum === this.state.onDragBrick.num2)
+            {
+                return {onNum : this.state.onDragBrick.num1 ,
+                        offNum : this.state.onDragBrick.num2,
+                        direction: this.state.boardCells[index +1].direction}
+            }
 
         }
-
-
-
-
+        return false;
     }
+
+    scanLeft(index) {
+
+        if(index-1 >= 0 && this.state.boardCells[index-1])
+        {
+            if(this.state.boardCells[index-1].onNum === this.state.onDragBrick.num1)
+            {
+                return {onNum : this.state.onDragBrick.num2 ,
+                        offNum : this.state.onDragBrick.num1,
+                        direction: this.state.boardCells[index-1].direction}
+
+            }
+            if(this.state.boardCells[index-1].onNum === this.state.onDragBrick.num2)
+            {
+                return {onNum : this.state.onDragBrick.num1 ,
+                        offNum : this.state.onDragBrick.num2,
+                        direction: this.state.boardCells[index-1].direction}
+            }
+
+        }
+        return false;
+    }
+
 
     render() {
         return (
