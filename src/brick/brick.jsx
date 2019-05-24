@@ -15,8 +15,10 @@ class Brick extends React.Component {
         this.onDragStart = this.onDragStart.bind(this);
     }
 
-    onDragStart(ev, id){
-        this.props.onDrag(this.props.num1,this.props.num2);
+    onDragStart(ev){
+        ev.dataTransfer.setData("num1", this.state.num1);
+        ev.dataTransfer.setData("num2", this.state.num2);
+        //this.props.onDrag(this.props.num1,this.props.num2);
     };
 
    render() {
@@ -25,7 +27,7 @@ class Brick extends React.Component {
                 id = {`brick${this.state.num1},${this.state.num2}` }
                 direction={this.state.direction}
                 className={"brick"}
-                onDragStart={(ev)  =>this.onDragStart(ev, `${this.state.num1},${this.state.num2}`)}
+                onDragStart={(ev)  =>this.onDragStart(ev)}
                 draggable        
                 >
                 <DotsContainer num={this.props.num1}/>

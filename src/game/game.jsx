@@ -97,12 +97,11 @@ class Game extends React.Component {
         });
     }
 
-    onBrickDropped(droppedIndex) {
-
+    onBrickDropped(droppedIndex, num1, num2) {
         let boardCells = this.state.boardCells;
         boardCells[droppedIndex].brick = {
-            num1: this.state.onDragBrick.num1,
-            num2: this.state.onDragBrick.num2
+            num1: num1,
+            num2: num2
         };
         this.removeBrickFromPlayerDeck();
         this.setState({boardCells: boardCells})

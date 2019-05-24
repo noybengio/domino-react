@@ -20,12 +20,12 @@ class Board extends React.Component {
     };
 
 
-    onDrop(ev, dest) {
-        ev.preventDefault();
+    onDrop(ev) {
+        let num1 = ev.dataTransfer.getData("num1");
+        let num2 = ev.dataTransfer.getData("num2");
         let index = parseInt(ev.target.getAttribute('cellindex'), 10);
-        this.props.onBrickDropped(index);
-        //let num1 = ev.dataTransfer.getData("num1");
-        // let num2 = ev.dataTransfer.getData("num2");
+        this.props.onBrickDropped(index, num1, num2);
+        
         //this.props.moveBrick.bind(this.props.game)(num1, num2);
 
     };
@@ -35,7 +35,7 @@ class Board extends React.Component {
             <div onDrop={this.onDrop} className={"board container-drag"}>
                 <div className="board"
                      onDragOver={(ev) => this.onDragOver(ev)}
-                     onDrop={(ev) => this.onDrop(ev, "board container-drag")}>
+                     onDrop={(ev) => this.onDrop(ev)}>
                     {
                         this.state.boardCells.map((cell, i) => {
                             return cell.brick ? <Brick key={i} num1={cell.brick.num1} num2={cell.brick.num2}/> :
