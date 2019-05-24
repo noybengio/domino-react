@@ -8,7 +8,8 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            boardCells: this.props.boardCells
+            boardCells: this.props.boardCells,
+            numBricks :this.props.numBricks,
         };
 
         this.onDrop = this.onDrop.bind(this);
@@ -21,11 +22,11 @@ class Board extends React.Component {
 
 
     onDrop(ev) {
+        let legalBrick;
         console.log("event on drop :" , ev);
         ev.preventDefault();
         let index = parseInt(ev.target.getAttribute('cellindex'), 10);
-        this.isLegalDrop(index);
-        this.props.onBrickDropped(index);
+        this.props.handleDrop.bind(this.props.game)(index);
         //let num1 = ev.dataTransfer.getData("num1");
         // let num2 = ev.dataTransfer.getData("num2");
         //this.props.moveBrick.bind(this.props.game)(num1, num2);

@@ -12,7 +12,8 @@ class Game extends React.Component {
             bricksArr: [],
             playerBricks: [],
             boardCells: this.createBoard(),
-            onDragBrick: this
+            onDragBrick: this ,
+            boardNumBricks : 0
 
 
         };
@@ -77,20 +78,6 @@ class Game extends React.Component {
         }
     }
 
-    /*
-    moveBrick(num1, num2) {
-        let i = 0;
-        while (i < this.state.playerBricks.length) {
-
-            if (`${this.state.playerBricks[i].num1}` === num1 && `${this.state.playerBricks[i].num2}` === num2) {
-
-                this.state.boardBricks.push(this.state.playerBricks.splice(i, 1));
-                i = this.state.playerBricks.length;
-            }
-            i++;
-        }
-    }
-*/
     onBrickStartDragging(draggedBrick) {
         console.log(" game onBrickStartDragging");
         this.setState((_) => {
@@ -98,19 +85,20 @@ class Game extends React.Component {
         });
     }
 
-    onBrickDropped(droppedIndex, brick) {
-        console.log(" game onBrickDropped");
-        let boardCells = this.state.boardCells;
-        boardCells[droppedIndex].brick = {
-            onNum: brick.onNum,
-            offNum: brick.offNum,
-            sides: (brick.onNum === brick.offNum) ? 4 : 2,
-            direction: brick.direction,
+    onBrickDropped(droppedIndex,res) {
+        console.log(" game onBrickDropped player bricks before:" , this.state.playerBricks);
+        console.log(" game onBrickDropped board bricks before:" , this.state.boardCells);
+        console.log("onBrickDropped legal brick :", res.brick);
 
-    }
-        ;
+        let boardCells = this.state.boardCells;
+        boardCells[droppedIndex].brick = res.brick;
+        console.log("onBrickDropped brick[droppedIndex] :",  boardCells[droppedIndex].brick );
+
         this.removeBrickFromPlayerDeck();
-        this.setState({boardCells: boardCells})
+        this.setState({boardCells: boardCells ,boardNumBricks:this.state.boardNumBricks+1});
+
+        console.log(" game onBrickDropped player bricks after:" , this.state.playerBricks);
+        console.log(" game onBrickDropped board bricks after:" , this.state.boardCells);
     }
 
     removeBrickFromPlayerDeck() {
@@ -134,126 +122,280 @@ class Game extends React.Component {
         this.setState({onDragBrick: {num1: num1, num2: num2, direction: direction}});
     }
 
+    //handle the first drop
+    handleDrop(index) {
+        console.log("handle drop this: " , this);
+        let res = null;
+        if(this.state.boardNumBricks > 0) {
+            res = this.isLegalDrop(index);
+            console.log("handle drop res :" , res);
+            if (res) {
+                this.onBrickDropped(index, res);
+            }
+        }
+        else {
+            res = this.createDroppedBrick(0,null, null);
+            console.log("handle drop first legal brick :", res);
+            this.onBrickDropped(50, res);
+
+        }
+
+    }
+
     isLegalDrop(index) {
 
-        let brick;
+        let res = null;
 
-        brick = this.scanDown(index);
-        if(brick) {
-            if(this.state.boardCells[index-10].sides === 2){
-                if(this.state.boardCells[index-10].direction === "vertical")
-                    removeBrickFromPlayerDeck(index, brick);
+        res = this.scanDown(index);
+        console.log("brick after scan down :" , res);
+        if(res) {
+            if((this.state.boardCells[index+10].brick.sides === 2 && this.state.boardCells[index+10].brick.direction === "vertical")
+            || this.state.boardCells[index+10].brick.sides === 4 ){
+                {
+                    return res;
+                }
             }
             else {
 
+                // css red sign on the cell that isnt legal
             }
         }
 
-        brick = this.scanUp(index);
-        if(brick) {
+        res = this.scanUp(index);
+        console.log("brick after scan up :" , res);
+        if(res) {
+           // this.fixDirection(brick);
+            if((this.state.boardCells[index-10].brick.sides === 2 && this.state.boardCells[index-10].brick.direction === "vertical")
+                || this.state.boardCells[index-10].brick.sides === 4 ){
+                {
+                    return res;
+                }
+            }
+            else {
+
+
+
+            }
+
 
         }
 
-        brick = this.scanLeft(index);
-        if(brick) {
+        res = this.scanLeft(index);
+        console.log("brick after scan left :" , res);
+        if(res) {
+            //this.fixDirection(brick);
+            if((this.state.boardCells[index-1].brick.sides === 2 && this.state.boardCells[index-1].brick.direction === "horizontal")
+                || this.state.boardCells[index-1].brick.sides === 4 ){
+                {
+                    return res;
+                }
+            }
+            else {
+
+
+
+            }
+
+
 
         }
 
-        brick = this.scanRight(index);
-        if(brick) {
+        res = this.scanRight(index);
+        console.log("brick after scan right :" , res);
+        if(res) {
+           // this.fixDirection(brick);
+            if((this.state.boardCells[index+1].brick.sides === 2 && this.state.boardCells[index+1].brick.direction === "horizontal")
+                || this.state.boardCells[index+1].brick.sides === 4 ){
+                {
+                    return res;
+                }
+            }
+            else {
+
+
+
+            }
+        }
+
+        return null;
+
+    }
+
+    createDroppedBrick(neighborIndex, offNum ,onNum,num1, num2, scanDir ) {
+        let res = null;
+        if(this.state.boardNumBricks > 0) {
+
+            if(offNum === onNum)
+            {
+                res = {
+                    up: (scanDir === "up" ? null : onNum),
+                    down: (scanDir === "down" ? null : onNum),
+                    right: (scanDir === "right" ? null : onNum),
+                    left: (scanDir === "left" ? null : onNum),
+                    num1: num1,
+                    num2: num2,
+                    direction: (this.state.boardCells[neighborIndex].direction === "vertical" ?  "horizontal" :"vertical"),
+                    sides: 4
+                };
+
+            }
+            else {
+                let isVertical = this.state.boardCells[neighborIndex].direction === "vertical";
+                res = {
+                    up: (isVertical && scanDir === "up"  || !isVertical ? null : onNum),
+                    down: (isVertical ? null : onNum),
+                    right: (isVertical ? null : onNum),
+                    left: (isVertical === "left" ? null : onNum),
+                    num1: num1,
+                    num2: num2,
+                    direction: this.state.boardCells[neighborIndex].direction,
+                    sides: 2
+                };
+            }
 
         }
+        else {
+            if(this.state.onDragBrick.num1 ===this.state.onDragBrick.num2)
+            {
+                res = {
+                    up: onNum,
+                    down: onNum,
+                    right: onNum,
+                    left: onNum,
+                    num1: num1,
+                    num2: num2,
+                    direction: (this.state.boardCells[neighborIndex].direction === "vertical" ?  "horizontal" :"vertical"),
+                    sides: 4
+                };
+
+
+
+            }
+            else {
+                let isVertical = this.state.boardCells[neighborIndex].direction === "vertical";
+                res = {
+                    up: (isVertical && scanDir === "up"  || !isVertical ? null : num1),
+                    down: (isVertical ? null : num2),
+                    right: (isVertical ? null : num1),
+                    left: (isVertical === "left" ? null : num2),
+                    num1: num1,
+                    num2: num2,
+                    direction: this.state.boardCells[neighborIndex].direction,
+                    sides: 2
+                };
+
+            }
+
+        }
+
+        return res;
+
 
     }
 
     scanUp(index) {
+        let res = null;
+        console.log("scan up neighbor: ", this.state.boardCells[index - 10].brick);
+        if (index - 10 > 0 && this.state.boardCells[index - 10].brick && this.state.boardCells[index - 10].brick.down) {
+            if (this.state.boardCells[index - 10].brick.down === this.state.onDragBrick.num1) {
+                this.state.boardCells[index - 10].brick.down = null;
+                res = {
+                    brick: this.createDroppedBrick(index - 10, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "up"),
+                    neighborIndex: index - 10,
+                    scanDir: "up"
+                };
+            }
 
-       if(index-10 > 0 && this.state.boardCells[index - 10])
-       {
-           if(this.state.boardCells[index - 10].onNum === this.state.onDragBrick.num1)
-           {
-               return { onNum : this.state.onDragBrick.num2 ,
-                        offNum : this.state.onDragBrick.num1,
-                        direction: this.state.boardCells[index - 10].direction }
 
-           }
-           if(this.state.boardCells[index - 10].onNum === this.state.onDragBrick.num2)
-           {
-               return { onNum : this.state.onDragBrick.num1 ,
-                        offNum : this.state.onDragBrick.num2,
-                        direction: this.state.boardCells[index - 10].direction}
-           }
+            if (this.state.boardCells[index - 10].brick.down === this.state.onDragBrick.num2) {
+                this.state.boardCells[index - 10].brick.down = null;
+                res = {
+                    brick: this.createDroppedBrick(index - 10, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "up"),
+                    neighborIndex: index - 10,
+                    scanDir: "up"
+                };
+            }
 
-       }
-           return false;
+        }
+        return res;
     }
 
     scanDown(index) {
+        let res = null;
+        if (index + 10 < 100 && this.state.boardCells[index + 10].brick && this.state.boardCells[index + 10].brick.up) {
+            if (this.state.boardCells[index + 10].brick.up === this.state.onDragBrick.num1)
+                this.state.boardCells[index + 10].brick.up = null;
+                res = {
+                    brick: this.createDroppedBrick(index + 10, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "down"),
+                    neighborIndex: index + 10,
+                    scanDir: "down"
+                };
 
-        if(index + 10 < 100 && this.state.boardCells[index + 10])
-        {
-            if(this.state.boardCells[index + 10].onNum === this.state.onDragBrick.num1)
-            {
-                return {onNum : this.state.onDragBrick.num2 ,
-                        offNum : this.state.onDragBrick.num1 ,
-                        direction: this.state.boardCells[index + 10].direction}
 
-            }
-            if(this.state.boardCells[index + 10].onNum === this.state.onDragBrick.num2)
-            {
-                return {onNum : this.state.onDragBrick.num1 ,
-                        offNum : this.state.onDragBrick.num1,
-                        direction: this.state.boardCells[index + 10].direction}
-            }
-
+            if (this.state.boardCells[index + 10].brick.up === this.state.onDragBrick.num2)
+                this.state.boardCells[index + 10].brick.up = null;
+                res = {
+                    brick: this.createDroppedBrick(index + 10, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "down"),
+                    neighborIndex: index + 10,
+                    scanDir: "down"
+                };
         }
-        return false;
+
+
+        return res;
     }
 
     scanRight(index) {
+        let res = null;
+        if (index + 1 < 10 && this.state.boardCells[index + 1].brick && this.state.boardCells[index + 1].brick.left) {
 
-        if(index+1 < 10 && this.state.boardCells[index + 1])
-        {
-            if(this.state.boardCells[index +1].onNum === this.state.onDragBrick.num1)
-            {
-                return {onNum : this.state.onDragBrick.num2 ,
-                        offNum : this.state.onDragBrick.num1,
-                        direction: this.state.boardCells[index +1].direction}
+            if (this.state.boardCells[index + 1].brick.left === this.state.onDragBrick.num1)
+                this.state.boardCells[index + 10].brick.left = null;
+            res = {
+                brick: this.createDroppedBrick(index + 1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "right"),
+                neighborIndex: index + 1,
+                scanDir: "right"
+            };
 
-            }
-            if(this.state.boardCells[index +1].onNum === this.state.onDragBrick.num2)
-            {
-                return {onNum : this.state.onDragBrick.num1 ,
-                        offNum : this.state.onDragBrick.num2,
-                        direction: this.state.boardCells[index +1].direction}
-            }
 
+            if (this.state.boardCells[index + 1].brick.left === this.state.onDragBrick.num2)
+                this.state.boardCells[index + 10].brick.left = null;
+            res = {
+                brick: this.createDroppedBrick(index + 1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "right"),
+                neighborIndex: index + 1,
+                scanDir: "right"
+            };
         }
-        return false;
+
+
+        return res;
     }
 
     scanLeft(index) {
+        let res = null;
+        if (index - 1 >= 0 && this.state.boardCells[index - 1].brick && this.state.boardCells[index - 1].brick.right > 0) {
+            this.state.boardCells[index - 1].brick.onNum.map((onNum) => {
+                    if (this.state.boardCells[index - 1].brick.right === this.state.onDragBrick.num1)
+                        this.state.boardCells[index + 10].brick.right = null;
+                    res = {
+                        brick: this.createDroppedBrick(index - 1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "left"),
+                        neighborIndex: index - 1,
+                        scanDir: "left"
+                    };
 
-        if(index-1 >= 0 && this.state.boardCells[index-1])
-        {
-            if(this.state.boardCells[index-1].onNum === this.state.onDragBrick.num1)
-            {
-                return {onNum : this.state.onDragBrick.num2 ,
-                        offNum : this.state.onDragBrick.num1,
-                        direction: this.state.boardCells[index-1].direction}
 
-            }
-            if(this.state.boardCells[index-1].onNum === this.state.onDragBrick.num2)
-            {
-                return {onNum : this.state.onDragBrick.num1 ,
-                        offNum : this.state.onDragBrick.num2,
-                        direction: this.state.boardCells[index-1].direction}
-            }
-
+                    if (this.state.boardCells[index - 1].brick.right === this.state.onDragBrick.num2)
+                        this.state.boardCells[index + 10].brick.right = null;
+                    res = {
+                        brick: this.createDroppedBrick(index - 10, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "left"),
+                        neighborIndex: index - 1,
+                        scanDir: "left"
+                    };
+                }
+            );
         }
-        return false;
+        return res;
     }
-
 
     render() {
         return (
@@ -264,7 +406,8 @@ class Game extends React.Component {
                     game={this}
                     id="board"
                     boardCells={this.state.boardCells}
-                    onBrickDropped={this.onBrickDropped}
+                    handleDrop={this.handleDrop}
+                    numBricks = {this.state.boardNumBricks}
                 />
                 <Player
                     className="container-drag"
