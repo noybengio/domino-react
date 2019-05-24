@@ -11,7 +11,6 @@ class Game extends React.Component {
             score2: 0,
             bricksArr: [],
             playerBricks: [],
-            boardBricks: [],
             boardCells: this.createBoard(),
             onDragBrick: this
 
@@ -78,6 +77,7 @@ class Game extends React.Component {
         }
     }
 
+    /*
     moveBrick(num1, num2) {
         let i = 0;
         while (i < this.state.playerBricks.length) {
@@ -90,19 +90,24 @@ class Game extends React.Component {
             i++;
         }
     }
-
+*/
     onBrickStartDragging(draggedBrick) {
+        console.log(" game onBrickStartDragging");
         this.setState((_) => {
             return {draggedBrick};
         });
     }
 
-    onBrickDropped(droppedIndex, num1, num2) {
+    onBrickDropped(droppedIndex, brick) {
+        console.log(" game onBrickDropped");
         let boardCells = this.state.boardCells;
         boardCells[droppedIndex].brick = {
-            num1: num1,
-            num2: num2
-        };
+            onNum: brick.onNum,
+            offNum: brick.offNum,
+            sides: (brick.onNum === brick.offNum) ? 4 : 2,
+            direction: brick.direction,
+
+    };
         this.removeBrickFromPlayerDeck();
         this.setState({boardCells: boardCells})
     }
@@ -123,9 +128,131 @@ class Game extends React.Component {
         this.setState({playerBricks: playerBricks});
     }
 
-    onDrag(num1, num2) {
-        this.setState({onDragBrick: {num1: num1, num2: num2}});
+    onDrag(num1, num2, direction) {
+        console.log("game on drag :", num1, num2);
+        this.setState({onDragBrick: {num1: num1, num2: num2, direction: direction}});
     }
+
+    isLegalDrop(index) {
+
+        let brick;
+
+        brick = this.scanDown(index);
+        if(brick) {
+            if(this.state.boardCells[index-10].sides === 2){
+                if(this.state.boardCells[index-10].direction === "vertical")
+                    removeBrickFromPlayerDeck(index, brick);
+            }
+            else {
+
+            }
+        }
+
+        brick = this.scanUp(index);
+        if(brick) {
+
+        }
+
+        brick = this.scanLeft(index);
+        if(brick) {
+
+        }
+
+        brick = this.scanRight(index);
+        if(brick) {
+
+        }
+
+    }
+
+    scanUp(index) {
+
+       if(index-10 > 0 && this.state.boardCells[index - 10])
+       {
+           if(this.state.boardCells[index - 10].onNum === this.state.onDragBrick.num1)
+           {
+               return { onNum : this.state.onDragBrick.num2 ,
+                        offNum : this.state.onDragBrick.num1,
+                        direction: this.state.boardCells[index - 10].direction }
+
+           }
+           if(this.state.boardCells[index - 10].onNum === this.state.onDragBrick.num2)
+           {
+               return { onNum : this.state.onDragBrick.num1 ,
+                        offNum : this.state.onDragBrick.num2,
+                        direction: this.state.boardCells[index - 10].direction}
+           }
+
+       }
+           return false;
+    }
+
+    scanDown(index) {
+
+        if(index + 10 < 100 && this.state.boardCells[index + 10])
+        {
+            if(this.state.boardCells[index + 10].onNum === this.state.onDragBrick.num1)
+            {
+                return {onNum : this.state.onDragBrick.num2 ,
+                        offNum : this.state.onDragBrick.num1 ,
+                        direction: this.state.boardCells[index + 10].direction}
+
+            }
+            if(this.state.boardCells[index + 10].onNum === this.state.onDragBrick.num2)
+            {
+                return {onNum : this.state.onDragBrick.num1 ,
+                        offNum : this.state.onDragBrick.num1,
+                        direction: this.state.boardCells[index + 10].direction}
+            }
+
+        }
+        return false;
+    }
+
+    scanRight(index) {
+
+        if(index+1 < 10 && this.state.boardCells[index + 1])
+        {
+            if(this.state.boardCells[index +1].onNum === this.state.onDragBrick.num1)
+            {
+                return {onNum : this.state.onDragBrick.num2 ,
+                        offNum : this.state.onDragBrick.num1,
+                        direction: this.state.boardCells[index +1].direction}
+
+            }
+            if(this.state.boardCells[index +1].onNum === this.state.onDragBrick.num2)
+            {
+                return {onNum : this.state.onDragBrick.num1 ,
+                        offNum : this.state.onDragBrick.num2,
+                        direction: this.state.boardCells[index +1].direction}
+            }
+
+        }
+        return false;
+    }
+
+    scanLeft(index) {
+
+        if(index-1 >= 0 && this.state.boardCells[index-1])
+        {
+            if(this.state.boardCells[index-1].onNum === this.state.onDragBrick.num1)
+            {
+                return {onNum : this.state.onDragBrick.num2 ,
+                        offNum : this.state.onDragBrick.num1,
+                        direction: this.state.boardCells[index-1].direction}
+
+            }
+            if(this.state.boardCells[index-1].onNum === this.state.onDragBrick.num2)
+            {
+                return {onNum : this.state.onDragBrick.num1 ,
+                        offNum : this.state.onDragBrick.num2,
+                        direction: this.state.boardCells[index-1].direction}
+            }
+
+        }
+        return false;
+    }
+
 
     render() {
         return (
@@ -136,7 +263,6 @@ class Game extends React.Component {
                     game={this}
                     id="board"
                     boardCells={this.state.boardCells}
-                    bricks={this.state.boardBricks}
                     onBrickDropped={this.onBrickDropped}
                 />
                 <Player

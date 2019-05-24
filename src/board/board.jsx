@@ -8,7 +8,6 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bricks: this.props.bricks,
             boardCells: this.props.boardCells
         };
 
@@ -16,21 +15,27 @@ class Board extends React.Component {
     }
 
     onDragOver(ev) {
+        console.log(" board on drag over");
         ev.preventDefault();
     };
 
 
     onDrop(ev) {
-        let num1 = ev.dataTransfer.getData("num1");
-        let num2 = ev.dataTransfer.getData("num2");
+        console.log("event on drop :" , ev);
+        ev.preventDefault();
         let index = parseInt(ev.target.getAttribute('cellindex'), 10);
-        this.props.onBrickDropped(index, num1, num2);
-        
+        this.isLegalDrop(index);
+        this.props.onBrickDropped(index);
+        //let num1 = ev.dataTransfer.getData("num1");
+        // let num2 = ev.dataTransfer.getData("num2");
+
         //this.props.moveBrick.bind(this.props.game)(num1, num2);
 
     };
 
+
     render() {
+        console.log("board render : ", this.state.boardCells);
         return (
             <div onDrop={this.onDrop} className={"board container-drag"}>
                 <div className="board"
@@ -38,13 +43,22 @@ class Board extends React.Component {
                      onDrop={(ev) => this.onDrop(ev)}>
                     {
                         this.state.boardCells.map((cell, i) => {
-                            return cell.brick ? <Brick key={i} num1={cell.brick.num1} num2={cell.brick.num2}/> :
-                                <EmptyCell key={i} cellIndex={i}/>
+                            return cell.brick ?
+                                <Brick
+                                    key={i} num1={cell.brick.num1}
+                                    num2={cell.brick.num2}
+                                    belongTo = { "board"}
+                                />
+                                :
+                                <EmptyCell key={i} cellIndex={i}
+                                />
                         })
                     }
                 </div>
             </div>
         );
+
+
     }
 }
 
