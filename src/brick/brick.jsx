@@ -9,7 +9,6 @@ class Brick extends React.Component {
             direction: this.props.direction,
             num1: this.props.num1,
             num2: this.props.num2,
-
             belongTo : this.props.belongTo
 
         };
@@ -43,7 +42,6 @@ class Brick extends React.Component {
                     id = {`brick${this.state.num1},${this.state.num2}` }
                     direction={this.state.direction}
                     className={"brick"}
-
                 >
                     <DotsContainer num={this.props.num1}/>
                     <hr/>

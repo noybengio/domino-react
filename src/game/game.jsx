@@ -1,6 +1,8 @@
 import React from 'react';
 import Player from "../player/player.jsx";
 import Board from "../board/board.jsx";
+import Statistics from "../statistics/statistics.jsx";
+import './game.css'
 
 class Game extends React.Component {
 
@@ -12,8 +14,9 @@ class Game extends React.Component {
             bricksArr: [],
             playerBricks: [],
             boardCells: this.createBoard(),
-            onDragBrick: this ,
-            boardNumBricks : 0
+            onDragBrick: this,
+            boardNumBricks: 0,
+            gameOver: false,
 
 
         };
@@ -85,20 +88,21 @@ class Game extends React.Component {
         });
     }
 
-    onBrickDropped(droppedIndex,res) {
-        console.log(" game onBrickDropped player bricks before:" , this.state.playerBricks);
-        console.log(" game onBrickDropped board bricks before:" , this.state.boardCells);
-        console.log("onBrickDropped legal brick :", res.brick);
-
+    onBrickDropped(droppedIndex, res) {
+        //console.log(" game onBrickDropped player bricks before:", this.state.playerBricks);
+      //  console.log(" game onBrickDropped board bricks before:", this.state.boardCells);
+       // console.log("onBrickDropped legal brick :", res);
+        let boardNumBricks = this.state.boardNumBricks + 1;
         let boardCells = this.state.boardCells;
-        boardCells[droppedIndex].brick = res.brick;
-        console.log("onBrickDropped brick[droppedIndex] :",  boardCells[droppedIndex].brick );
+        boardCells[droppedIndex].brick = res;
+       // console.log("onBrickDropped brick[droppedIndex] :", boardCells[droppedIndex].brick);
 
         this.removeBrickFromPlayerDeck();
-        this.setState({boardCells: boardCells ,boardNumBricks:this.state.boardNumBricks+1});
+        console.log("num bricks :" , boardNumBricks);
+        this.setState({boardCells: boardCells, boardNumBricks: boardNumBricks});
 
-        console.log(" game onBrickDropped player bricks after:" , this.state.playerBricks);
-        console.log(" game onBrickDropped board bricks after:" , this.state.boardCells);
+       // console.log(" game onBrickDropped player bricks after:", this.state.playerBricks);
+        console.log(" game onBrickDropped board bricks after:", this.state.boardCells);
     }
 
     removeBrickFromPlayerDeck() {
@@ -118,25 +122,21 @@ class Game extends React.Component {
     }
 
     onDrag(num1, num2, direction) {
-        console.log("game on drag :", num1, num2);
         this.setState({onDragBrick: {num1: num1, num2: num2, direction: direction}});
     }
 
     //handle the first drop
     handleDrop(index) {
-        console.log("handle drop this: " , this);
         let res = null;
-        if(this.state.boardNumBricks > 0) {
+        if (this.state.boardNumBricks > 0) {
             res = this.isLegalDrop(index);
-            console.log("handle drop res :" , res);
+            console.log("handle drop res :", res);
             if (res) {
-                this.onBrickDropped(index, res);
+                this.onBrickDropped(index, res.brick);
             }
-        }
-        else {
-            res = this.createDroppedBrick(0,null, null);
-            console.log("handle drop first legal brick :", res);
-            this.onBrickDropped(50, res);
+        } else {
+            res = this.createDroppedBrick(0, null, null, this.state.onDragBrick.num1, this.state.onDragBrick.num2, null);
+            this.onBrickDropped(55, res);
 
         }
 
@@ -145,88 +145,48 @@ class Game extends React.Component {
     isLegalDrop(index) {
 
         let res = null;
-
         res = this.scanDown(index);
-        console.log("brick after scan down :" , res);
-        if(res) {
-            if((this.state.boardCells[index+10].brick.sides === 2 && this.state.boardCells[index+10].brick.direction === "vertical")
-            || this.state.boardCells[index+10].brick.sides === 4 ){
-                {
-                    return res;
-                }
-            }
-            else {
+        if (res !== null)
+            return res;
+        else {
 
-                // css red sign on the cell that isnt legal
-            }
+            // css red sign on the cell that isnt legal
         }
 
         res = this.scanUp(index);
-        console.log("brick after scan up :" , res);
-        if(res) {
-           // this.fixDirection(brick);
-            if((this.state.boardCells[index-10].brick.sides === 2 && this.state.boardCells[index-10].brick.direction === "vertical")
-                || this.state.boardCells[index-10].brick.sides === 4 ){
-                {
-                    return res;
-                }
-            }
-            else {
 
-
-
-            }
-
+        if (res !== null)
+            return res;
+        else {
 
         }
 
         res = this.scanLeft(index);
-        console.log("brick after scan left :" , res);
-        if(res) {
-            //this.fixDirection(brick);
-            if((this.state.boardCells[index-1].brick.sides === 2 && this.state.boardCells[index-1].brick.direction === "horizontal")
-                || this.state.boardCells[index-1].brick.sides === 4 ){
-                {
-                    return res;
-                }
-            }
-            else {
 
-
-
-            }
-
+        if (res !== null)
+            return res;
+        else {
 
 
         }
 
+
         res = this.scanRight(index);
-        console.log("brick after scan right :" , res);
-        if(res) {
-           // this.fixDirection(brick);
-            if((this.state.boardCells[index+1].brick.sides === 2 && this.state.boardCells[index+1].brick.direction === "horizontal")
-                || this.state.boardCells[index+1].brick.sides === 4 ){
-                {
-                    return res;
-                }
-            }
-            else {
+        if (res !== null)
+            return res;
+        else {
 
-
-
-            }
         }
 
         return null;
 
     }
 
-    createDroppedBrick(neighborIndex, offNum ,onNum,num1, num2, scanDir ) {
+    createDroppedBrick(neighborIndex, offNum, onNum, num1, num2, scanDir) {
         let res = null;
-        if(this.state.boardNumBricks > 0) {
+        if (this.state.boardNumBricks > 0) {
 
-            if(offNum === onNum)
-            {
+            if (num1 === num2) {
                 res = {
                     up: (scanDir === "up" ? null : onNum),
                     down: (scanDir === "down" ? null : onNum),
@@ -234,53 +194,57 @@ class Game extends React.Component {
                     left: (scanDir === "left" ? null : onNum),
                     num1: num1,
                     num2: num2,
-                    direction: (this.state.boardCells[neighborIndex].direction === "vertical" ?  "horizontal" :"vertical"),
+                    direction: (this.state.boardCells[neighborIndex].brick.direction === "vertical" ? "horizontal" : "vertical"),
                     sides: 4
                 };
 
-            }
-            else {
-                let isVertical = this.state.boardCells[neighborIndex].direction === "vertical";
+            } else {
+                let isVertical = this.state.boardCells[neighborIndex].brick.direction === "vertical";
+                let direction;
+                if(!isVertical && (scanDir === "up" || scanDir === "down"))
+                    direction = "vertical";
+                else {
+                    if (isVertical && (scanDir === "left" || scanDir === "right"))
+                        direction = "horizontal";
+                    else
+                        direction = this.state.boardCells[neighborIndex].brick.direction;
+                }
                 res = {
-                    up: (isVertical && scanDir === "up"  || !isVertical ? null : onNum),
-                    down: (isVertical ? null : onNum),
-                    right: (isVertical ? null : onNum),
-                    left: (isVertical === "left" ? null : onNum),
+                    up: (direction === "horizontal" || scanDir === "up" ? null : onNum),
+                    down: (direction === "horizontal" || scanDir === "down" ? null : onNum),
+                    right: (direction === "vertical" || scanDir === "right" ? null : onNum),
+                    left: (direction === "vertical" || scanDir === "left" ? null : onNum),
                     num1: num1,
                     num2: num2,
-                    direction: this.state.boardCells[neighborIndex].direction,
+                    direction:direction ,
                     sides: 2
                 };
             }
 
-        }
-        else {
-            if(this.state.onDragBrick.num1 ===this.state.onDragBrick.num2)
-            {
+        } else {
+            if (this.state.onDragBrick.num1 === this.state.onDragBrick.num2) {
                 res = {
-                    up: onNum,
-                    down: onNum,
-                    right: onNum,
-                    left: onNum,
+                    up: num1,
+                    down: num1,
+                    right: num1,
+                    left: num1,
                     num1: num1,
                     num2: num2,
-                    direction: (this.state.boardCells[neighborIndex].direction === "vertical" ?  "horizontal" :"vertical"),
+                    direction: "vertical",
                     sides: 4
                 };
 
 
+            } else {
 
-            }
-            else {
-                let isVertical = this.state.boardCells[neighborIndex].direction === "vertical";
                 res = {
-                    up: (isVertical && scanDir === "up"  || !isVertical ? null : num1),
-                    down: (isVertical ? null : num2),
-                    right: (isVertical ? null : num1),
-                    left: (isVertical === "left" ? null : num2),
+                    up: num1,
+                    down: num2,
+                    right: null,
+                    left: null,
                     num1: num1,
                     num2: num2,
-                    direction: this.state.boardCells[neighborIndex].direction,
+                    direction: "vertical",
                     sides: 2
                 };
 
@@ -295,8 +259,7 @@ class Game extends React.Component {
 
     scanUp(index) {
         let res = null;
-        console.log("scan up neighbor: ", this.state.boardCells[index - 10].brick);
-        if (index - 10 > 0 && this.state.boardCells[index - 10].brick && this.state.boardCells[index - 10].brick.down) {
+        if (index - 10 >= 0 && this.state.boardCells[index - 10].brick && this.state.boardCells[index - 10].brick.down) {
             if (this.state.boardCells[index - 10].brick.down === this.state.onDragBrick.num1) {
                 this.state.boardCells[index - 10].brick.down = null;
                 res = {
@@ -315,106 +278,129 @@ class Game extends React.Component {
                     scanDir: "up"
                 };
             }
-
         }
+
+        console.log("scan up final res:", res);
+
         return res;
     }
 
     scanDown(index) {
+
         let res = null;
-        if (index + 10 < 100 && this.state.boardCells[index + 10].brick && this.state.boardCells[index + 10].brick.up) {
-            if (this.state.boardCells[index + 10].brick.up === this.state.onDragBrick.num1)
+        if (index + 10 < 100 && this.state.boardCells[index + 10].brick!==null && this.state.boardCells[index + 10].brick.up !== null) {
+            if (this.state.boardCells[index + 10].brick.up === this.state.onDragBrick.num1) {
                 this.state.boardCells[index + 10].brick.up = null;
                 res = {
-                    brick: this.createDroppedBrick(index + 10, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "down"),
+                    brick: this.createDroppedBrick(index + 10, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "down"),
                     neighborIndex: index + 10,
                     scanDir: "down"
                 };
+            }
 
-
-            if (this.state.boardCells[index + 10].brick.up === this.state.onDragBrick.num2)
+            if (this.state.boardCells[index + 10].brick.up === this.state.onDragBrick.num2) {
                 this.state.boardCells[index + 10].brick.up = null;
                 res = {
                     brick: this.createDroppedBrick(index + 10, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "down"),
                     neighborIndex: index + 10,
                     scanDir: "down"
                 };
+            }
+
         }
 
-
+        console.log("scan down final res:", res);
         return res;
     }
 
     scanRight(index) {
         let res = null;
-        if (index + 1 < 10 && this.state.boardCells[index + 1].brick && this.state.boardCells[index + 1].brick.left) {
+        if ((index + 1) % 10 < 10 && this.state.boardCells[index + 1].brick !== null && this.state.boardCells[index + 1].brick.left !== null) {
+            if (this.state.boardCells[index + 1].brick.left === this.state.onDragBrick.num1) {
+                this.state.boardCells[index + 1].brick.left = null;
+                res = {
+                    brick: this.createDroppedBrick(index + 1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "right"),
+                    neighborIndex: index + 1,
+                    scanDir: "right"
+                };
+            }
 
-            if (this.state.boardCells[index + 1].brick.left === this.state.onDragBrick.num1)
-                this.state.boardCells[index + 10].brick.left = null;
-            res = {
-                brick: this.createDroppedBrick(index + 1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "right"),
-                neighborIndex: index + 1,
-                scanDir: "right"
-            };
+            if (this.state.boardCells[index + 1].brick.left === this.state.onDragBrick.num2) {
+                this.state.boardCells[index + 1].brick.left = null;
+                res = {
+                    brick: this.createDroppedBrick(index + 1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "right"),
+                    neighborIndex: index + 1,
+                    scanDir: "right"
+                };
+            }
 
-
-            if (this.state.boardCells[index + 1].brick.left === this.state.onDragBrick.num2)
-                this.state.boardCells[index + 10].brick.left = null;
-            res = {
-                brick: this.createDroppedBrick(index + 1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "right"),
-                neighborIndex: index + 1,
-                scanDir: "right"
-            };
         }
-
-
         return res;
     }
 
     scanLeft(index) {
         let res = null;
-        if (index - 1 >= 0 && this.state.boardCells[index - 1].brick && this.state.boardCells[index - 1].brick.right > 0) {
-            this.state.boardCells[index - 1].brick.onNum.map((onNum) => {
-                    if (this.state.boardCells[index - 1].brick.right === this.state.onDragBrick.num1)
-                        this.state.boardCells[index + 10].brick.right = null;
-                    res = {
-                        brick: this.createDroppedBrick(index - 1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "left"),
-                        neighborIndex: index - 1,
-                        scanDir: "left"
-                    };
+        if ((index - 1) % 10 >= 0 && this.state.boardCells[index - 1].brick !== null && this.state.boardCells[index - 1].brick.right !==null) {
+            if (this.state.boardCells[index - 1].brick.right === this.state.onDragBrick.num1) {
+                this.state.boardCells[index - 1].brick.right = null;
+                res = {
+                    brick: this.createDroppedBrick(index - 1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "left"),
+                    neighborIndex: index - 1,
+                    scanDir: "left"
+                };
 
+            }
+            if (this.state.boardCells[index - 1].brick.right === this.state.onDragBrick.num2) {
+                this.state.boardCells[index - 1].brick.right = null;
+                res = {
+                    brick: this.createDroppedBrick(index - 1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "left"),
+                    neighborIndex: index - 1,
+                    scanDir: "left"
+                };
+            }
 
-                    if (this.state.boardCells[index - 1].brick.right === this.state.onDragBrick.num2)
-                        this.state.boardCells[index + 10].brick.right = null;
-                    res = {
-                        brick: this.createDroppedBrick(index - 10, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "left"),
-                        neighborIndex: index - 1,
-                        scanDir: "left"
-                    };
-                }
-            );
         }
         return res;
     }
 
+    grabBrick() {
+        let playerBricks = this.state.playerBricks;
+        let bricksArr = this.state.bricksArr;
+        if (this.state.bricksArr.length > 0)
+            playerBricks.push(bricksArr.pop());
+
+        this.setState({playerBricks: playerBricks, bricksArr: bricksArr});
+
+    }
+
+
     render() {
         return (
-            <div id="game">
+            <div className="game">
                 <Board
-                    className="container-drag"
                     moveBrick={this.moveBrick}
                     game={this}
                     id="board"
                     boardCells={this.state.boardCells}
                     handleDrop={this.handleDrop}
-                    numBricks = {this.state.boardNumBricks}
+                    numBricks={this.state.boardNumBricks}
                 />
-                <Player
-                    className="container-drag"
-                    id="player1"
-                    bricks={this.state.playerBricks}
-                    onDrag={this.onDrag}
-                />
+                <div className='player-statistics-container'>
+                    <Player
+                        id="player1"
+                        bricks={this.state.playerBricks}
+                        onDrag={this.onDrag}
+                    />
+
+                    <Statistics
+
+                        grabBrick={this.grabBrick}
+                        countTurns={this.state.boardNumBricks}
+                        game = {this}
+                        gameOver = {this.state.gameOver}
+
+                    />
+                </div>
             </div>
         );
     }

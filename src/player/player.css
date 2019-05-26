@@ -1,9 +1,10 @@
 .player {
 
     height: 160px;
-    width: 100%;
+    width: 70%;
     align-items: stretch;
     display: flex;
     justify-content: center;
+
 
 }

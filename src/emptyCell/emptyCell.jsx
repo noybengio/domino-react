@@ -1,4 +1,5 @@
 import React from 'react';
+import './emptyCell.css';
 
 const EmptyCell = (props) => {
     return (
