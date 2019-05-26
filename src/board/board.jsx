@@ -29,6 +29,7 @@ class Board extends React.Component {
         this.props.handleDrop.bind(this.props.game)(index);
         //let num1 = ev.dataTransfer.getData("num1");
         // let num2 = ev.dataTransfer.getData("num2");
+
         //this.props.moveBrick.bind(this.props.game)(num1, num2);
 
     };
@@ -40,7 +41,7 @@ class Board extends React.Component {
             <div onDrop={this.onDrop} className={"container-board"}>
                 <div className="board"
                      onDragOver={(ev) => this.onDragOver(ev)}
-                     onDrop={(ev) => this.onDrop(ev, "board")}>
+                     onDrop={(ev) => this.onDrop(ev)}>s
                     {
 
                         this.state.boardCells.map((cell, i) => {
