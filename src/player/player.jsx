@@ -13,7 +13,7 @@ class Player extends React.Component {
 
     onDragOver(ev) {
         ev.preventDefault();
-        console.log("player onDragOver");
+        //console.log("player onDragOver");
 
     };
 
@@ -31,9 +31,9 @@ class Player extends React.Component {
                                 key={`brick-${i}`}
                                 num1={brick.num1}
                                 num2={brick.num2}
-                                onDrag={this.props.onDrag}
+                                setDragBrick={this.props.setDragBrick}
                                 belongTo = { "player"}
-
+                                game = { this.props.game }
                             />);
                     })
                 }

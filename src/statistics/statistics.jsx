@@ -10,18 +10,13 @@ class Statistics extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            gameOver: this.props.gameState,
-            countTurns: this.props.countTurns,
-            winner: this.props.winner
 
         };
     }
 
     render() {
-
-        console.log(" statistics turns counter : ", this.props.countTurns);
-        return (
-            <div>
+         return(  
+           <div>
 
                 <Info
                     text="Turn Counter: "
@@ -30,14 +25,26 @@ class Statistics extends React.Component {
 
                 <Button
                     text="Grab Brick"
-                    buttonFunc={this.props.grabBrick}
+                    buttonFunc = {this.props.grabBrick}
+                    game = {this.props.game}
+                    disabled = { this.props.bricksArrayLength === 0 || this.props.gameOver }
+                />
+
+                <Button
+                    text="New Game"
+                    buttonFunc={this.props.startNewGame}
                     game={this.props.game}
                 />
 
                 {
-                    (this.state.gameOver === false ?
+                    (this.props.gameOver === true ?
                             <div>
                                 <hr/>
+                                <Info
+                                    text="Game Over "
+                                    data = {this.props.winner === "player1" ? "You Win!" : "Loser..."}
+                                />
+
                                 <Button
                                     text="New Game"
                                     buttonFunc={this.props.startNewGame}
@@ -46,19 +53,16 @@ class Statistics extends React.Component {
 
                                 <Button
                                     text="Prev Turn"
-                                    buttonFunc={this.props.prevTurn}
+                                    buttonFunc={this.props.setPrevHistory}
                                     game={this.props.game}
+                                    disabled = { this.props.prevButton }
                                 />
 
                                 <Button
                                     text="Next Turn"
-                                    buttonFunc={this.props.nextTurn}
+                                    buttonFunc={this.props.setNextHistory}
                                     game={this.props.game}
-                                />
-
-                                <Info
-                                    text={this.state.winner === "player1" ? "You Win!" : "Loser..."}
-
+                                    disabled = { this.props.nextButton }
                                 />
 
                             </div>

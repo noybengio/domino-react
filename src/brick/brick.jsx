@@ -13,13 +13,14 @@ class Brick extends React.Component {
 
         };
 
-        this.onDragStart = this.onDragStart.bind(this);
+        this.onDragStart.bind(this);
+
     }
 
     onDragStart(ev, id){
         console.log(" brick on drag start : ",this.props.num1,this.props.num2 );
 
-        this.props.onDrag(this.props.num1,this.props.num2 , this.props.direction);
+        this.props.setDragBrick.bind(this.props.game)(this.props.num1,this.props.num2);
     };
 
    render() {
