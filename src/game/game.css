@@ -7,9 +7,12 @@
 }
 
 .player-statistics-container{
-
 	display: flex;
 	flex-direction: row;
-
-
+	position: fixed;
+	background-color: #966666;
+	width: 100%;
+	bottom:0;
+	left:0;
+	border-radius: 10px;
 }

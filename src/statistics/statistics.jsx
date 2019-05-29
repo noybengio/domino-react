@@ -16,7 +16,7 @@ class Statistics extends React.Component {
 
     render() {
          return(  
-           <div>
+           <div class="statistics">
 
                 <Info
                     text="Turn Counter: "
@@ -27,7 +27,7 @@ class Statistics extends React.Component {
                     text="Grab Brick"
                     buttonFunc = {this.props.grabBrick}
                     game = {this.props.game}
-                    disabled = { this.props.bricksArrayLength === 0 || this.props.gameOver }
+                    disabled = { this.props.bricksArrayLenght === 0 || this.props.gameOver }
                 />
 
                 <Button
