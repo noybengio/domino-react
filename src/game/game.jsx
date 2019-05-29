@@ -429,7 +429,7 @@ class Game extends React.Component {
         let historyState = this.state.historyState;
         let historyIndex;
 
-        historyState.push(this.state);
+        historyState.push(JSON.stringify(this.state));
         historyIndex = historyState.length - 1;
 
         this.setState({
@@ -439,9 +439,10 @@ class Game extends React.Component {
 
     setPrevHistory() {
         let historyIndex = this.state.historyIndex;
-        historyIndex--;
+        if(historyIndex > 0)
+            historyIndex--;
 
-        let prevState = this.state.historyState[historyIndex];
+        let prevState = JSON.parse(this.state.historyState[historyIndex]);
 
         this.setState({
             score1: prevState.score1,
@@ -459,7 +460,8 @@ class Game extends React.Component {
 
     setNextHistory() {
         let historyIndex = this.state.historyIndex;
-        historyIndex++;
+        if(historyIndex < this.state.historyState.length - 1)
+            historyIndex++;
 
         let nextState = this.state.historyState[historyIndex];
 
