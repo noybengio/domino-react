@@ -22,13 +22,11 @@ class Board extends React.Component {
         ev.preventDefault();
     };
 
-
     onDrop(ev) {
         let legalBrick;
         let index = parseInt(ev.target.getAttribute('cellindex'), 10);
         this.handleDrop(index);
     };
-
 
     render() {
         console.log("board render : ", this.state.boardCells);
