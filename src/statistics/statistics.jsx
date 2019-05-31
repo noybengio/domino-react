@@ -16,25 +16,20 @@ class Statistics extends React.Component {
 
     render() {
          return(  
-           <div class="statistics">
+           <div className="statistics">
 
                 <Info
                     text="Turn Counter: "
-                    data={this.props.countTurns}
+                    data={this.props.turnCounter}
                 />
 
                 <Button
                     text="Grab Brick"
                     buttonFunc = {this.props.grabBrick}
                     game = {this.props.game}
-                    disabled = { this.props.bricksArrayLenght === 0 || this.props.gameOver }
+                    disabled = { this.props.bricksArrayLength === 0 || this.props.gameOver }
                 />
 
-                <Button
-                    text="New Game"
-                    buttonFunc={this.props.startNewGame}
-                    game={this.props.game}
-                />
 
                 {
                     (this.props.gameOver === true ?

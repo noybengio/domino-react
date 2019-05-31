@@ -4,8 +4,8 @@
     width:100%;*/
     border: 1px solid black;
     display: grid;
-    grid-template-columns: repeat(10, 105px);
-    grid-template-rows: repeat(10, 105px);
+    grid-template-columns: repeat(30, 105px);
+    grid-template-rows: repeat(30, 105px);
 
 }
 
