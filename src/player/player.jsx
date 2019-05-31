@@ -7,7 +7,7 @@ class Player extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bricks: this.props.bricks
+
         };
     }
 
@@ -24,7 +24,7 @@ class Player extends React.Component {
                 onDragOver={(ev) => this.onDragOver(ev)}
             >
                 {
-                    this.state.bricks.map((brick, i) => {
+                    this.props.bricks.map((brick, i) => {
                         return (
                             !brick.used && <Brick
                                 direction={"vertical"}

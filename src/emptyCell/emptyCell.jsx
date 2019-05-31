@@ -3,7 +3,14 @@ import './emptyCell.css';
 
 const EmptyCell = (props) => {
     return (
-        <div className={'empty-cell'} cellindex={props.cellIndex}> </div>
+        <div
+             className={'empty-cell'}
+             cellindex={props.cellIndex}
+             turn-red = {'false'}
+        />
+
+
+
     );
 };
 

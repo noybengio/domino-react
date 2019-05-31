@@ -33,7 +33,7 @@ class Game extends React.Component {
 
     createBoard() {
         let tempBoard = [];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 900; i++) {
             tempBoard.push({
                 index: i,
                 brick: null
@@ -65,13 +65,6 @@ class Game extends React.Component {
         return bricksArr;
     }
 
-    hitBrick() {
-        let playerBricks = this.state.playerBricks;
-        let bricksArr = this.state.bricksArr;
-
-        this.setState({playerBricks: playerBricks, bricksArr: bricksArr});
-    }
-
     splitBricks(bricksArr) {
         let playerBricks = [];
         for (let i = 0; i < 6; i++) {
@@ -93,9 +86,8 @@ class Game extends React.Component {
         let boardNumBricks = this.state.boardNumBricks + 1;
         let boardCells = this.state.boardCells;
         let bricksArrayLength = this.state.bricksArr.length;
-        let gameOver = false;
         let turnCounter = this.state.turnCounter;
-        let winner = "";
+        let gameOverStatus;
 
         this.setHistoryState();
 
@@ -106,25 +98,14 @@ class Game extends React.Component {
         this.removeBrickFromPlayerDeck();
         console.log("num bricks :", boardNumBricks);
 
-        if (this.state.playerBricks.length === 0) {
-            gameOver = true;
-            winner = "player1"
-        } else if (bricksArrayLength === 0) {
-            this.setAvailableBoardNums();
-            if (!this.isTurnPossible)
-                gameOver = true;
-        }
-
         turnCounter++;
-
-
         this.setState({
             boardCells: boardCells,
             boardNumBricks: boardNumBricks,
-            gameOver: gameOver,
             turnCounter: turnCounter,
-            winner: winner
         });
+
+        this.isGameOver();
 
         // console.log(" game onBrickDropped player bricks after:", this.state.playerBricks);
         console.log(" game onBrickDropped board bricks after:", this.state.boardCells);
@@ -167,17 +148,23 @@ class Game extends React.Component {
 
     }
 
-    handleDrop(index) {
+    handleDrop(target) {
         let res = null;
+        let index = parseInt(target.getAttribute('cellindex'), 10);
+
+        if(target.getAttribute('turn-red') === 'true')
+            target.setAttribute('turn-red' , 'false');
         if (this.state.boardNumBricks > 0) {
             res = this.isLegalDrop(index);
-            console.log("handle drop res :", res);
             if (res) {
                 this.onBrickDropped(index, res.brick);
             }
+            else {
+                target.setAttribute('turn-red' , 'true');
+            }
         } else {
             res = this.createDroppedBrick(0, null, null, this.state.onDragBrick.num1, this.state.onDragBrick.num2, null);
-            this.onBrickDropped(55, res);
+            this.onBrickDropped(194, res);
 
         }
 
@@ -189,35 +176,20 @@ class Game extends React.Component {
         res = this.scanDown(index);
         if (res !== null)
             return res;
-        else {
-
-            // css red sign on the cell that isnt legal
-        }
 
         res = this.scanUp(index);
 
         if (res !== null)
             return res;
-        else {
-
-        }
 
         res = this.scanLeft(index);
 
         if (res !== null)
             return res;
-        else {
-
-
-        }
-
 
         res = this.scanRight(index);
         if (res !== null)
             return res;
-        else {
-
-        }
 
         return null;
 
@@ -298,22 +270,22 @@ class Game extends React.Component {
 
     scanUp(index) {
         let res = null;
-        if (index - 10 >= 0 && this.state.boardCells[index - 10].brick && this.state.boardCells[index - 10].brick.down !== null) {
-            if (this.state.boardCells[index - 10].brick.down === this.state.onDragBrick.num1) {
-                this.state.boardCells[index - 10].brick.down = null;
+        if (index - 30 >= 0 && this.state.boardCells[index - 30].brick && this.state.boardCells[index - 30].brick.down !== null) {
+            if (this.state.boardCells[index - 30].brick.down === this.state.onDragBrick.num1) {
+                this.state.boardCells[index - 30].brick.down = null;
                 res = {
-                    brick: this.createDroppedBrick(index - 10, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "up"),
-                    neighborIndex: index - 10,
+                    brick: this.createDroppedBrick(index - 30, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "up"),
+                    neighborIndex: index - 30,
                     scanDir: "up"
                 };
             }
 
 
-            if (this.state.boardCells[index - 10].brick.down === this.state.onDragBrick.num2) {
-                this.state.boardCells[index - 10].brick.down = null;
+            if (this.state.boardCells[index - 30].brick.down === this.state.onDragBrick.num2) {
+                this.state.boardCells[index - 30].brick.down = null;
                 res = {
-                    brick: this.createDroppedBrick(index - 10, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "up"),
-                    neighborIndex: index - 10,
+                    brick: this.createDroppedBrick(index - 30, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "up"),
+                    neighborIndex: index - 30,
                     scanDir: "up"
                 };
             }
@@ -327,21 +299,21 @@ class Game extends React.Component {
     scanDown(index) {
 
         let res = null;
-        if (index + 10 < 100 && this.state.boardCells[index + 10].brick !== null && this.state.boardCells[index + 10].brick.up !== null) {
-            if (this.state.boardCells[index + 10].brick.up === this.state.onDragBrick.num1) {
-                this.state.boardCells[index + 10].brick.up = null;
+        if (index + 30 < 900 && this.state.boardCells[index + 30].brick !== null && this.state.boardCells[index + 30].brick.up !== null) {
+            if (this.state.boardCells[index + 30].brick.up === this.state.onDragBrick.num1) {
+                this.state.boardCells[index + 30].brick.up = null;
                 res = {
-                    brick: this.createDroppedBrick(index + 10, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "down"),
-                    neighborIndex: index + 10,
+                    brick: this.createDroppedBrick(index + 30, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "down"),
+                    neighborIndex: index + 30,
                     scanDir: "down"
                 };
             }
 
-            if (this.state.boardCells[index + 10].brick.up === this.state.onDragBrick.num2) {
-                this.state.boardCells[index + 10].brick.up = null;
+            if (this.state.boardCells[index + 30].brick.up === this.state.onDragBrick.num2) {
+                this.state.boardCells[index + 30].brick.up = null;
                 res = {
-                    brick: this.createDroppedBrick(index + 10, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "down"),
-                    neighborIndex: index + 10,
+                    brick: this.createDroppedBrick(index + 30, this.state.onDragBrick.num2, this.state.onDragBrick.num1, this.state.onDragBrick.num1, this.state.onDragBrick.num2, "down"),
+                    neighborIndex: index + 30,
                     scanDir: "down"
                 };
             }
@@ -354,7 +326,7 @@ class Game extends React.Component {
 
     scanRight(index) {
         let res = null;
-        if ((index + 1) % 10 < 10 && this.state.boardCells[index + 1].brick !== null && this.state.boardCells[index + 1].brick.left !== null) {
+        if ((index + 1) % 30 < 30 && this.state.boardCells[index + 1].brick !== null && this.state.boardCells[index + 1].brick.left !== null) {
             if (this.state.boardCells[index + 1].brick.left === this.state.onDragBrick.num1) {
                 this.state.boardCells[index + 1].brick.left = null;
                 res = {
@@ -379,7 +351,7 @@ class Game extends React.Component {
 
     scanLeft(index) {
         let res = null;
-        if ((index - 1) % 10 >= 0 && this.state.boardCells[index - 1].brick !== null && this.state.boardCells[index - 1].brick.right !== null) {
+        if ((index - 1) % 30 >= 0 && this.state.boardCells[index - 1].brick !== null && this.state.boardCells[index - 1].brick.right !== null) {
             if (this.state.boardCells[index - 1].brick.right === this.state.onDragBrick.num1) {
                 this.state.boardCells[index - 1].brick.right = null;
                 res = {
@@ -406,62 +378,92 @@ class Game extends React.Component {
 
         let playerBricks = this.state.playerBricks;
         let bricksArr = this.state.bricksArr;
-        let gameOver = false;
         let turnCounter = this.state.turnCounter;
+        let gameOverStatus = this.isGameOver();
 
         this.setHistoryState();
 
         if (bricksArr.length > 0)
             playerBricks.push(bricksArr.pop());
 
-        else if (bricksArr.length === 0) {
-            this.setAvailableBoardNums();
-            if (!this.isTurnPossible)
-                gameOver = true;
-        }
+
         turnCounter++;
-        this.setState({playerBricks: playerBricks, bricksArr: bricksArr, turnCounter: turnCounter, gameOver: gameOver});
+        this.setState({playerBricks: playerBricks, bricksArr: bricksArr, turnCounter: turnCounter, gameOver: gameOverStatus.gameOver});
 
     }
 
-    setAvailableBoardNums() {
+    isGameOver() {
+        let res = {
+            gameOver: false,
+            winner: ""
+        };
+        if (this.state.playerBricks.length === 0) {
+            res.gameOver = true;
+            res.winner = "player1"
+        }
+        else if (this.state.bricksArr.length === 0 && this.state.boardNumBricks > 0) {
+            if (this.isTurnPossible() === false)
+                res.gameOver = true;
+
+        }
+
+        if( res.gameOver === true) {
+            this.setState({
+                gameOver:res.gameOver,
+                winner: res.winner
+            });
+
+            this.setHistoryState();
+        }
+
+        return res;
+    }
+
+    getAvailableBoardNums() {
         let availableNums = [];
         this.state.boardCells.map(cell => {
-            if (cell.brick && cell.brick.up && !this.state.availableNumsOnBoard.includes(cell.brick.up))
+            if (cell.brick!== null && cell.brick.up !== null && availableNums.includes(cell.brick.up)===false)
                 availableNums.push(cell.brick.up);
 
-            if (cell.brick && cell.brick.down && !this.state.availableNumsOnBoard.includes(cell.brick.down))
+            if (cell.brick!== null && cell.brick.down!== null && availableNums.includes(cell.brick.down)===false)
                 availableNums.push(cell.brick.down);
 
-            if (cell.brick && cell.brick.right && !this.state.availableNumsOnBoard.includes(cell.brick.right))
+            if (cell.brick!== null && cell.brick.right !== null&& availableNums.includes(cell.brick.right)===false)
                 availableNums.push(cell.brick.right);
 
-            if (cell.brick && cell.brick.left && !this.state.availableNumsOnBoard.includes(cell.brick.left))
+            if (cell.brick!== null && cell.brick.left !== null&& availableNums.includes(cell.brick.left)===false)
                 availableNums.push(cell.brick.left);
         });
 
-        this.setState({availableNumsOnBoard: availableNums});
+        return availableNums;
     }
 
     isTurnPossible() {
-        this.state.playerBricks.map(brick => {
-            if (this.state.availableNumsOnBoard.includes(brick.num1) || this.state.availableNumsOnBoard.includes(brick.num2))
+        let availableNumsOnBoard = this.getAvailableBoardNums();
+       for (let i = 0 ; i < this.state.playerBricks.length ; i++){
+            if (availableNumsOnBoard.includes( this.state.playerBricks[i].num1) || availableNumsOnBoard.includes(this.state.playerBricks[i].num2))
                 return true;
-        });
+        }
 
         return false;
     }
 
     setHistoryState() {
+        let newState = JSON.parse(JSON.stringify(this.state));
+        delete newState.historyState;
+        delete newState.historyIndex;
         let historyState = this.state.historyState;
         let historyIndex;
+        console.log("setHistoryState newState:" , newState);
 
-        historyState.push(JSON.stringify(this.state));
+        historyState.push(newState);
+
         historyIndex = historyState.length - 1;
+
 
         this.setState({
             historyState: historyState,
-            historyIndex: historyIndex
+            historyIndex: historyIndex,
         });
     }
 
@@ -470,7 +472,7 @@ class Game extends React.Component {
         if (historyIndex > 0)
             historyIndex--;
 
-        let prevState = JSON.parse(this.state.historyState[historyIndex]);
+        let prevState = this.state.historyState[historyIndex];
 
         this.setState({
             score1: prevState.score1,
@@ -481,6 +483,7 @@ class Game extends React.Component {
             historyIndex: historyIndex,
             boardCells: prevState.boardCells,
             boardNumBricks: prevState.boardNumBricks,
+            turnCounter: prevState.turnCounter
         });
 
 
@@ -502,11 +505,13 @@ class Game extends React.Component {
             historyIndex: historyIndex,
             boardCells: nextState.boardCells,
             boardNumBricks: nextState.boardNumBricks,
+            turnCounter: nextState.turnCounter
         });
     }
 
     startNewGame() {
 
+        let boardCells = this.createBoard();
         let bricksArr = this.createBricksArray();
         let res = this.splitBricks(bricksArr);
         let playerBricks = res.playerBricks;
@@ -520,16 +525,14 @@ class Game extends React.Component {
             availableNumsOnBoard: [],
             historyState: [],
             historyIndex: -1,
-            boardCells: this.createBoard(),
+            boardCells: boardCells,
             onDragBrick: null,
             boardNumBricks: 0,
             gameOver: false,
             winner: "",
             turnCounter: 0
         });
-
     }
-
 
     render() {
         const historyLength = this.state.historyState.length;
@@ -556,11 +559,11 @@ class Game extends React.Component {
                         game={this}
                         countTurns={this.state.boardNumBricks}
                         gameOver={this.state.gameOver}
-                        bricksArrayLenght={this.state.bricksArr.length}
+                        bricksArrayLength={this.state.bricksArr.length}
                         winner={this.state.winner}
 
-                        nextButton={this.state.historyIndex < historyLength - 1}
-                        prevButton={this.state.historyIndex > 0}
+                        nextButton={this.state.historyIndex === historyLength - 1}
+                        prevButton={this.state.historyIndex === 0}
                         setNextHistory={this.setNextHistory}
                         setPrevHistory={this.setPrevHistory}
                         grabBrick={this.grabBrick}

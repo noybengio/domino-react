@@ -10,8 +10,7 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            boardCells: this.props.boardCells,
-            numBricks :this.props.numBricks,
+
         };
 
         this.onDrop = this.onDrop.bind(this);
@@ -23,22 +22,18 @@ class Board extends React.Component {
     };
 
     onDrop(ev) {
-        let legalBrick;
-        let index = parseInt(ev.target.getAttribute('cellindex'), 10);
-        this.handleDrop(index);
+        this.handleDrop(ev.target);
     };
 
     render() {
-        console.log("board render : ", this.state.boardCells);
         return (
-            <div onDrop={this.onDrop} className={"container-board"}>
+            <div  className={"container-board"}>
                 <div className="board"
                      onDragOver={(ev) => this.onDragOver(ev)}
                      onDrop={(ev) => this.onDrop(ev)}
                      >
                     {
-                        this.state.boardCells.map((cell, i) => {
-                            (cell.brick ? console.log("board render map cell : ", cell): console.log());
+                        this.props.boardCells.map((cell, i) => {
                             return cell.brick ?
                                 <Brick
                                     key={i}

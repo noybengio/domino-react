@@ -13,7 +13,6 @@ class Button extends React.Component {
     }
 
     render() {
-        console.log("button function of", this.props.text ,this.props.buttonFunc);
         return (
             <div>
                 <button
