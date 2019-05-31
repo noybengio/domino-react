@@ -530,7 +530,6 @@ class Game extends React.Component {
 
     }
 
-
     render() {
         const historyLength = this.state.historyState.length;
 
