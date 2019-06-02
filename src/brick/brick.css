@@ -2,39 +2,43 @@
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background-color: whitesmoke;
+    justify-self: center;
+    align-self: center;
     border: 1px solid black;
+    /*position: relative;*/
+    justify-content: center;
+
 }
 
 .brick[direction="vertical"] {
-    display: flex;
+    /*display: flex;*/
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    /*align-items: center;*/
     width: 50px;
     height: 100px;
 }
 
 .brick[direction="horizontal"] {
-    display: flex;
+    /*display: flex;*/
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
     width: 100px;
     height: 50px;
 }
 
-.brick[direction="vertical"] hr {
+.brick hr {
     border: 1px solid black;
-    width: 100%;
+    
+    padding: 0;
+    border-radius: 1px;
 }
+
+ .brick[direction="vertical"] hr {
+    margin: 7px 3px 7px 3px;}
 
 .brick[direction="horizontal"] hr {
-    border: 1px solid black;
-    height: 100%;
-}
-
-
+    margin: 3px 7px 3px 7px;
+} 
 
 .brick .dots-container {
     justify-content: center;

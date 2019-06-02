@@ -7,14 +7,13 @@ class Button extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+
         };
 
     }
 
     render() {
         return (
-            <div>
                 <button
                     type="button"
                     onClick={function () {this.props.buttonFunc.bind(this.props.game)();}.bind(this)}
@@ -23,10 +22,8 @@ class Button extends React.Component {
                 >
                     {this.props.text}
                 </button>
-
-            </div>
         );
-        }
+    }
 
 }
 

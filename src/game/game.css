@@ -1,18 +1,16 @@
 .game {
 
-	display: flex;
 	flex-direction: column;
-	align-content: center;
-	justify-content: center;
+
 }
 
-.player-statistics-container{
+ .player-statistics-container{
 	display: flex;
-	flex-direction: row;
-	position: fixed;
-	background-color: #966666;
-	width: 100%;
-	bottom:0;
-	left:0;
+	flex-direction: column;
+	position: sticky;
+	padding: 5px;
+	bottom: 0;
+	margin: 0 auto;
 	border-radius: 10px;
-}
+	
+} 

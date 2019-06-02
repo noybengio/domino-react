@@ -1,10 +1,11 @@
 .dots-container {
-    height: 100%;
-    width: 100%;
+
     display: grid;
     grid-template-columns: repeat(3,10px);
-    grid-gap: 4px;
+    grid-gap: 2px;
     grid-template-rows: repeat(3,10px);
+    justify-content: center;
+    align-items: center;
 
 }
 
@@ -41,9 +42,10 @@
 
 
 
-.dot
+.dots-container .dot
 {
     border-radius: 50%;
+    height: 10px;
 }
 
 

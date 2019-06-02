@@ -27,8 +27,17 @@ class Game extends React.Component {
             boardNumBricks: 0,
             gameOver: false,
             winner: "",
-            turnCounter: 0
+            turnCounter: 0,
+            zoom: 100,
+            minutes: 0,
+            seconds: 0,
+            interval: null,
+            time: "00:00"
+            
         };
+
+        this.state.interval = setInterval(this.setTime.bind(this), 1000);
+
     }
 
     createBoard() {
@@ -79,24 +88,17 @@ class Game extends React.Component {
     }
 
     onBrickDropped(droppedIndex, res) {
-        //console.log(" game onBrickDropped player bricks before:", this.state.playerBricks);
-        //  console.log(" game onBrickDropped board bricks before:", this.state.boardCells);
-        // console.log("onBrickDropped legal brick :", res);
-
         let boardNumBricks = this.state.boardNumBricks + 1;
         let boardCells = this.state.boardCells;
         let bricksArrayLength = this.state.bricksArr.length;
         let turnCounter = this.state.turnCounter;
         let gameOverStatus;
 
-        this.setHistoryState();
+        this.setHistoryState(true);
 
-        console.log("localStorage", localStorage);
         boardCells[droppedIndex].brick = res;
-        // console.log("onBrickDropped brick[droppedIndex] :", boardCells[droppedIndex].brick);
 
         this.removeBrickFromPlayerDeck();
-        console.log("num bricks :", boardNumBricks);
 
         turnCounter++;
         this.setState({
@@ -106,9 +108,6 @@ class Game extends React.Component {
         });
 
         this.isGameOver();
-
-        // console.log(" game onBrickDropped player bricks after:", this.state.playerBricks);
-        console.log(" game onBrickDropped board bricks after:", this.state.boardCells);
     }
 
     removeBrickFromPlayerDeck() {
@@ -128,8 +127,6 @@ class Game extends React.Component {
     }
 
     setDragBrick(num1, num2) {
-        console.log("setDragBrick this", this);
-        //this.setState({onDragBrick: {num1: num1, num2: num2}, playerBricks: this.setUsedBrick(num1, num2)});
         this.setState({onDragBrick: {num1: num1, num2: num2}});
     }
 
@@ -291,7 +288,6 @@ class Game extends React.Component {
             }
         }
 
-        console.log("scan up final res:", res);
 
         return res;
     }
@@ -320,7 +316,6 @@ class Game extends React.Component {
 
         }
 
-        console.log("scan down final res:", res);
         return res;
     }
 
@@ -381,7 +376,7 @@ class Game extends React.Component {
         let turnCounter = this.state.turnCounter;
         let gameOverStatus = this.isGameOver();
 
-        this.setHistoryState();
+        this.setHistoryState(true);
 
         if (bricksArr.length > 0)
             playerBricks.push(bricksArr.pop());
@@ -413,7 +408,7 @@ class Game extends React.Component {
                 winner: res.winner
             });
 
-            this.setHistoryState();
+            this.setHistoryState(true);
         }
 
         return res;
@@ -448,17 +443,17 @@ class Game extends React.Component {
         return false;
     }
 
-    setHistoryState() {
+    setHistoryState(setIndex) {
         let newState = JSON.parse(JSON.stringify(this.state));
         delete newState.historyState;
         delete newState.historyIndex;
         let historyState = this.state.historyState;
-        let historyIndex;
-        console.log("setHistoryState newState:" , newState);
+        let historyIndex = this.state.historyIndex;
 
         historyState.push(newState);
 
-        historyIndex = historyState.length - 1;
+        if(setIndex === true)
+            historyIndex = historyState.length - 1;
 
 
         this.setState({
@@ -483,7 +478,10 @@ class Game extends React.Component {
             historyIndex: historyIndex,
             boardCells: prevState.boardCells,
             boardNumBricks: prevState.boardNumBricks,
-            turnCounter: prevState.turnCounter
+            turnCounter: prevState.turnCounter,
+            minutes: prevState.minutes,
+            seconds: prevState.seconds, 
+            time: prevState.time
         });
 
 
@@ -505,7 +503,10 @@ class Game extends React.Component {
             historyIndex: historyIndex,
             boardCells: nextState.boardCells,
             boardNumBricks: nextState.boardNumBricks,
-            turnCounter: nextState.turnCounter
+            turnCounter: nextState.turnCounter,
+            minutes: nextState.minutes,
+            seconds: nextState.seconds,
+            time: nextState.time
         });
     }
 
@@ -530,15 +531,97 @@ class Game extends React.Component {
             boardNumBricks: 0,
             gameOver: false,
             winner: "",
-            turnCounter: 0
+            turnCounter: 0,
+            zoom: 100,
+            minutes: 0,
+            seconds: 0,
+            interval:setInterval(this.setTime.bind(this), 1000),
+            time: "00:00"
         });
     }
 
+    undoStep() {
+        this.setHistoryState(false);
+
+        let historyIndex = this.state.historyIndex;
+
+        let prevHistory = JSON.parse(JSON.stringify(this.state.historyState[historyIndex]));
+        historyIndex--;
+
+        this.setState({
+            score1: prevHistory.score1,
+            score2: prevHistory.score2,
+            bricksArr: prevHistory.bricksArr,
+            playerBricks: prevHistory.playerBricks,
+            availableNumsOnBoard: prevHistory.availableNumsOnBoard,
+            boardCells: prevHistory.boardCells,
+            boardNumBricks: prevHistory.boardNumBricks,
+            onDragBrick: prevHistory.onDragBrick,
+            turnCounter: prevHistory.turnCounter,
+            historyIndex: historyIndex
+        });
+
+    }
+
+    zoomIn() {
+        let zoom = this.state.zoom;
+
+        zoom += 5;
+        // let board = document.getElementsByClassName("board")[0];
+        // let style  =board.style;
+        document.getElementsByClassName("board")[0].style.zoom = `${zoom}%`;
+
+        this.setState({zoom: zoom});
+    }
+
+    zoomOut() {
+        let zoom = this.state.zoom;
+
+        zoom -= 5;
+        // let board = document.getElementsByClassName("board")[0];
+
+        // let style  =board.style.zoom;
+        document.getElementsByClassName("board")[0].style.zoom = `${zoom}%`;
+        this.setState({zoom: zoom});
+    }
+
+    setTime(){
+        let minutes = this.state.minutes;
+        let seconds = this.state.seconds;
+        let time = "";
+
+        seconds++;
+ 
+        if(seconds === 60){
+            minutes++;
+            seconds = 0;
+        }
+ 
+        time = (minutes < 10 ? `0${minutes}` : minutes) + ":" + (seconds < 10 ? `0${seconds}` : seconds);
+
+        this.setState({
+            minutes: minutes,
+            seconds: seconds,
+            time: time
+        });
+        
+        
+    }
+
+    stopClock() {
+        clearInterval(this.state.interval);
+    }
+
+
     render() {
         const historyLength = this.state.historyState.length;
+        if(this.state.gameOver === true)
+            this.stopClock();
 
         return (
+            
             <div className="game">
+
                 <Board
                     moveBrick={this.moveBrick}
                     game={this}
@@ -547,29 +630,45 @@ class Game extends React.Component {
                     handleDrop={this.handleDrop}
                     numBricks={this.state.boardNumBricks}
                 />
-                <div className='player-statistics-container'>
-                    <Player
-                        id="player1"
-                        bricks={this.state.playerBricks}
-                        setDragBrick={this.setDragBrick}
-                        game={this}
-                    />
 
+                <div className = {"player-statistics-container"}>
                     <Statistics
+                        //to bind button funciton
                         game={this}
+
                         countTurns={this.state.boardNumBricks}
                         gameOver={this.state.gameOver}
                         bricksArrayLength={this.state.bricksArr.length}
                         winner={this.state.winner}
 
                         nextButton={this.state.historyIndex === historyLength - 1}
-                        prevButton={this.state.historyIndex === 0}
                         setNextHistory={this.setNextHistory}
+
+                        prevButton={this.state.historyIndex === 0}
                         setPrevHistory={this.setPrevHistory}
+
                         grabBrick={this.grabBrick}
+
                         startNewGame={this.startNewGame}
+
                         turnCounter={this.state.turnCounter}
+
+                        undoStep = {this.undoStep}
+
+                        zoom = {this.state.zoom}
+                        zoomIn = {this.zoomIn}
+                        zoomOut = {this.zoomOut}
+
+                        time = {this.state.time}
                     />
+
+                    <Player
+                        id="player1"
+                        bricks={this.state.playerBricks}
+                        setDragBrick={this.setDragBrick}
+                        game={this}
+                    />`
+
                 </div>
             </div>
         );

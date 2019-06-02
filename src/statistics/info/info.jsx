@@ -13,10 +13,14 @@ class Info extends React.Component {
 
     render() {
         return (
-            <div className={"info"}>
-                <p>{this.props.text}</p>
+            <div 
+                className="info"
+                belongto = {this.props.belongTo}
+            >
+                <p >{this.props.text}</p>
+                { this.props.data &&
                 <p>{this.props.data}</p>
-
+                }
 
             </div>
         );

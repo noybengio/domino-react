@@ -10,7 +10,7 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            
         };
 
         this.onDrop = this.onDrop.bind(this);
@@ -26,6 +26,7 @@ class Board extends React.Component {
     };
 
     render() {
+            
         return (
             <div  className={"container-board"}>
                 <div className="board"
@@ -35,15 +36,23 @@ class Board extends React.Component {
                     {
                         this.props.boardCells.map((cell, i) => {
                             return cell.brick ?
-                                <Brick
-                                    key={i}
-                                    num1={cell.brick.num1}
-                                    num2={cell.brick.num2}
+                                <div 
+                                key = {`container-brick${cell.brick.num1},${cell.brick.num2}`}
+                                    className = {"container-brick"}
                                     direction = {cell.brick.direction}
-                                    belongTo = { "board"}
-                                />
+                                    >
+                                        <Brick
+                                        key={i}
+                                        num1={cell.brick.num1}
+                                        num2={cell.brick.num2}
+                                        direction = {cell.brick.direction}
+                                        belongTo = { "board"}
+                                    />
+                                </div>
                                 :
-                                <EmptyCell key={i} cellIndex={i}
+                                <EmptyCell 
+                                    key={i} 
+                                    cellIndex={i}
                                 />
                         })
                     }

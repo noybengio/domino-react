@@ -4,17 +4,38 @@
     width:100%;*/
     border: 1px solid black;
     display: grid;
-    grid-template-columns: repeat(30, 105px);
-    grid-template-rows: repeat(30, 105px);
-
+    grid-template-columns: repeat(30, 100px);
+    grid-template-rows: repeat(30, 100px);
+    grid-gap: 2px; 
+    zoom: 100%;  
 }
 
 .container-board {
     float: right;
-    height: 70%;
     width: 100%;
     display: flex;
     overflow-y: auto;
     align-items: center;
     justify-content: center;
+}
+
+.container-brick{
+    
+    display: flex;
+    justify-content: center;
+
+}
+.container-brick[direction="vertical"] {
+    
+    display: flex;
+    justify-content: center;
+
+}
+
+.container-brick[direction="horizontal"] {
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }

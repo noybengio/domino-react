@@ -13,14 +13,13 @@ class Player extends React.Component {
 
     onDragOver(ev) {
         ev.preventDefault();
-        //console.log("player onDragOver");
 
     };
 
     render() {
         return (
             <div
-                className={"player"}
+                className={"player-container"}
                 onDragOver={(ev) => this.onDragOver(ev)}
             >
                 {

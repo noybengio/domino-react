@@ -11,7 +11,10 @@ class DotsContainer extends React.Component {
 
     render() {
         return (
-            <div className={'dots-container'} dots-index={this.props.num}>
+            <div 
+                className={'dots-container'} 
+                dots-index={this.props.num}
+            >
                 <div dot-index="0" className={'dot'}/>
                 <div dot-index="1" className={'dot'}/>
                 <div dot-index="2" className={'dot'}/>
