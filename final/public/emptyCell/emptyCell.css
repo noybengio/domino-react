@@ -1,0 +1,27 @@
+.empty-cell {
+    /*border: 1px solid black;*/
+
+}
+
+.empty-cell[turn-red= "true"] {
+    animation:pulse 2s linear;
+
+}
+
+.empty-cell[drag-over= "true"] { 
+    background-color: yellow;
+
+    transition: background-color 1000ms linear;
+  }
+
+@keyframes pulse {
+    0%,100% {
+        background-color: transparent;
+    }
+
+    50% {
+        background-color: #AD310B;
+
+    }
+
+}
