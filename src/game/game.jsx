@@ -17,8 +17,7 @@ class Game extends React.Component {
         this.state = {
             score1: 0,
             score2: 0,
-            bricksArr: bricksArr,
-            playerBricks: playerBricks,
+            bricksArr: bricksAu,
             availableNumsOnBoard: [],
             historyState: [],
             historyIndex: -1,
