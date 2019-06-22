@@ -1,0 +1,7 @@
+.gameroom-container{
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+    margin: 7px;
+    z-index: 100;
+}

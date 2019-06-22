@@ -1,8 +1,6 @@
 import React from "react";
-
 import './gameRoom.css'
-
-import Info from "../../basicComponents/info/info.jsx";
+import Info from "../../../basicComponents/info/info.jsx";
 
 class GameRoom extends React.Component {
 
@@ -16,7 +14,11 @@ class GameRoom extends React.Component {
 
     render() {
         return (
-            <div className="game-Room" >
+            <div
+                className="gameroom-container"
+                onClick={function () {this.props.enterGame.bind(this.props.game)();}.bind(this)}
+
+            >
 
                 <Info text = {this.props.name}
                       data = {null}/>
@@ -24,10 +26,10 @@ class GameRoom extends React.Component {
                 <Info text = {this.props.admin}
                       data = {null}/>
 
-                <Info text = {`${this.props.numSighned} / ${this.props.numRequired}`}
+                <Info text = {`${this.props.numSigned} / ${this.props.numReq}`}
                       data = {null}/>
 
-                <Info text = {this.props.gameStatus}
+                <Info text = {this.props.status}
                       data = {null}/>
 
             </div>

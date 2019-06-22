@@ -20,8 +20,8 @@ class SignIn extends React.Component {
                 <Input text = "User Name"/>
                 <Button
                     text="Sign In"
-                    buttonFunc = {}
-                    game = {}
+                    buttonFunc = {this.props.signIn}
+                    game = {this.props.game}
                 />
             </div>
         );

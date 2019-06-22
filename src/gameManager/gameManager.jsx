@@ -1,8 +1,8 @@
-import React from './node_modules/react';
+import React from 'react';
 import './gameManager.css';
-import SighIn from '../sighIn/sighIn.jsx';
-import Lobby from '../lobby/lobby.jsx.js';
-import Game from '../game/game.jsx.js';
+import SignIn from '../signIn/signIn.jsx';
+import Lobby from '../lobby/lobby.jsx';
+import Game from '../game/game.jsx';
 
 
 
@@ -11,31 +11,56 @@ class gameManager extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            page: "sighIn",
+            page: "signIn",
             name:""
 
         };
 
     }
 
+    signIn() {
+
+        let name = document.getElementById("input").value;
+        console.log("game manager sighn in name: " , name);
+        this.setState({
+            page: "Lobby",
+            name: name
+        });
+    }
+    enterGame() {
+
+        this.setState({
+            page: "Game",
+        });
+
+    }
+
    render() {
         let page = this.state.page;
         
-        return ( (page) => {
+        return (
+            <div>
+            {((page) => {
+                console.log(page);
+                switch(page) {
 
-            switch(page) {
+                    case("signIn"):
+                        return <SignIn
+                            signIn = {this.signIn}
+                            game = {this}
+                        />;
 
-                case("sighIn"):
-                    return <SighIn/>
-                    
-                case("Lobby"):
-                    return <Lobby/>
+                    case("Lobby"):
+                        return <Lobby
+                            enterGame = {this.enterGame}
+                            game = {this}
+                        />;
 
-                case("Game"):
-                    return <Game/>
-            }
-        }
-   
+                    case("Game"):
+                        return <Game/>;
+                }
+        })(page )}
+            </div>
         );
    }
 }

@@ -1,4 +1,4 @@
-import React from './node_modules/react';
+import React from 'react';
 import './lobbyPlayer.css';
 import Info from '../../../basicComponents/info/info.jsx';
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Game from "./game/game.jsx";
+import GameManager from "./gameManager/gameManager.jsx";
 import './index.css'
 
 const App = () => (
     <div id = "app">
-        <Game/>
+        <GameManager/>
     </div>
 );
 

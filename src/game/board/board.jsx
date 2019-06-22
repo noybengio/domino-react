@@ -2,8 +2,8 @@ import React from 'react';
 import './board.css'
 
 
-import EmptyCell from '../emptyCell/emptyCell.jsx.js.js'
-import Brick from '../brick/brick.jsx.js.js'
+import EmptyCell from '../emptyCell/emptyCell.jsx'
+import Brick from '../brick/brick.jsx'
 
 class Board extends React.Component {
 
