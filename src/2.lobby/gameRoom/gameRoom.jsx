@@ -2,6 +2,8 @@ import React from "react";
 
 import './gameRoom.css'
 
+import Info from "../../basicComponents/info/info.jsx";
+
 class GameRoom extends React.Component {
 
     constructor(props) {
@@ -14,15 +16,26 @@ class GameRoom extends React.Component {
 
     render() {
         return (
-            <div className="input" >
-                <p> {this.props.text}</p>
-                <input type = "input"/>
+            <div className="game-Room" >
+
+                <Info text = {this.props.name}
+                      data = {null}/>
+
+                <Info text = {this.props.admin}
+                      data = {null}/>
+
+                <Info text = {`${this.props.numSighned} / ${this.props.numRequired}`}
+                      data = {null}/>
+
+                <Info text = {this.props.gameStatus}
+                      data = {null}/>
 
             </div>
+
         );
     }
 
 }
 
-export default Input;
+export default GameRoom;
 
