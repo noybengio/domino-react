@@ -1,7 +1,7 @@
 import React from 'react';
-import Player from "../player/player.jsx";
-import Board from "../board/board.jsx";
-import Statistics from "../statistics/statistics.jsx";
+import Player from "./player/player.jsx";
+import Board from "./board/board.jsx";
+import Statistics from "./statistics/statistics.jsx";
 import './game.css'
 
 class Game extends React.Component {
@@ -17,8 +17,7 @@ class Game extends React.Component {
         this.state = {
             score1: 0,
             score2: 0,
-            bricksArr: bricksArr,
-            playerBricks: playerBricks,
+            bricksArr: bricksAu,
             availableNumsOnBoard: [],
             historyState: [],
             historyIndex: -1,

@@ -1,6 +1,6 @@
 import React from 'react';
 import './brick.css';
-import DotsContainer from '../dotsContainer/dotsContainer.jsx';
+import DotsContainer from '../dotsContainer/dotsContainer.jsx.js';
 
 class Brick extends React.Component {
     constructor(props) {
