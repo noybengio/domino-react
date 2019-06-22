@@ -1,0 +1,16 @@
+.game {
+
+	flex-direction: column;
+
+}
+
+ .player-statistics-container{
+	display: flex;
+	flex-direction: column;
+	position: sticky;
+	padding: 5px;
+	bottom: 0;
+	margin: 0 auto;
+	border-radius: 10px;
+	
+} 
