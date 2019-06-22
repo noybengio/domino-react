@@ -18,9 +18,7 @@ class Info extends React.Component {
                 belongto = {this.props.belongTo}
             >
                 <p >{this.props.text}</p>
-                { this.props.data &&
-                <p>{this.props.data}</p>
-                }
+                { this.props.data && <p>{this.props.data}</p> }
 
             </div>
         );
