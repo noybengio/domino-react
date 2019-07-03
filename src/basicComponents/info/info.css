@@ -6,7 +6,6 @@ p {
 }
 
 .info {
-    width: 150px;
     display: flex;
     align-items: baseline;
     position: sticky;

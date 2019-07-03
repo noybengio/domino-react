@@ -1,7 +1,24 @@
 .gameroom-container{
     display: flex;
-    flex-direction: row;
     border: 1px solid black;
-    margin: 7px;
-    z-index: 100;
+    margin: 5px;
 }
+
+tr{
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+  }
+
+  tr:hover {
+        background: rgb(71, 71, 71, 0.5);
+        cursor: pointer;
+  }
+
+  
+
+  tbody{
+      width: 100%;
+  }

@@ -14,26 +14,19 @@ class GameRoom extends React.Component {
 
     render() {
         return (
-            <div
-                className="gameroom-container"
-                onClick={function () {this.props.enterGame.bind(this.props.game)();}.bind(this)}
-
-            >
-
-                <Info text = {this.props.name}
-                      data = {null}/>
-
-                <Info text = {this.props.admin}
-                      data = {null}/>
-
-                <Info text = {`${this.props.numSigned} / ${this.props.numReq}`}
-                      data = {null}/>
-
-                <Info text = {this.props.status}
-                      data = {null}/>
-
-            </div>
-
+            <>
+                <tbody>
+                    <tr
+                        className="gameroom-container"
+                        onClick={function () {this.props.enterGame.bind(this.props.game)();}.bind(this)}
+                    >
+                        <th>{this.props.name}</th>
+                        <th>{this.props.admin}</th>
+                        <th>{`${this.props.numSigned} / ${this.props.numReq}`}</th>
+                        <th>{this.props.status}</th>
+                    </tr>
+                </tbody>
+            </>
         );
     }
 

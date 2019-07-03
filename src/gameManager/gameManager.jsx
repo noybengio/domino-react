@@ -39,7 +39,7 @@ class gameManager extends React.Component {
         let page = this.state.page;
         
         return (
-            <div>
+            <div className = "gameManager-container">
             {((page) => {
                 console.log(page);
                 switch(page) {

@@ -15,14 +15,20 @@ class SignIn extends React.Component {
 
     render() {
         return (
-            <div className="sign-in" >
-
-                <Input text = "User Name"/>
-                <Button
-                    text="Sign In"
-                    buttonFunc = {this.props.signIn}
-                    game = {this.props.game}
-                />
+            <div className="sign-in-container" >
+                <form className="sign-in-form">
+                    <Input 
+                        text = "User Name"
+                    />
+                    <Button
+                        className={"square_btn"}
+                        text="Sign In"
+                        buttonFunc = {this.props.signIn}
+                        game = {this.props.game}
+                    />
+                </form>
+               
+             
             </div>
         );
     }

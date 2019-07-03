@@ -14,7 +14,10 @@ class PlayersList extends React.Component {
    render() {
         return (
             <div className= {"playerslist-container"}>
-              {
+                <p>Players</p>
+                <hr/>
+                <div className={"players-container"}>
+                    {
                         this.props.players.map((player, i) => {
                             return (
                                 <LobbyPlayer
@@ -24,6 +27,7 @@ class PlayersList extends React.Component {
                                 />)
                         })
                     }
+                </div>
             </div>
         );
    }

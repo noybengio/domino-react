@@ -1,5 +1,4 @@
 .lobbyPlayer-container{
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin: 3px 0 3px 0;
 }

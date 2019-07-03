@@ -1,7 +1,26 @@
-.gameslist-container{
+.table-gameslist-container{
     display: flex;
     flex-direction: column;
     align-items: center;
     border: 1px solid black;
+    padding: 5px;
+    margin: 5px;
 
+}
+
+.GamesList-title {
+    display: flex;
+    border: 1px solid black;
+    padding: 5px;
+    margin: 5px;
+
+}
+
+.gameslist-container {
+    display:flex;
+    flex-direction: column;
+    width: inherit;
+}
+table{
+    width: auto;
 }
