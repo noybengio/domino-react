@@ -1,0 +1,12 @@
+.menu-container{
+
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.manu-buttons{
+    display: flex;
+    justify-content: space-evenly;
+    width: 250px;
+}

@@ -19,7 +19,6 @@
 .gameslist-container {
     display:flex;
     flex-direction: column;
-    width: inherit;
 }
 table{
     width: auto;

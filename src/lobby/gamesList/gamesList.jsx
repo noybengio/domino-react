@@ -16,30 +16,25 @@ class GamesList extends React.Component {
     render() {
         return (
             <div className ={"gameslist-container"}>
-            <div className={"GamesList-title"}>
-                <p>Rooms</p>
-                <Button
-                        text="+"
-                        className={"circle_btn"}
-                        buttonFunc = {this.props.signIn}
-                        game = {this.props.game}
-                    />
-
-            </div>
+            
                 
                 <table className= {"table-gameslist-container"}>
                     {
                         this.props.games.map((game, i) => {
                             return (
                                 <GameRoom
-                                    key = {i}
+                                    key = {`room-${game.name}` }
                                     name = {game.name}
+                                    index = {i}
+                                    playerName ={this.props.name}
                                     admin = {game.admin}
                                     numReq = {game.numReq}
                                     numSigned = {game.numSigned}
                                     status = {game.status}
                                     enterGame = {this.props.enterGame}
                                     game = {this.props.game}
+                                    lobby = {this.props.lobby}
+                                    deleteRoom = {this.props.deleteRoom}
                                 />)
                         })
                     }

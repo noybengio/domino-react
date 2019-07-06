@@ -10,11 +10,16 @@ tr{
     border: 1px solid black;
     text-align: left;
     padding: 8px;
+    z-index: 100;
+  }
+  th{
+      width: 20%;
   }
 
   tr:hover {
         background: rgb(71, 71, 71, 0.5);
         cursor: pointer;
+       
   }
 
   
@@ -22,3 +27,15 @@ tr{
   tbody{
       width: 100%;
   }
+  .table-close-button{
+    width: 20px;
+    position: absolute;
+    right: 45px;
+    top: 70px;
+    border: 0px;
+
+  }
+  .table-close-button:hover {
+    background:transparent;
+  }
+

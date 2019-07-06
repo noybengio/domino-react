@@ -1,11 +1,22 @@
 .lobby-container{
     display: flex;
-    width: 100%;
     background-color:rgba(226, 226, 226, 0.75);
     background-size: cover;
-    margin: 20px auto 0 auto;
     border-radius: 10px;
     box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     transition: all .5s ease;
+    margin: 10px;
+}
+.menu-gamesList-container{
+
+    display: flex;
+    flex-direction: column;
+    width: inherit;
+    margin: 5px;
+    border: 1px solid black;
+    width: 100%;
+    padding: 5px;
+
+
 }

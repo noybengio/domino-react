@@ -1,6 +1,7 @@
 import React from "react";
 import './gameRoom.css'
-import Info from "../../../basicComponents/info/info.jsx";
+import Button from "../../../basicComponents/button/button.jsx";
+
 
 class GameRoom extends React.Component {
 
@@ -18,14 +19,23 @@ class GameRoom extends React.Component {
                 <tbody>
                     <tr
                         className="gameroom-container"
-                        onClick={function () {this.props.enterGame.bind(this.props.game)();}.bind(this)}
+                        onClick={function (e) {this.props.enterGame.bind(this.props.game)(e);}.bind(this)}
+                        index = {this.props.index}
                     >
                         <th>{this.props.name}</th>
                         <th>{this.props.admin}</th>
                         <th>{`${this.props.numSigned} / ${this.props.numReq}`}</th>
-                        <th>{this.props.status}</th>
+                        <th>{this.props.status}</th>                    
                     </tr>
                 </tbody>
+                {(this.props.admin === this.props.playerName && this.props.numSigned > 0 ) &&  
+                            <tr className={"table-close-button"}><Button
+                                className={"close_btn"}
+                                text="✖"
+                                buttonFunc = {this.props.deleteRoom}
+                                game = {this.props.lobby}
+                            /></tr> 
+                        }
             </>
         );
     }

@@ -4,11 +4,6 @@
     padding: 3px 10px 3px 10px;
 }
 
-.round-button{
-
-
-}
-
 button.square_btn {
     display: inline-block;
     padding: 7px 20px;
@@ -31,7 +26,7 @@ button.circle_btn{
     height: 55px;
     transform: translateX(13px) translateY(-15px) scale(0.55);
     transition: all 0.2s;
-    border: solid 2px #FFC107;
+    border: solid 2px rgb(255, 193, 7);
     border-radius: 50%;
 
     color: #FFC107;
@@ -40,4 +35,17 @@ button.circle_btn{
   
   button.circle_btn:hover {
       background: rgb(255, 174, 0);
+  }
+
+  .close_btn {
+    background: transparent;
+    border-radius: 5px;
+    float: right;
+    top: 3px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    font-size: 15px;
+    
   }
