@@ -42,11 +42,12 @@ class Board extends React.Component {
                                     direction = {cell.brick.direction}
                                     >
                                         <Brick
-                                        key={i}
-                                        num1={cell.brick.num1}
-                                        num2={cell.brick.num2}
-                                        direction = {cell.brick.direction}
-                                        belongTo = { "board"}
+                                            className = {"brick-board"}
+                                            key={`board-brick-${i}`}
+                                            num1={cell.brick.num1}
+                                            num2={cell.brick.num2}
+                                            direction = {cell.brick.direction}
+                                            belongTo = { "board"}
                                     />
                                 </div>
                                 :

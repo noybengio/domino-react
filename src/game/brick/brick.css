@@ -1,4 +1,4 @@
-.brick {
+.brick , .brick-board {
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -6,12 +6,11 @@
     justify-self: center;
     align-self: center;
     border: 1px solid black;
-    /*position: relative;*/
     justify-content: center;
 
 }
 
-.brick[direction="vertical"] {
+.brick[direction="vertical"], .brick-board[direction="vertical"] {
     /*display: flex;*/
     flex-direction: column;
     /*align-items: center;*/
@@ -19,29 +18,53 @@
     height: 100px;
 }
 
-.brick[direction="horizontal"] {
+.brick[direction="horizontal"], .brick-board[direction="horizontal"] {
     /*display: flex;*/
     flex-direction: row;
     width: 100px;
     height: 50px;
 }
 
-.brick hr {
+.brick hr, .brick-board hr {
     border: 1px solid black;
-    
     padding: 0;
     border-radius: 1px;
 }
 
- .brick[direction="vertical"] hr {
+ .brick[direction="vertical"] hr, .brick-board[direction="vertical"] hr{
     margin: 7px 3px 7px 3px;}
 
-.brick[direction="horizontal"] hr {
+.brick[direction="horizontal"] hr, .brick-board[direction="horizontal"] hr {
     margin: 3px 7px 3px 7px;
 } 
 
-.brick .dots-container {
+.brick .dots-container, .brick-board .dots-container {
     justify-content: center;
     align-self: center;
     align-content: center;
+}
+
+.enemie-brick{
+    width: 30px;
+    height: 60px;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    background-color: whitesmoke;
+    justify-self: center;
+    align-self: center;
+    border: 1px solid black;
+    justify-content: center;
+}
+
+.enemie-brick[direction="vertical"]{
+    /*display: flex;*/
+    width: 30px;
+    height: 60px;
+}
+
+.enemie-brick[direction="horizontal"]{
+    /*display: flex;*/
+    width: 60px;
+    height: 30px;
 }
