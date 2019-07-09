@@ -69,6 +69,11 @@ class gameManager extends React.Component {
 
         let name = document.getElementById("input").value;
         console.log("game manager sighn in name: " , name);
+
+
+        fetch('http://localhost:3000/')
+            .then(res =>res.json())
+        console.log("singin res: ", res);
         this.setState({
             screen: "Lobby",
             status:"Lobby",
