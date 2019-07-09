@@ -32,10 +32,13 @@ let player = {
 let enemies = [
     {
         name: "Tal",
- 
+        numOfBricks: 6,
+        bricks: new Array(6).fill(0)
     },
     {
         name: "Shir",
+        numOfBricks: 6,
+        bricks: new Array(6).fill(0)
     }
 
 ];
@@ -52,7 +55,8 @@ class gameManager extends React.Component {
             game: {
                 name: "",
                 admin: "",
-                players: [],
+                player: null,
+                enemies: [],
                 numOfPlayers: 0,
             },
             
@@ -65,6 +69,11 @@ class gameManager extends React.Component {
 
         let name = document.getElementById("input").value;
         console.log("game manager sighn in name: " , name);
+
+
+        fetch('http://localhost:3000/')
+            .then(res =>res.json())
+        console.log("singin res: ", res);
         this.setState({
             screen: "Lobby",
             status:"Lobby",
@@ -75,12 +84,17 @@ class gameManager extends React.Component {
     enterGame(e) {
     
         let index = e.currentTarget.getAttribute("index");
+        console.log("enter game index: ", index);
+        /* implement in Game component - need to pass index of room to game*/
+
         let game = {
             name: gamesDB[index].name,
             admin: gamesDB[index].admin,
-            players: [],
+            player: player,
+            enemies: enemies,
             numPlayers: gamesDB[index].numReq,
         }
+
         this.setState({
             screen: "Game",
             game: game,
@@ -122,8 +136,11 @@ class gameManager extends React.Component {
                     case("Game"):
                     let game = this.state.game;
                         return <Game
-                                
-                                 numPlayers = {game.numPlayers}
+                                    name = {game.name}
+                                    andmin = {game.admin}
+                                    numPlayers = {game.numPlayers}
+                                    player = {game.player}
+                                    enemies = {game.enemies}
                                 />;
                 }
         })(screen)}

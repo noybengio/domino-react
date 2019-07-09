@@ -9,16 +9,30 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
 
+        /*call function to get bricks and data from server */
+
         let bricksArr = this.createBricksArray();
         let res = this.splitBricks(bricksArr);
         let playerBricks = res.playerBricks;
         bricksArr = res.bricksArr;
+        
+        let name = this.props.name;
+        let admin = this.props.admin;
+        let numPlayers = this.props.numPlayers;
+        let player = this.props.player;
+        let enemies = this.props.enemies;
 
         this.state = {
+            name: name,
+            admin: admin,
+            numPlayers: numPlayers,
+            player: player,
+            enemies: enemies,
+
+
             score1: 0,
             score2: 0,
             players: null,
-            numPlayers: this.props.numPlayers,
             bricksArr: bricksArr,
             playerBricks: playerBricks,
             availableNumsOnBoard: [],
@@ -81,7 +95,6 @@ class Game extends React.Component {
         for (let i = 0; i < 6; i++) {
             playerBricks.push(bricksArr.pop());
         }
-
 
         return ({
             playerBricks: playerBricks,
@@ -591,7 +604,6 @@ class Game extends React.Component {
             this.stopClock();
 
         return (
-            
             <div className="game">
 
                 <Board
@@ -635,13 +647,38 @@ class Game extends React.Component {
                     />
 
                     <Player
-                        id="player1"
+                        id="player"
+                        belongTo = {"player"}
+                        name = {this.state.player.name}
                         bricks={this.state.playerBricks}
                         setDragBrick={this.setDragBrick}
                         game={this}
-                    />`
+                    />
 
                 </div>
+
+                <Player
+                        id="enemie1"
+                        belongTo = {"enemie"}
+                        className = {this.state.numPlayers === 2 ? "enemie-container-top" : "enemie-container-left"}
+                        name = {this.state.enemies[0].name}
+                        numOfBricks = {this.state.enemies[0].numOfBricks}
+                        bricks= {this.state.enemies[0].bricks}
+                    /> 
+
+                {this.state.numPlayers === 3 &&
+                    <Player
+                        id="enemie2"
+                        belongTo = {"enemie"}
+                        className = "enemie-container-right"
+                        name = {this.state.enemies[1].name}
+                        numOfBricks = {this.state.enemies[1].numOfBricks}
+                        bricks= {this.state.enemies[1].bricks}
+                    />
+            
+            
+            
+                }
             </div>
         );
     }

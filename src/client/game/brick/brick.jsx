@@ -30,31 +30,27 @@ class Brick extends React.Component {
                 direction={this.state.direction}
                 className={"brick"}
                 onDragStart={(ev)  =>this.onDragStart(ev, `${this.state.num1},${this.state.num2}`)}
-                draggable
-                >
-                <DotsContainer 
-                    num={this.props.num1}
-                     />
+                draggable >
+                <DotsContainer num={this.props.num1} />
                 <hr/>
-                <DotsContainer 
-                    num={this.props.num2}
-                     />
+                <DotsContainer num={this.props.num2} />
 
             </div>
 
                 :
                 <div
-                    id = {`brick${this.state.num1},${this.state.num2}` }
+                    /*id = {`${this.props.belongTo}-brick${this.state.num1},${this.state.num2}` }*/
                     direction={this.state.direction}
-                    className={"brick"}
-                >
-                    <DotsContainer 
-                        num={this.props.num1}
-                        />
-                    <hr/>
-                    <DotsContainer 
-                        num={this.props.num2}
-                        u/>
+                    className={this.props.className} >
+                        { 
+                            this.props.belongTo === "board" &&
+                                <>
+                                    <DotsContainer num={this.props.num1} />
+                                    <hr/>
+                                    <DotsContainer num={this.props.num2} />
+                                </>
+                            }
+                  
                 </div>
 
         );
