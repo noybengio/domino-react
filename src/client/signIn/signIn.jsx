@@ -23,7 +23,7 @@ class SignIn extends React.Component {
                     {/*/>*/}
                     {/*<button onClick={this.signIn} type="button">Sign in</button>*/}
                 {/*</form>*/}
-                <form className="sign-in-form">
+                <form className="sign-in-form" >
                     <Input
                         text = "User Name"
                     />

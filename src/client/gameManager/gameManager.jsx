@@ -68,12 +68,21 @@ class gameManager extends React.Component {
     signIn() {
 
         let name = document.getElementById("input").value;
-        console.log("game manager sighn in name: " , name);
+        console.log("game manager sign in name: " , name);
 
+        const param = {
+            headers:{
+                "content-type":"application/json; charset=UTF-8"
+            },
 
-        fetch('http://localhost:3000/')
+            body:{name:name},
+            method:"POST"
+        };
+
+        fetch('http://localhost:3000/signIn', {body:name,
+            method:"POST"} )
             .then(res =>res.json())
-        console.log("singin res: ", res);
+            .then(finalRes => console.log(finalRes));
         this.setState({
             screen: "Lobby",
             status:"Lobby",
@@ -93,7 +102,7 @@ class gameManager extends React.Component {
             player: player,
             enemies: enemies,
             numPlayers: gamesDB[index].numReq,
-        }
+        };
 
         this.setState({
             screen: "Game",

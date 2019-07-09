@@ -15,7 +15,7 @@ class Button extends React.Component {
     render() {
         return (
                 <button
-                    type="button"
+                    type={this.props.type ? this.props.type : "button"}
                     onClick={function () {this.props.buttonFunc.bind(this.props.game)();}.bind(this)}
                     className={this.props.className ? this.props.className : "button"}
                     disabled = {this.props.disabled}
