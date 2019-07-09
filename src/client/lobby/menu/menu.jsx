@@ -1,5 +1,5 @@
 import React from 'react';
-import './Menu.css';
+import './menu.css';
 import Button from "../../basicComponents/button/button.jsx";
 
 

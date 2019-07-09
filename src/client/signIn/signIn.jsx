@@ -11,13 +11,20 @@ class SignIn extends React.Component {
 
         }
 
-        };
+    };
 
     render() {
         return (
             <div className="sign-in-container" >
+                {/*<form className="sign-in-form">*/}
+                    {/*<input*/}
+                        {/*onChange={this.inputChanged}*/}
+                        {/*text="User Name"*/}
+                    {/*/>*/}
+                    {/*<button onClick={this.signIn} type="button">Sign in</button>*/}
+                {/*</form>*/}
                 <form className="sign-in-form">
-                    <Input 
+                    <Input
                         text = "User Name"
                     />
                     <Button
@@ -27,8 +34,8 @@ class SignIn extends React.Component {
                         game = {this.props.game}
                     />
                 </form>
-               
-             
+
+
             </div>
         );
     }
