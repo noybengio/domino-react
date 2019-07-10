@@ -44,7 +44,6 @@ let enemies = [
 ];
 
 
-
 class gameManager extends React.Component {
     constructor(props) {
         super(props);
@@ -52,6 +51,7 @@ class gameManager extends React.Component {
             screen: "signIn",
             name:"",
             status:"", //where is the player - lobby/playing
+            error: null,
             game: {
                 name: "",
                 admin: "",
@@ -71,9 +71,9 @@ class gameManager extends React.Component {
         console.log("game manager sighn in name: " , name);
 
 
-        fetch('http://localhost:3000/')
-            .then(res =>res.json())
-        console.log("singin res: ", res);
+        fetch('http://localhost:3000/',)
+            .then(res => res.json())
+            .then(finalRes => console.log(finalRes))
         this.setState({
             screen: "Lobby",
             status:"Lobby",
@@ -123,6 +123,7 @@ class gameManager extends React.Component {
                         return <SignIn
                             signIn = {this.signIn}
                             game = {this}
+                            error = {this.state.error}
                         />;
 
                     case("Lobby"):

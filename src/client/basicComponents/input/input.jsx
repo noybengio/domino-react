@@ -14,7 +14,7 @@ class Input extends React.Component {
 
     render() {
         return (
-            <div className="input" >
+            <div className={this.props.className ? this.props.className : "input"} >
                 <p> {this.props.text}</p>
                 <input id = {this.props.id ? this.props.id : "input"} 
                 type = "input"/>
