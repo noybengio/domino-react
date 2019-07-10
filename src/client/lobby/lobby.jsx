@@ -51,6 +51,7 @@ class Lobby extends React.Component {
             games: gamesDB,
             players: playersDB,
             myRoom: null,
+            error : null
         };
 
     }
@@ -64,6 +65,7 @@ class Lobby extends React.Component {
 
     addRoom() {
         let myRoom = null;
+        let stringifiedRoom = null;
         let games = this.state.games;
         let gameName = document.getElementById("roomName").value;
         let playersNum = document.getElementById("playerNum").value
@@ -79,12 +81,31 @@ class Lobby extends React.Component {
 
         games.unshift(myRoom);
 
-        this.setState({
-            screen: "Lobby",
-            games: games,
-            myRoom: myRoom
-        });
+        stringifiedRoom = JSON.stringify(myRoom); //sringify the new room object
+        console.log("in lobby add room func room:",stringifiedRoom );
+        fetch('/lobby/addRoom', {
+            body:stringifiedRoom,
+            method:"POST"} )
+            .then(res => {
+                if(res.status !== 200) {
+                    res.text().then(error => {
+                        console.log("add room error from server");
+                        this.setState({
+                            error: error,
+                        });
+                    })
+                }
+            else
+                {
+                    this.setState({
+                        screen: "Lobby",
+                        games: games,
+                        myRoom: myRoom
+                    });
+                }
+            })
     }
+
 
     
     goLobby() {

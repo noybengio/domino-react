@@ -1,8 +1,4 @@
-.input, .red-input { 
-    display: flexl;
+.input {
+    display: flex;
     flex-direction: column;
-}
-.red-input {
-        color: red;
-    
 }
