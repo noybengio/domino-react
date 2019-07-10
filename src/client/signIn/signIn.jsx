@@ -23,9 +23,16 @@ class SignIn extends React.Component {
                     {/*/>*/}
                     {/*<button onClick={this.signIn} type="button">Sign in</button>*/}
                 {/*</form>*/}
+<<<<<<< HEAD
                 <form className="sign-in-form">
                     {this.props.error !== null && <Input className = "red-input" text = {this.props.error}/>}
                     <Input text = "User Name" />
+=======
+                <form className="sign-in-form" >
+                    <Input
+                        text = "User Name"
+                    />
+>>>>>>> a0a7ef34d48f35246f7d49aa7f88cfe614cea07e
                     <Button
                         className={"square_btn"}
                         text="Sign In"
