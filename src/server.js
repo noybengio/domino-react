@@ -19,7 +19,8 @@ app.use(session({
 
 app.post('/signIn', auth.addUserToAuthList, (req, res) => {
     console.log("new user name: ", req.body);
-    res.sendStatus(200);
+
+    //console.log("server sign in post result: ", res);
 });
 /*
     We don't need to set up a app.get('/', (req,res)={...}) method

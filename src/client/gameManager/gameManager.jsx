@@ -52,6 +52,7 @@ class gameManager extends React.Component {
             screen: "signIn",
             name:"",
             status:"", //where is the player - lobby/playing
+            error: null,
             game: {
                 name: "",
                 admin: "",
@@ -59,7 +60,6 @@ class gameManager extends React.Component {
                 enemies: [],
                 numOfPlayers: 0,
             },
-            
 
         };
 
@@ -81,8 +81,23 @@ class gameManager extends React.Component {
 
         fetch('http://localhost:3000/signIn', {body:name,
             method:"POST"} )
-            .then(res =>res.json())
-            .then(finalRes => console.log(finalRes));
+            .then(res =>{
+                res.text().then(text => console.log(text))
+                //console.log("fetch before json res:" , res.text().then(text => console.log(text)));
+                console.log("fetch before json res body:" , res.body);
+                console.log("JSON.parse res :" , JSON.parse(res));
+
+                if(res.status !== 200)
+                {
+                    res.text().then(error => {
+                        this.setState({
+                            error: error,
+                        })
+                    })
+                }
+            }).catch(error => console.log("in catch error :" , error))
+            //.then(finalRes => console.log(finalRes));
+
         this.setState({
             screen: "Lobby",
             status:"Lobby",
@@ -130,6 +145,7 @@ class gameManager extends React.Component {
 
                     case("signIn"):
                         return <SignIn
+                            error = {this.state.error}
                             signIn = {this.signIn}
                             game = {this}
                         />;
