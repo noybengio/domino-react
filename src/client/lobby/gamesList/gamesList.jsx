@@ -1,7 +1,6 @@
 import React from 'react';
 import './gamesList.css';
 import GameRoom from './gameRoom/gameRoom.jsx';
-import Button from "../../basicComponents/button/button.jsx";
 
 
 class GamesList extends React.Component {

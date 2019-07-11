@@ -46,26 +46,23 @@ function getUserInfo(id) {
 function addRoomToRoomsList (req, res, next) {
     console.log("in auth addROom func");
     console.log("in auth addROom func req body after stringify: ", req.body);
-    let i;
     let roomObject = JSON.parse(req.body);
-
+    let name = roomObject.name;
     console.log("in auth addROom func req body object: ",roomObject);
-    let lenOfRoomsList = roomsList.length;
-    for (sessionid in roomsList) {
-        const name = roomsList[sessionid].name;
-        console.log("add room for loop name :", name);
-        if (name === roomObject.name) {
+
+        if (roomsList[name] !== undefined) {
             console.log("inside for - user already exist");
             res.status(403).send('user name already exist');
             return;
         }
-    }
 
-    roomsList[roomObject.name] = roomObject;
+    roomsList[name] = roomObject;
     res.sendStatus(200);
-    console.log(" room added :" ,roomsList[sessionid]);
+    console.log(" rooms added :" ,roomsList[name]);
     console.log("roomsList: ", roomsList);
     next();
+
+
 
 }
 
