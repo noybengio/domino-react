@@ -68,17 +68,9 @@ class gameManager extends React.Component {
 
         let name = document.getElementById("input").value;
         console.log("game manager sign in name: " , name);
-
-        const param = {
-            headers:{
-                "content-type":"application/json; charset=UTF-8"
-            },
-
-            body:{name:name},
-            method:"POST"
-        };
-
-        fetch('http://localhost:3000/signIn', {body:name,
+        
+        fetch('http://192.168.1.107:3000/signIn', {
+            body:name,
             method:"POST"} )
             .then(res =>{
                 res.text().then(text => console.log(text))
@@ -97,12 +89,6 @@ class gameManager extends React.Component {
             }).catch(error => console.log("in catch error :" , error))
             //.then(finalRes => console.log(finalRes));
 
-<<<<<<< HEAD
-        fetch('http://localhost:3000/',)
-            .then(res => res.json())
-            .then(finalRes => console.log(finalRes))
-=======
->>>>>>> a0a7ef34d48f35246f7d49aa7f88cfe614cea07e
         this.setState({
             screen: "Lobby",
             status:"Lobby",

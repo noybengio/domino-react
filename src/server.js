@@ -1,9 +1,5 @@
 const express = require('express');
-<<<<<<< HEAD
-var session = require('express-session');
-=======
 let session = require('express-session');
->>>>>>> a0a7ef34d48f35246f7d49aa7f88cfe614cea07e
 const path = require('path');
 const bodyParser = require('body-parser');
 const auth = require('./server/auth');
@@ -15,34 +11,6 @@ app.use(express.static(path.resolve(__dirname,"..",'public')));
 
 app.use(bodyParser.text());
 
-<<<<<<< HEAD
-app.use(express.static('public'));
-app.use(session({ secret: 'topSecret'}));
-
-global.userList = [];
-
-
-app.get('/a',(req,res) => {
-    console.log("path '/' req.sessionID:", req.sessionID);
-    console.log("path '/' req:" , req);
-
-
-/*
-  if (req.session.views) {
-    req.session.views++    
-    res.write('views: ' + req.session.views);    
-    res.end()
-  } else {
-    req.session.views = 1
-    res.end('welcome to the session demo. refresh!')
-  }
-    console.log("path '/' req:" , req);
-    userList[req.session.id] = 5;
-    */
-})
-
-
-=======
 app.use(session({
     secret: "cookie_secret",
     resave: true,
@@ -51,7 +19,6 @@ app.use(session({
 
 app.post('/signIn', auth.addUserToAuthList, (req, res) => {
     console.log("new user name: ", req.body);
->>>>>>> a0a7ef34d48f35246f7d49aa7f88cfe614cea07e
 
     //console.log("server sign in post result: ", res);
 });
