@@ -68,32 +68,45 @@ class gameManager extends React.Component {
 
         let name = document.getElementById("input").value;
         console.log("game manager sign in name: " , name);
+<<<<<<< HEAD
         
         fetch('http://192.168.1.107:3000/signIn', {
+=======
+
+        fetch('http://localhost:3000/signIn', {
+>>>>>>> 016f27402a6fb4ed0430bffbc9bf6b8fa8bdcb87
             body:name,
             method:"POST"} )
             .then(res =>{
-                res.text().then(text => console.log(text))
-                //console.log("fetch before json res:" , res.text().then(text => console.log(text)));
-                console.log("fetch before json res body:" , res.body);
-                console.log("JSON.parse res :" , JSON.parse(res));
 
                 if(res.status !== 200)
                 {
                     res.text().then(error => {
+                        console.log("log in error from server");
                         this.setState({
                             error: error,
                         })
                     })
                 }
+                else {
+                    this.setState({
+                        screen: "Lobby",
+                        status:"Lobby",
+                        name: name,
+                        error: null
+                    });
+                }
             }).catch(error => console.log("in catch error :" , error))
             //.then(finalRes => console.log(finalRes));
 
+<<<<<<< HEAD
         this.setState({
             screen: "Lobby",
             status:"Lobby",
             name: name,
         });
+=======
+>>>>>>> 016f27402a6fb4ed0430bffbc9bf6b8fa8bdcb87
     }
 
     enterGame(e) {
@@ -139,8 +152,7 @@ class gameManager extends React.Component {
                             error = {this.state.error}
                             signIn = {this.signIn}
                             game = {this}
-                            error = {this.state.error}
-                        />;
+ד                        />;
 
                     case("Lobby"):
                         return <Lobby

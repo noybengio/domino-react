@@ -4,6 +4,7 @@ import PlayersList from './playersList/playersList.jsx';
 import GamesList from './gamesList/gamesList.jsx';
 import Menu from './menu/menu.jsx';
 import AddRoom from './addRoom/addRoom.jsx';
+import Info from "../basicComponents/info/info.jsx";
 
 let gamesDB = [
     {
@@ -51,11 +52,13 @@ class Lobby extends React.Component {
             games: gamesDB,
             players: playersDB,
             myRoom: null,
+            error : null
         };
 
     }
 
     addRoomPopUp() {
+        console.log("add room pop up");
 
         this.setState({
             screen: "addRoom",
@@ -64,9 +67,10 @@ class Lobby extends React.Component {
 
     addRoom() {
         let myRoom = null;
+        let stringifiedRoom = null;
         let games = this.state.games;
         let gameName = document.getElementById("roomName").value;
-        let playersNum = document.getElementById("playerNum").value
+        let playersNum = document.getElementById("playerNum").value;
         console.log("addRoom:\n", "\troom name: ", gameName, "\n\tplayers num: ", playersNum);
         
         myRoom = {
@@ -79,12 +83,31 @@ class Lobby extends React.Component {
 
         games.unshift(myRoom);
 
-        this.setState({
-            screen: "Lobby",
-            games: games,
-            myRoom: myRoom
-        });
+        stringifiedRoom = JSON.stringify(myRoom); //sringify the new room object
+        console.log("in lobby add room func room:",stringifiedRoom );
+        fetch('/lobby/addRoom', {
+            body:stringifiedRoom,
+            method:"POST"} )
+            .then(res => {
+                if(res.status !== 200) {
+                    res.text().then(error => {
+                        console.log("add room error from server");
+                        this.setState({
+                            error: error,
+                        });
+                    })
+                }
+            else
+                {
+                    this.setState({
+                        screen: "Lobby",
+                        games: games,
+                        myRoom: myRoom
+                    });
+                }
+            })
     }
+
 
     
     goLobby() {
@@ -108,11 +131,13 @@ class Lobby extends React.Component {
         let screen = this.state.screen;
         return (
             <div className= {"lobby-container"}>
+
                 {screen === "addRoom" && 
                     <AddRoom
                         game = {this}
                         addRoom = {this.addRoom}
                         goLobby = {this.goLobby}
+                        error = {this.state.error}
                     />
                 }
                 <PlayersList

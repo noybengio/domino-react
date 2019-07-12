@@ -2,6 +2,8 @@ import React from 'react';
 import './addRoom.css';
 import Button from "../../basicComponents/button/button.jsx";
 import Input from "../../basicComponents/input/input.jsx";
+import Info from "../../basicComponents/info/info.jsx";
+
 
 
 class AddRoom extends React.Component {
@@ -17,6 +19,13 @@ class AddRoom extends React.Component {
         return (
             <div className={"addRoom-background"} >
                 <div className ={"addRoom-container"}>
+                    {this.props.error !== null &&
+                    <Info
+                        className = "red-info"
+                        text = {this.props.error}
+                        data = {null}/>
+                    }
+
                 <Button
                     className={"close_btn"}
                     text="✖"
@@ -53,9 +62,7 @@ class AddRoom extends React.Component {
                     
                 </form>
                 </div>
-                
-               
-             
+
             </div>
         );
     }
