@@ -19,35 +19,6 @@ app.use(session({
     saveUninitialized: true
 }));
 
-global.userList = [];
-
-
-app.get('/a',(req,res) => {
-    console.log("path '/' req.sessionID:", req.sessionID);
-    console.log("path '/' req:" , req);
-
-
-/*
-  if (req.session.views) {
-    req.session.views++    
-    res.write('views: ' + req.session.views);    
-    res.end()
-  } else {
-    req.session.views = 1
-    res.end('welcome to the session demo. refresh!')
-  }
-    console.log("path '/' req:" , req);
-    userList[req.session.id] = 5;
-    */
-})
-
-
-app.use(session({
-    secret: "cookie_secret",
-    resave: true,
-    saveUninitialized: true
-}));
-
 app.post('/signIn', auth.addUserToAuthList, (req, res) => {
     console.log("new user name: ", req.body);
 
@@ -55,6 +26,21 @@ app.post('/signIn', auth.addUserToAuthList, (req, res) => {
 });
 
 app.post('/lobby/addRoom', auth.addRoomToRoomsList, (req, res) => {
+
+});
+
+app.get('/lobby',(req, res) => {
+
+    let lobbyBody;
+    lobbyBody = {
+        rooms: roomsList,
+        players: userList
+    };
+
+    res.json(lobbyBody);
+    console.log("roomsList  get to lobby :", lobbyBody.rooms);
+    console.log("playersList  get to lobby :", lobbyBody.players);
+
 
 });
 

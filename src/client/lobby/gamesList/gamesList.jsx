@@ -19,24 +19,28 @@ class GamesList extends React.Component {
                 
                 <table className= {"table-gameslist-container"}>
                     {
-                        this.props.games.map((game, i) => {
-                            return (
-                                <GameRoom
-                                    key = {`room-${game.name}` }
-                                    name = {game.name}
-                                    index = {i}
-                                    playerName ={this.props.name}
-                                    admin = {game.admin}
-                                    numReq = {game.numReq}
-                                    numSigned = {game.numSigned}
-                                    status = {game.status}
-                                    enterGame = {this.props.enterGame}
-                                    game = {this.props.game}
-                                    lobby = {this.props.lobby}
-                                    deleteRoom = {this.props.deleteRoom}
-                                />)
-                        })
+                        (() => {
+                            let games = this.props.games;
+                            let componentGames = [];
+                            for (let game in games) {
+
+                                componentGames.push(
+                                    <GameRoom
+                                        key = {`room-${games[`${game}`].name}`}
+                                        name = {games[`${game}`].name}                                        playerName ={this.props.name}
+                                        admin = {games[`${game}`].admin}
+                                        numReq = {games[`${game}`].numReq}
+                                        numSigned = {games[`${game}`].numSigned}
+                                        status = {games[`${game}`].status}
+                                        enterGame = {this.props.enterGame}
+                                        game = {this.props.game}
+                                        lobby = {this.props.lobby}
+                                        deleteRoom = {this.props.deleteRoom}
+                                    />)}
+                            return componentGames;
+                        })()
                     }
+
                 </table>
             </div>
         );

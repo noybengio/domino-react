@@ -4,7 +4,35 @@ import SignIn from '../signIn/signIn.jsx';
 import Lobby from '../lobby/lobby.jsx';
 import Game from '../game/game.jsx';
 
+/* get data from array of objects
+        let gamesDB = {
+            a:{
+                name: "Noys Game",
+                admin:"Noy",
+                numReq:3,
+                numSigned:0,
+                status: "waiting"
+            }
+            ,
+            b:{
+                name:"Oz Game",
+                admin:"Oz",
+                numReq:2,
+                numSigned:0,
+                status: "waiting"
+            }
+   };
+        console.log("gameDB ", gamesDB['a'].name);
 
+
+
+
+        for (let i in gamesDB){
+            console.log("for i: ", gamesDB[`${i}`]);
+        }
+
+ */
+/*
 let gamesDB = [
     {
         name:"Noys Game",
@@ -42,7 +70,7 @@ let enemies = [
     }
 
 ];
-
+*/
 
 class gameManager extends React.Component {
     constructor(props) {
@@ -68,6 +96,8 @@ class gameManager extends React.Component {
 
         let name = document.getElementById("input").value;
         console.log("game manager sign in name: " , name);
+
+
 
         fetch('http://localhost:3000/signIn', {
             body:name,

@@ -1,6 +1,5 @@
-const userList = {};
-const roomsList = {};
-const playersList = {};
+global.userList = {};
+global.roomsList = {};
 
 function userAuthentication(req, res, next) {
     if (userList[req.session.id] === undefined) {
@@ -22,7 +21,9 @@ function addUserToAuthList(req, res, next) {
             }
         }
 
-        userList[req.session.id] = req.body;
+        userList[req.session.id] = {
+            name: req.body,
+            location: "lobby"};
         res.sendStatus(200);
         console.log(" name added :" ,userList[req.session.id]);
     console.log("userList: ", userList);
@@ -52,7 +53,7 @@ function addRoomToRoomsList (req, res, next) {
 
         if (roomsList[name] !== undefined) {
             console.log("inside for - user already exist");
-            res.status(403).send('user name already exist');
+            res.status(403).send('room name already exists');
             return;
         }
 
@@ -62,8 +63,8 @@ function addRoomToRoomsList (req, res, next) {
     console.log("roomsList: ", roomsList);
     next();
 
-
-
 }
+
+
 
 module.exports = {userAuthentication, addUserToAuthList, removeUserFromAuthList, getUserInfo,addRoomToRoomsList}

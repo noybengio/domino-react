@@ -19,10 +19,12 @@ class LobbyPlayer extends React.Component {
                     data = {null}
                 />
 
+
                 <Info
-                    text = "Status: "
-                    data = {this.props.status}
+                    text = "location: "
+                    data = {this.props.location}
                 />
+
             </div>
         );
    }

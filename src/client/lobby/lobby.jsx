@@ -49,10 +49,11 @@ class Lobby extends React.Component {
         super(props);
         this.state = {
             screen: "Lobby",
-            games: gamesDB,
-            players: playersDB,
+            rooms: [],
+            players: [],
             myRoom: null,
-            error : null
+            error : null,
+            dataTimeOut: null
         };
 
     }
@@ -68,7 +69,6 @@ class Lobby extends React.Component {
     addRoom() {
         let myRoom = null;
         let stringifiedRoom = null;
-        let games = this.state.games;
         let gameName = document.getElementById("roomName").value;
         let playersNum = document.getElementById("playerNum").value;
         console.log("addRoom:\n", "\troom name: ", gameName, "\n\tplayers num: ", playersNum);
@@ -80,8 +80,6 @@ class Lobby extends React.Component {
             numSigned: 0,
             status: "waiting"
         };
-
-        games.unshift(myRoom);
 
         stringifiedRoom = JSON.stringify(myRoom); //sringify the new room object
         console.log("in lobby add room func room:",stringifiedRoom );
@@ -101,15 +99,12 @@ class Lobby extends React.Component {
                 {
                     this.setState({
                         screen: "Lobby",
-                        games: games,
                         myRoom: myRoom
                     });
                 }
             })
     }
 
-
-    
     goLobby() {
         this.setState({
             screen: "Lobby",
@@ -126,6 +121,39 @@ class Lobby extends React.Component {
             myRoom: null,
         });
     }
+
+     getDataForLobby()
+    {
+
+        console.log("in get data to lobby");
+
+        fetch('/lobby', {
+            method:"GET"} )
+            .then(res => {
+                if(res.status === 200)
+                {
+                    return res.json();
+                }
+            })
+            .then(lobbyBody => {
+                console.log(lobbyBody);
+                this.setState({
+                    rooms: lobbyBody.rooms,
+                    players: lobbyBody.players,
+                    dataTimeOut: setTimeout(this.getDataForLobby.bind(this), 1000)
+                })
+            })
+
+    }
+
+
+    componentDidMount() {
+        console.log("in componentDidMount");
+
+        this.getDataForLobby();
+    }
+
+
 
     render() {
         let screen = this.state.screen;
@@ -155,7 +183,7 @@ class Lobby extends React.Component {
 
                     />
                     <GamesList
-                        games = {this.state.games}
+                        games = {this.state.rooms}
                         enterGame = {this.props.enterGame}
                         game = {this.props.game}
                         lobby = {this}
