@@ -72,13 +72,15 @@ let enemies = [
 ];
 */
 
+let url = 'http://10.0.0.3:3000';
+
 class gameManager extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             screen: "signIn",
-            name:"",
-            status:"", //where is the player - lobby/playing
+            name: "",
+            status: "", //where is the player - lobby/playing
             error: null,
             game: {
                 name: "",
@@ -90,6 +92,24 @@ class gameManager extends React.Component {
 
         };
 
+        window.addEventListener("unload", function (e) {
+            fetch(`${url}/logOut`, {
+                method: "DELETE"
+            })
+                .then(res => {
+
+                    if (res.status !== 204) {
+                        res.text().then(error => {
+                            console.log("log in error from server");
+                            this.setState({
+                                error: error,
+                            })
+                        })
+                    }
+                });
+
+
+        })
     }
 
     signIn() {
@@ -99,9 +119,10 @@ class gameManager extends React.Component {
 
 
 
-        fetch('http://localhost:3000/signIn', {
+        fetch(`${url}/signIn`, {
             body:name,
-            method:"POST"} )
+            method:"POST",
+            mode: "no-cors"} )
             .then(res =>{
 
                 if(res.status !== 200)
@@ -148,9 +169,27 @@ class gameManager extends React.Component {
     }
 
     logOut() {
-        this.setState({
-            screen: "signIn",
-        });
+        fetch(`${url}/logOut`, {
+            method:"DELETE"} )
+            .then(res =>{
+
+                if(res.status !== 204)
+                {
+                    res.text().then(error => {
+                        console.log("log in error from server");
+                        this.setState({
+                            error: error,
+                        })
+                    })
+                }
+                else {
+                    this.setState({
+                        screen: "signIn",
+                        error: null
+
+                    });
+                }
+            }).catch(error => console.log("in catch error :" , error))
 
     }
 
@@ -177,6 +216,7 @@ class gameManager extends React.Component {
                                     enterGame = {this.enterGame}
                                     logOut = {this.logOut}
                                     game = {this}
+                                    url = {url}
                             />;
 
                     case("Game"):

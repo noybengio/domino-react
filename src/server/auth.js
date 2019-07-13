@@ -10,10 +10,8 @@ function userAuthentication(req, res, next) {
 }
 
 function addUserToAuthList(req, res, next) {
-    console.log("in auth add user" );
         for (sessionid in userList) {
             const name = userList[sessionid];
-            console.log("add user for name :", name);
             if (name === req.body) {
                 console.log("inside for - user already exist");
                 res.status(403).send('user name already exist');
@@ -26,7 +24,7 @@ function addUserToAuthList(req, res, next) {
             location: "lobby"};
         res.sendStatus(200);
         console.log(" name added :" ,userList[req.session.id]);
-    console.log("userList: ", userList);
+         console.log("userList: ", userList);
         next();
 
 }
@@ -35,7 +33,9 @@ function removeUserFromAuthList(req, res, next) {
     if (userList[req.session.id] === undefined) {
         res.status(403).send('user does not exist');
     } else {
+        console.log("user logged out:", userList[req.session.id]);
         delete userList[req.session.id];
+        res.status(204).send('user deleted successfully');
         next();
     }
 }
@@ -45,11 +45,8 @@ function getUserInfo(id) {
 }
 
 function addRoomToRoomsList (req, res, next) {
-    console.log("in auth addROom func");
-    console.log("in auth addROom func req body after stringify: ", req.body);
     let roomObject = JSON.parse(req.body);
     let name = roomObject.name;
-    console.log("in auth addROom func req body object: ",roomObject);
 
         if (roomsList[name] !== undefined) {
             console.log("inside for - user already exist");
@@ -65,6 +62,15 @@ function addRoomToRoomsList (req, res, next) {
 
 }
 
+function removeRoomFromAuthList(req, res, next) {
+    if (roomsList[req.body] === undefined) {
+        res.status(403).send('room name does not exist');
+    } else {
+        delete roomsList[req.body];
+        res.status(204).send('room deleted successfully');
+        next();
+    }
+}
 
 
-module.exports = {userAuthentication, addUserToAuthList, removeUserFromAuthList, getUserInfo,addRoomToRoomsList}
+module.exports = {removeRoomFromAuthList,userAuthentication, addUserToAuthList, removeUserFromAuthList, getUserInfo,addRoomToRoomsList}

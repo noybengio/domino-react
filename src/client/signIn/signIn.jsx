@@ -1,8 +1,8 @@
 import React from "react";
 import './signIn.css';
-import Input from "../basicComponents/input/input.jsx";
-import Button from "../basicComponents/button/button.jsx";
-import Info from "../basicComponents/info/info.jsx";
+import Input from "../../basicComponents/input/input.jsx";
+import Button from "../../basicComponents/button/button.jsx";
+import Info from "../../basicComponents/info/info.jsx";
 
 
 class SignIn extends React.Component {

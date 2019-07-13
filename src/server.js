@@ -20,7 +20,6 @@ app.use(session({
 }));
 
 app.post('/signIn', auth.addUserToAuthList, (req, res) => {
-    console.log("new user name: ", req.body);
 
     //console.log("server sign in post result: ", res);
 });
@@ -38,9 +37,15 @@ app.get('/lobby',(req, res) => {
     };
 
     res.json(lobbyBody);
-    console.log("roomsList  get to lobby :", lobbyBody.rooms);
-    console.log("playersList  get to lobby :", lobbyBody.players);
 
+
+});
+
+app.delete('/logOut', auth.removeUserFromAuthList, (req, res) => {
+
+});
+
+app.delete('/deleteRoom', auth.removeRoomFromAuthList, (req, res) => {
 
 });
 

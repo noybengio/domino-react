@@ -1,6 +1,6 @@
 import React from "react";
 import './gameRoom.css'
-import Button from "../../../basicComponents/button/button.jsx";
+import Button from "../../../../basicComponents/button/button.jsx";
 
 
 class GameRoom extends React.Component {
@@ -28,14 +28,21 @@ class GameRoom extends React.Component {
                         <th>{this.props.status}</th>                    
                     </tr>
                 </tbody>
-                {(this.props.admin === this.props.playerName && this.props.numSigned > 0 ) &&  
-                            <tr className={"table-close-button"}><Button
+                {(this.props.admin === this.props.playerName && this.props.numSigned === 0 ) &&
+
+                            <tr className={"table-close-button"}>
+                                <Button
+                                id = {this.props.name}
                                 className={"close_btn"}
                                 text="✖"
                                 buttonFunc = {this.props.deleteRoom}
                                 game = {this.props.lobby}
-                            /></tr> 
+                            /></tr>
+
                         }
+
+
+
             </>
         );
     }

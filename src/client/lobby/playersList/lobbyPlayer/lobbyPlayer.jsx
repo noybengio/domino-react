@@ -1,6 +1,6 @@
 import React from 'react';
 import './lobbyPlayer.css';
-import Info from '../../../basicComponents/info/info.jsx';
+import Info from '../../../../basicComponents/info/info.jsx';
 
 class LobbyPlayer extends React.Component {
     constructor(props) {

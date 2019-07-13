@@ -1,6 +1,6 @@
 import React from 'react';
 import './menu.css';
-import Button from "../../basicComponents/button/button.jsx";
+import Button from "../../../basicComponents/button/button.jsx";
 
 
 class Menu extends React.Component {
@@ -30,7 +30,7 @@ class Menu extends React.Component {
                         text="Log Out"
                         className={"square_btn"}
                         buttonFunc = {this.props.logOut}
-                        game = {this.props.game}
+                        game = {this.props.lobby}
                     />
                 </div>
             

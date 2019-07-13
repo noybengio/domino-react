@@ -1,8 +1,8 @@
 import React from 'react';
 import './addRoom.css';
-import Button from "../../basicComponents/button/button.jsx";
-import Input from "../../basicComponents/input/input.jsx";
-import Info from "../../basicComponents/info/info.jsx";
+import Button from "../../../basicComponents/button/button.jsx";
+import Input from "../../../basicComponents/input/input.jsx";
+import Info from "../../../basicComponents/info/info.jsx";
 
 
 
@@ -31,6 +31,7 @@ class AddRoom extends React.Component {
                     text="✖"
                     buttonFunc = {this.props.goLobby}
                     game = {this.props.game}
+
                 />
 
                 <form className={"addRoom-form"}>

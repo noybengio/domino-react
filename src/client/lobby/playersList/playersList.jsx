@@ -39,7 +39,7 @@ class PlayersList extends React.Component {
 
                                 componentPlayers.push(
                                     <LobbyPlayer
-                                        // key = {i}
+                                        key = {players[`${player}`].name}
                                         name={players[`${player}`].name}
                                         location = {players[`${player}`].location}
                                     />)}

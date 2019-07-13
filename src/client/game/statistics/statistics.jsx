@@ -1,7 +1,7 @@
 import React from "react";
 import './statistic.css';
-import Button from '../../basicComponents/button/button.jsx';
-import Info from '../../basicComponents/info/info.jsx';
+import Button from '../../../basicComponents/button/button.jsx';
+import Info from '../../../basicComponents/info/info.jsx';
     import Zoom from './zoom/zoom.jsx';
 
 class Statistics extends React.Component {
