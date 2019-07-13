@@ -1,8 +1,8 @@
 import React from "react";
 import './signIn.css';
-import Input from "../basicComponents/input/input.jsx";
-import Button from "../basicComponents/button/button.jsx";
-import Info from "../basicComponents/info/info.jsx";
+import Input from "../../basicComponents/input/input.jsx.js";
+import Button from "../../basicComponents/button/button.jsx.js";
+import Info from "../../basicComponents/info/info.jsx.js";
 
 
 class SignIn extends React.Component {
@@ -17,16 +17,6 @@ class SignIn extends React.Component {
     render() {
         return (
             <div className="sign-in-container" >
-<<<<<<< HEAD
-                {/*<form className="sign-in-form">*/}
-                    {/*<input*/}
-                        {/*onChange={this.inputChanged}*/}
-                        {/*text="User Name"*/}
-                    {/*/>*/}
-                    {/*<button onClick={this.signIn} type="button">Sign in</button>*/}
-                {/*</form>*/}
-=======
->>>>>>> 016f27402a6fb4ed0430bffbc9bf6b8fa8bdcb87
                 <form className="sign-in-form">
                     {this.props.error !== null &&
                         <Info
@@ -35,10 +25,6 @@ class SignIn extends React.Component {
                             data = {null}/>
                     }
                     <Input text = "User Name" />
-<<<<<<< HEAD
-=======
-
->>>>>>> 016f27402a6fb4ed0430bffbc9bf6b8fa8bdcb87
                     <Button
                         className={"square_btn"}
                         text="Sign In"

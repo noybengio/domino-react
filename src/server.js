@@ -9,7 +9,7 @@ const userManagement = require('./server/userManagement');
 const app = express();
 app.use(express.static(path.resolve(__dirname,"..",'public')));
 
-app.use(bodyParser.text());
+app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(session({
     secret: 'topSecret',

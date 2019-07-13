@@ -1,7 +1,7 @@
 import React from "react";
 import './zoom.css';
-import Button from '../../../basicComponents/button/button.jsx';
-import Info from '../../../basicComponents/info/info.jsx';
+import Button from '../../../../basicComponents/button/button.jsx.js';
+import Info from '../../../../basicComponents/info/info.jsx.js';
 
 
 class Zoom extends React.Component {

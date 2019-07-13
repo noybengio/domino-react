@@ -1,6 +1,6 @@
 import React from "react";
 import './gameRoom.css'
-import Button from "../../../basicComponents/button/button.jsx";
+import Button from "../../../../basicComponents/button/button.jsx.js";
 
 
 class GameRoom extends React.Component {

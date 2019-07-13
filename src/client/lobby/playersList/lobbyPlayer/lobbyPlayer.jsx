@@ -1,6 +1,6 @@
 import React from 'react';
 import './lobbyPlayer.css';
-import Info from '../../../basicComponents/info/info.jsx';
+import Info from '../../../../basicComponents/info/info.jsx.js';
 
 class LobbyPlayer extends React.Component {
     constructor(props) {
@@ -19,10 +19,12 @@ class LobbyPlayer extends React.Component {
                     data = {null}
                 />
 
+
                 <Info
-                    text = "Status: "
-                    data = {this.props.status}
+                    text = "location: "
+                    data = {this.props.location}
                 />
+
             </div>
         );
    }
