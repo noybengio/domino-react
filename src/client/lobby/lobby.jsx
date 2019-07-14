@@ -74,13 +74,14 @@ class Lobby extends React.Component {
         let gameName = document.getElementById("roomName").value;
         let playersNum = document.getElementById("playerNum").value;
         console.log("addRoom:\n", "\troom name: ", gameName, "\n\tplayers num: ", playersNum);
+
         
         myRoom = {
             name: gameName,
-            admin: this.props.name,
+            //admin: this.props.name,
             numReq:playersNum,
-            numSigned: 0,
-            status: "waiting"
+            //numSigned: 0,
+            //status: "waiting",
         };
 
         stringifiedRoom = JSON.stringify(myRoom); //sringify the new room object
@@ -116,16 +117,17 @@ class Lobby extends React.Component {
     }
 
     deleteRoom(e){
-       let roomName = e.target.id;
+       let roomId = e.target.getAttribute("belongto");
+       console.log("e.target.belongto",roomId);
 
         fetch(`${this.props.url}/deleteRoom`, {
-            body:roomName,
+            body:roomId,
             method:"DELETE"} )
             .then(res => {
 
                 if (res.status !== 204) {
                     res.text().then(error => {
-                        console.log(" cannot delete :", roomName);
+                        console.log(" cannot delete :", roomId);
                         this.setState({
                             error: error,
                         })

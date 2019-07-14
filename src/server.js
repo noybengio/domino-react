@@ -4,6 +4,8 @@ let session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
 const auth = require('./server/auth');
+const game = require('./server/game');
+
 const userManagement = require('./server/userManagement');
 
 
@@ -49,10 +51,48 @@ app.delete('/deleteRoom', auth.removeRoomFromAuthList, (req, res) => {
 
 });
 
+app.get('/game/:id',(req, res) => {
+
+    let lobbyBody;
+    lobbyBody = {
+        rooms: roomsList,
+        players: userList
+    };
+    let roomID = req.params.id;
+    console.log("roomID", roomID);
+    console.log("roomsList[roomID].data", roomsList[roomID].data);
+    console.log("roomsList[roomID].status", roomsList[roomID].status);
+
+    if(roomsList[roomID].numSigned !== parseInt(roomsList[roomID].numReq)) { //first time entered the room
+
+        roomsList[roomID].numSigned++;
+        console.log("roomsList[roomID].numReq:", roomsList[roomID].numReq);
+        if (roomsList[roomID].numSigned === parseInt(roomsList[roomID].numReq))//first enter
+        {
+            roomsList[roomID].status = "playing";
+            console.log("roomsList[roomID]:", roomsList[roomID]);
+
+            let bricksArr = game.createBricksArray();
+
+            for(let i = 0)
+            let res = game.splitBricks(bricksArr);
+            let playerBricks = res.playerBricks;
+            bricksArr = res.bricksArr;
+
+            console.log("playerBricks: ", playerBricks);
+            console.log("bricksArr: ", bricksArr);
+        }
+
+
+    }
+    res.json(lobbyBody);
+
+
+});
+
 /*
     We don't need to set up a app.get('/', (req,res)={...}) method
     because we have in our static folder an html file named - 'index.html' - the defualt html file name.
-
     The result is when the server is getting the '/' request path it will return the index.html file
 */
 

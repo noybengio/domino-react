@@ -15,7 +15,7 @@ class Button extends React.Component {
     render() {
         return (
                 <button
-                    id = {this.props.id && this.props.id}
+                    belongto = {this.props.belongto}
                     type={this.props.type ? this.props.type : "button"}
                     onClick={function (e) {this.props.buttonFunc.bind(this.props.game)(e);}.bind(this)}
                     className={this.props.className ? this.props.className : "button"}
