@@ -59,34 +59,37 @@ app.get('/game/:id',(req, res) => {
         players: userList
     };
     let roomID = req.params.id;
+
     console.log("roomID", roomID);
     console.log("roomsList[roomID].data", roomsList[roomID].data);
     console.log("roomsList[roomID].status", roomsList[roomID].status);
 
-    if(roomsList[roomID].numSigned !== parseInt(roomsList[roomID].numReq)) { //first time entered the room
-
+    if(roomsList[roomID].numSigned !== parseInt(roomsList[roomID].numReq)) {
+        roomsList[roomID].players.push(userList[req.session.id]);
+        console.log("game room players: ", roomsList[roomID].players);
         roomsList[roomID].numSigned++;
-        console.log("roomsList[roomID].numReq:", roomsList[roomID].numReq);
-        if (roomsList[roomID].numSigned === parseInt(roomsList[roomID].numReq))//first enter
+    }
+
+           if (roomsList[roomID].data === null &&
+               roomsList[roomID].numSigned === parseInt(roomsList[roomID].numReq))//first enter
         {
             roomsList[roomID].status = "playing";
             console.log("roomsList[roomID]:", roomsList[roomID]);
 
             let bricksArr = game.createBricksArray();
 
-            for(let i = 0)
-            let res = game.splitBricks(bricksArr);
-            let playerBricks = res.playerBricks;
-            bricksArr = res.bricksArr;
+            for(let i = 0; i < roomsList[roomID].players.length; i++ ) {
 
-            console.log("playerBricks: ", playerBricks);
-            console.log("bricksArr: ", bricksArr);
+                let res = game.splitBricks(bricksArr);
+                let playerBricks = res.playerBricks;
+                bricksArr = res.bricksArr;
+
+                console.log("playerBricks: ", playerBricks);
+                console.log("bricksArr: ", bricksArr);
+            }
         }
 
-
-    }
     res.json(lobbyBody);
-
 
 });
 

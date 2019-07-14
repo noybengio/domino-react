@@ -33,6 +33,8 @@ class GamesList extends React.Component {
                                 deleteRoom={this.props.deleteRoom}
                                 data = {null}
 
+
+
                             />
                         })
                     }

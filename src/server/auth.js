@@ -62,6 +62,7 @@ function addRoomToRoomsList (req, res, next) {
 
     roomObject.id = Object.keys(roomsList).length;
     roomsList[roomObject.id] = roomObject;
+    roomsList[roomObject.id].players = [];
     res.sendStatus(200);
     console.log("roomsList: ", roomsList);
     next();
