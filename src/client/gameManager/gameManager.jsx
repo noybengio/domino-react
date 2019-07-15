@@ -72,13 +72,15 @@ let enemies = [
 ];
 */
 
+let url = 'http://192.168.1.107:3000';
+
 class gameManager extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             screen: "signIn",
-            name:"",
-            status:"", //where is the player - lobby/playing
+            name: "",
+            status: "", //where is the player - lobby/playing
             error: null,
             game: {
                 name: "",
@@ -90,16 +92,37 @@ class gameManager extends React.Component {
 
         };
 
+        window.addEventListener("unload", function (e) {
+            fetch(`${url}/logOut`, {
+                method: "DELETE"
+            })
+                .then(res => {
+
+                    if (res.status !== 204) {
+                        res.text().then(error => {
+                            console.log("log in error from server");
+                            this.setState({
+                                error: error,
+                            })
+                        })
+                    }
+                });
+
+
+        })
     }
 
     signIn() {
 
         let name = document.getElementById("input").value;
         console.log("game manager sign in name: " , name);
-        
-        fetch('http://10.0.0.3:3000//signIn', {
+
+
+
+        fetch(`${url}/signIn`, {
             body:name,
-            method:"POST"} )
+            method:"POST",
+            mode: "no-cors"} )
             .then(res =>{
 
                 if(res.status !== 200)
@@ -125,30 +148,58 @@ class gameManager extends React.Component {
     }
 
     enterGame(e) {
-    
-        let index = e.currentTarget.getAttribute("index");
-        console.log("enter game index: ", index);
-        /* implement in Game component - need to pass index of room to game*/
 
-        let game = {
-            name: gamesDB[index].name,
-            admin: gamesDB[index].admin,
-            player: player,
-            enemies: enemies,
-            numPlayers: gamesDB[index].numReq,
-        };
+        let roomId = e.target.getAttribute("belongto");
+        console.log("e.target", e.target);
 
-        this.setState({
-            screen: "Game",
-            game: game,
-        });
+        console.log("roomId", roomId);
+        fetch(`${url}/game/${roomId}`, {
+            method:"Get"} )
+            .then(res =>{
+
+                if(res.status !== 200)
+                {
+                    res.text().then(error => {
+                        console.log("can't enter game");
+                        this.setState({
+                            error: error,
+                        })
+                    })
+                }
+                else {
+
+                    this.setState({
+                        screen: "Game",
+                        error: null
+
+                    });
+                }
+            }).catch(error => console.log("in catch error :" , error))
 
     }
 
     logOut() {
-        this.setState({
-            screen: "signIn",
-        });
+        fetch(`${url}/logOut`, {
+            method:"DELETE"} )
+            .then(res =>{
+
+                if(res.status !== 204)
+                {
+                    res.text().then(error => {
+                        console.log("log in error from server");
+                        this.setState({
+                            error: error,
+                        })
+                    })
+                }
+                else {
+                    this.setState({
+                        screen: "signIn",
+                        error: null
+
+                    });
+                }
+            }).catch(error => console.log("in catch error :" , error))
 
     }
 
@@ -175,6 +226,7 @@ class gameManager extends React.Component {
                                     enterGame = {this.enterGame}
                                     logOut = {this.logOut}
                                     game = {this}
+                                    url = {url}
                             />;
 
                     case("Game"):

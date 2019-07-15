@@ -4,6 +4,7 @@ import PlayersList from './playersList/playersList.jsx';
 import GamesList from './gamesList/gamesList.jsx';
 import Menu from './menu/menu.jsx';
 import AddRoom from './addRoom/addRoom.jsx';
+import Info from "../../basicComponents/info/info.jsx";
 
 let gamesDB = [
     {
@@ -55,6 +56,8 @@ class Lobby extends React.Component {
             dataTimeOut: null
         };
 
+        this.getDataForLobby();
+
     }
 
     addRoomPopUp() {
@@ -71,20 +74,22 @@ class Lobby extends React.Component {
         let gameName = document.getElementById("roomName").value;
         let playersNum = document.getElementById("playerNum").value;
         console.log("addRoom:\n", "\troom name: ", gameName, "\n\tplayers num: ", playersNum);
+
         
         myRoom = {
             name: gameName,
-            admin: this.props.name,
+            //admin: this.props.name,
             numReq:playersNum,
-            numSigned: 0,
-            status: "waiting"
+            //numSigned: 0,
+            //status: "waiting",
         };
 
         stringifiedRoom = JSON.stringify(myRoom); //sringify the new room object
         console.log("in lobby add room func room:",stringifiedRoom );
-        fetch('http://10.0.0.3:3000/lobby/addRoom', {
+        fetch(`${this.props.url}/lobby/addRoom`, {
             body:stringifiedRoom,
-            method:"POST"} )
+            method:"POST",
+            mode: "no-cors"} )
             .then(res => {
                 if(res.status !== 200) {
                     res.text().then(error => {
@@ -111,14 +116,26 @@ class Lobby extends React.Component {
 
     }
 
-    deleteRoom(){
-        let games = this.state.games;
+    deleteRoom(e){
+       let roomId = e.target.getAttribute("belongto");
+       console.log("e.target.belongto",roomId);
 
-        games.splice(0, 1) ;
-        this.setState({
-            games: games,
-            myRoom: null,
-        });
+        fetch(`${this.props.url}/deleteRoom`, {
+            body:roomId,
+            method:"DELETE"} )
+            .then(res => {
+
+                if (res.status !== 204) {
+                    res.text().then(error => {
+                        console.log(" cannot delete :", roomId);
+                        this.setState({
+                            error: error,
+                        })
+                    })
+                }
+
+            }).catch(error => console.log("in catch error :" , error))
+
     }
 
      getDataForLobby()
@@ -126,8 +143,9 @@ class Lobby extends React.Component {
 
         console.log("in get data to lobby");
 
-        fetch('http://10.0.0.3:3000/lobby', {
-            method:"GET"} )
+        fetch(`${this.props.url}/lobby`, {
+            method:"GET",
+            mode: "no-cors"} )
             .then(res => {
                 if(res.status === 200)
                 {
@@ -146,10 +164,10 @@ class Lobby extends React.Component {
     }
 
 
-    componentDidMount() {
-        console.log("in componentDidMount");
-
-        this.getDataForLobby();
+    logOut()
+    {
+        clearTimeout(this.state.dataTimeOut);
+        this.props.logOut.bind(this.props.game)();
     }
 
 
@@ -177,7 +195,7 @@ class Lobby extends React.Component {
                        game = {this.props.game}
                        lobby = {this}
                        addRoomPopUp = {this.addRoomPopUp}
-                       logOut = {this.props.logOut}
+                       logOut = {this.logOut}
                        myRoom = {this.state.myRoom}
 
                     />

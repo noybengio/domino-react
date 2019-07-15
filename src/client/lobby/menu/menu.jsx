@@ -30,7 +30,7 @@ class Menu extends React.Component {
                         text="Log Out"
                         className={"square_btn"}
                         buttonFunc = {this.props.logOut}
-                        game = {this.props.game}
+                        game = {this.props.lobby}
                     />
                 </div>
             

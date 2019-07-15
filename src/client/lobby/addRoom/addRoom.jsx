@@ -31,6 +31,7 @@ class AddRoom extends React.Component {
                     text="✖"
                     buttonFunc = {this.props.goLobby}
                     game = {this.props.game}
+
                 />
 
                 <form className={"addRoom-form"}>

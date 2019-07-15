@@ -19,23 +19,37 @@ class GameRoom extends React.Component {
                 <tbody>
                     <tr
                         className="gameroom-container"
-                        onClick={function (e) {this.props.enterGame.bind(this.props.game)(e);}.bind(this)}
-                        index = {this.props.index}
+                        onClick={this.props.status  !== "playing" ? function (e) {this.props.enterGame.bind(this.props.game)(e);}.bind(this): null}
+                        belongto = {this.props.id}
                     >
-                        <th>{this.props.name}</th>
-                        <th>{this.props.admin}</th>
-                        <th>{`${this.props.numSigned} / ${this.props.numReq}`}</th>
-                        <th>{this.props.status}</th>                    
+                        <th belongto = {this.props.id}>
+                            {this.props.name}</th>
+
+                        <th belongto = {this.props.id}>
+                            {this.props.admin}</th>
+
+                        <th belongto = {this.props.id}>
+                            {`${this.props.numSigned} / ${this.props.numReq}`}</th>
+
+                        <th belongto = {this.props.id}>
+                            {this.props.status}</th>
                     </tr>
-                </tbody>
-                {(this.props.admin === this.props.playerName && this.props.numSigned > 0 ) &&  
-                            <tr className={"table-close-button"}><Button
-                                className={"close_btn"}
-                                text="✖"
-                                buttonFunc = {this.props.deleteRoom}
-                                game = {this.props.lobby}
-                            /></tr> 
+
+                {(this.props.admin === this.props.playerName && this.props.numSigned === 0 ) &&
+
+                            <tr className={"table-close-button"}>
+                                <Button
+                                    belongto = {this.props.id}
+                                    className={"close_btn"}
+                                    text="✖"
+                                    buttonFunc = {this.props.deleteRoom}
+                                    game = {this.props.lobby} />
+                            </tr>
+
                         }
+
+                </tbody>
+
             </>
         );
     }
