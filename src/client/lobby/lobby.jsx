@@ -4,7 +4,6 @@ import PlayersList from './playersList/playersList.jsx';
 import GamesList from './gamesList/gamesList.jsx';
 import Menu from './menu/menu.jsx';
 import AddRoom from './addRoom/addRoom.jsx';
-import Info from "../../basicComponents/info/info.jsx.js";
 
 let gamesDB = [
     {
@@ -83,7 +82,7 @@ class Lobby extends React.Component {
 
         stringifiedRoom = JSON.stringify(myRoom); //sringify the new room object
         console.log("in lobby add room func room:",stringifiedRoom );
-        fetch('/lobby/addRoom', {
+        fetch('http://10.0.0.3:3000/lobby/addRoom', {
             body:stringifiedRoom,
             method:"POST"} )
             .then(res => {
@@ -127,7 +126,7 @@ class Lobby extends React.Component {
 
         console.log("in get data to lobby");
 
-        fetch('/lobby', {
+        fetch('http://10.0.0.3:3000/lobby', {
             method:"GET"} )
             .then(res => {
                 if(res.status === 200)

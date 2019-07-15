@@ -97,7 +97,7 @@ class gameManager extends React.Component {
         let name = document.getElementById("input").value;
         console.log("game manager sign in name: " , name);
         
-        fetch('http://192.168.1.107:3000/signIn', {
+        fetch('http://10.0.0.3:3000//signIn', {
             body:name,
             method:"POST"} )
             .then(res =>{
