@@ -111,6 +111,7 @@ app.get('/game/grabBrick/:id', (req, res) => {
     let roomID = req.params.id;
     console.log('get grab brick roomID' , roomID);
     let brick = game.grabBrick(roomsList[roomID], userList[req.session.index]);
+    console.log("grabed brick :" ,brick );
 
     if(brick === true)
         res.sendStatus(200);

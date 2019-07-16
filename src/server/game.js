@@ -141,25 +141,21 @@ function setPackageGame(playerName, room) {
 
 function grabBrick(room, playerName) {
 
-    room.data.players.map(player => {
-        console.log("grab brick player :" , player);
+        for(let i = 0; i < room.data.players.length; i++ ) {
+            //if (room.data.players[i].name === playerName) {
+                //this.setHistoryState();
 
-        if (player.name === playerName) {
-            //this.setHistoryState();
+                if (room.data.bricksArr.length > 0) {
+                    room.data.players[i].bricksArr.push(room.data.bricksArr.pop());
+                    console.log("grab brick player bricks:" , room.data.players[i].bricksArr);
+                    room.general.turnCounter++;
 
-            if (room.data.bricksArr.length > 0) {
-                player.bricksArr.push(room.data.bricksArr.pop());
+                    return true;
+                }
 
-                room.general.turnCounter++;
-
-                return true;
             }
+      //  }
 
-
-        }
-
-
-    });
 
 
 }
