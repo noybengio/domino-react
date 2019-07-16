@@ -12,49 +12,23 @@ class Game extends React.Component {
 
         /*call function to get bricks and data from server */
 
-        let bricksArr = this.createBricksArray();
-        let res = this.splitBricks(bricksArr);
-        let playerBricks = res.playerBricks;
-        bricksArr = res.bricksArr;
-        
-        let name = this.props.name;
-        let admin = this.props.admin;
-        let numPlayers = this.props.numPlayers;
-        let player = this.props.player;
-        let enemies = this.props.enemies;
-
         this.state = {
-            name: name,
-            admin: admin,
-            numPlayers: numPlayers,
-            player: player,
-            enemies: enemies,
+            player: this.props.player,
+            enemies: this.props.enemies,
+            numReq :this.props.numReq,
+            numSigned: this.props.numSigned,
+            general: this.props.general,
+            status: this.props.status,
+            board: this.props.board,
 
+            dataInterval: setTimeout(this.getGameData.bind(this), 1000),
 
-            score1: 0,
-            score2: 0,
-            players: null,
-            bricksArr: bricksArr,
-            playerBricks: playerBricks,
-            availableNumsOnBoard: [],
-            historyState: [],
-            historyIndex: -1,
-            boardCells: this.createBoard(),
             onDragBrick: null,
-            boardNumBricks: 0,
-            gameOver: false,
-            winner: "",
-            turnCounter: 0,
-            
-            minutes: 0,
-            seconds: 0,
-            interval: null,
-            time: "00:00",
-            
+
             zoom: 100,
         };
 
-        this.state.interval = setInterval(this.setTime.bind(this), 1000);
+        //this.state.interval = setInterval(this.setTime.bind(this), 1000);
 
     }
 
@@ -384,22 +358,52 @@ class Game extends React.Component {
 
     grabBrick() {
 
-        let playerBricks = this.state.playerBricks;
-        let bricksArr = this.state.bricksArr;
-        let turnCounter = this.state.turnCounter;
+        fetch(`${this.props.url}/game/grabBrick/${this.props.roomId}`, {
+            method: "Get"
+        })
+            .then(res => {
 
+                if (res.status !== 200) {
+                    res.text().then(error => {
+                        console.log("grab brick fetch error: ", error);
+                        return;
+                    })
+                }
 
-        this.setHistoryState();
+            });
+    }
 
-        if (bricksArr.length > 0)
-            playerBricks.push(bricksArr.pop());
+    getGameData()
+    {
+        fetch(`${this.props.url}/game/${this.props.roomId}`, {
+            method:"Get"} )
+            .then(res => {
 
+                if (res.status !== 200) {
+                    res.text().then(error => {
+                        console.log("get game data error :" ,error );
+                        this.setState({
+                            dataInterval: setTimeout(this.getGameData.bind(this), 1000)
+                        });
+                    })
+                }
+                return res.json();
+            })
+            .then(gamePackage => {
 
-        turnCounter++;
-        this.setState({playerBricks: playerBricks, bricksArr: bricksArr, turnCounter: turnCounter});
+                console.log("get data game player :",gamePackage.player);
 
-        if (this.state.bricksArr.length === 0)
-            this.isGameOver();
+                this.setState({
+                    player: gamePackage.player,
+                    enemies: gamePackage.enemies,
+                    general: gamePackage.general,
+                    status: gamePackage.status,
+                    board: gamePackage.board,
+                    dataInterval: setTimeout(this.getGameData.bind(this), 1000),
+                });
+            })
+            .catch(error => console.log("in catch error :" , error))
+
     }
 
     isGameOver() {
@@ -448,7 +452,7 @@ class Game extends React.Component {
 
     isTurnPossible() {
         let availableNumsOnBoard = this.getAvailableBoardNums();
-       for (let i = 0 ; i < this.state.playerBricks.length ; i++){
+        for (let i = 0 ; i < this.state.playerBricks.length ; i++){
             if (availableNumsOnBoard.includes( this.state.playerBricks[i].num1) || availableNumsOnBoard.includes(this.state.playerBricks[i].num2))
                 return true;
         }
@@ -491,7 +495,7 @@ class Game extends React.Component {
             boardNumBricks: prevState.boardNumBricks,
             turnCounter: prevState.turnCounter,
             minutes: prevState.minutes,
-            seconds: prevState.seconds, 
+            seconds: prevState.seconds,
             time: prevState.time
         });
 
@@ -579,12 +583,12 @@ class Game extends React.Component {
         let time = "";
 
         seconds++;
- 
+
         if(seconds === 60){
             minutes++;
             seconds = 0;
         }
- 
+
         time = (minutes < 10 ? `0${minutes}` : minutes) + ":" + (seconds < 10 ? `0${seconds}` : seconds);
 
         this.setState({
@@ -592,8 +596,15 @@ class Game extends React.Component {
             seconds: seconds,
             time: time
         });
-        
-        
+
+
+    }
+
+    goLobby() {
+        this.setState({
+            screen: "Lobby",
+        });
+
     }
 
     stopClock() {
@@ -601,7 +612,7 @@ class Game extends React.Component {
     }
 
     render() {
-        const historyLength = this.state.historyState.length;
+        const historyLength = this.state.general.historyState.length;
         if(this.state.gameOver === true)
             this.stopClock();
 
@@ -612,9 +623,9 @@ class Game extends React.Component {
                     moveBrick={this.moveBrick}
                     game={this}
                     id="board"
-                    boardCells={this.state.boardCells}
+                    boardCells={this.state.board.boardCells}
                     handleDrop={this.handleDrop}
-                    numBricks={this.state.boardNumBricks}
+                    numBricks={this.state.board.boardNumBricks}
                 />
 
                 <div className = {"player-statistics-container"}>
@@ -622,22 +633,22 @@ class Game extends React.Component {
                         //to bind button funciton
                         game={this}
 
-                        countTurns={this.state.boardNumBricks}
-                        gameOver={this.state.gameOver}
-                        bricksArrayLength={this.state.bricksArr.length}
-                        winner={this.state.winner}
+                        countTurns={this.state.general.turnCounter}
+                        gameOver={this.state.general.gameOver}
+                        bricksArrayLength={this.state.general.bricksArrayLength}
+                        winner={this.state.general.winner}
 
-                        nextButton={this.state.historyIndex === historyLength - 1}
+                        nextButton={this.state.general.historyIndex === this.state.general.historyState.length - 1}
                         setNextHistory={this.setNextHistory}
 
-                        prevButton={this.state.historyIndex === 0}
+                        prevButton={this.state.general.historyIndex === 0}
                         setPrevHistory={this.setPrevHistory}
 
                         grabBrick={this.grabBrick}
 
                         startNewGame={this.startNewGame}
 
-                        turnCounter={this.state.turnCounter}
+                        turnCounter={this.state.general.turnCounter}
 
                         undoStep = {this.undoStep}
 
@@ -645,50 +656,53 @@ class Game extends React.Component {
                         zoomIn = {this.zoomIn}
                         zoomOut = {this.zoomOut}
 
-                        time = {this.state.time}
+                        time = {this.state.general.time}
                     />
 
                     <Player
                         id="player"
                         belongTo = {"player"}
                         name = {this.state.player.name}
-                        bricks={this.state.playerBricks}
+                        bricks={this.state.player.bricksArr}
                         setDragBrick={this.setDragBrick}
                         game={this}
                     />
 
                 </div>
-                {this.state.numPlayers > 1 &&
-                    <Player
-                        id="enemie1"
-                        belongTo = {"enemie"}
-                        className = {this.state.numPlayers === 2 ? "enemie-container-top" : "enemie-container-left"}
-                        name = {this.state.enemies[0].name}
-                        numOfBricks = {this.state.enemies[0].numOfBricks}
-                        bricks= {this.state.enemies[0].bricks}
-                    /> 
-                }
-               
-
-                {this.state.numPlayers === 3 &&
-                    <Player
-                        id="enemie2"
-                        belongTo = {"enemie"}
-                        className = "enemie-container-right"
-                        name = {this.state.enemies[1].name}
-                        numOfBricks = {this.state.enemies[1].numOfBricks}
-                        bricks= {this.state.enemies[1].bricks}
-                    />         
+                {this.state.enemies[0] !== undefined &&
+                <Player
+                    id="enemy1"
+                    belongTo = {"enemy"}
+                    className = {this.state.numPlayers === 2 ? "enemy-container-top" : "enemy-container-left"}
+                    name = {this.state.enemies[0].name}
+                    numOfBricks = {this.state.enemies[0].numBricks}
+                    bricks= {this.state.enemies[0].bricks}
+                    score = {this.state.enemies[0].score}
+                />
                 }
 
-                {this.state.status === "waiting" && 
-                    <WaitingPopUp 
-                        numSigned = {this.state.numSigned}
-                        numReq = {this.state.numReq}
-                        status = {this.state.status}
-                        lobby = {this.props.lobby}
-                        goLobby = {this.props.goLobby}
-                    />
+
+                {this.state.enemies[1] !== undefined &&
+                <Player
+                    id="enemy2"
+                    belongTo = {"enemy"}
+                    className = "enemy-container-right"
+                    name = {this.state.enemies[1].name}
+                    numOfBricks = {this.state.enemies[1].numBricks}
+                    bricks= {this.state.enemies[1].bricks}
+                    score = {this.state.enemies[1].score}
+
+                />
+                }
+
+                {this.state.status === "waiting" &&
+                <WaitingPopUp
+                    numSigned = {this.state.numSigned}
+                    numReq = {this.state.numReq}
+                    status = {this.state.status}
+                    lobby = {this.props.lobby}
+                    goLobby = {this.props.goLobby}
+                />
                 }
             </div>
         );

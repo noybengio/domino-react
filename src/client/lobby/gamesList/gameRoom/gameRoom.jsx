@@ -7,55 +7,47 @@ class GameRoom extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-
-        };
-
+        this.state = {};
     }
 
     render() {
-        { console.log("in game room this.props.playerName is:", this.props.playerName)}
-        { console.log("in game room this.props.admin  is:", this.props.admin )}
+        const canDelete = this.props.admin === this.props.playerName && this.props.numSigned === 0;
         return (
-            <>
-                <tbody>
-                    <tr
-                        key = {`room-${this.props.id}`}
-                        className="gameroom-container"
-                        onClick={this.props.status  !== "playing" ? function (e) {this.props.enterGame.bind(this.props.game)(e);}.bind(this): null}
-                        belongto = {this.props.id}
-                    >
-                        <th belongto = {this.props.id}> {this.props.name} </th>
+            <tr
+                key={`room-${this.props.id}`}
+                className="gameroom-container"
+                onClick={this.props.status !== "playing" ? function (e) {
+                    clearTimeout(this.props.lobby.state.dataTimeOut);
+                    this.props.enterGame.bind(this.props.game)(e);
+                }.bind(this) : null}
+                belongto={this.props.id}
+            >
+                <td belongto={this.props.id}> {this.props.name} </td>
 
-                        <th belongto = {this.props.id}> {this.props.admin} </th>
+                <td belongto={this.props.id}> {this.props.admin} </td>
 
-                        <th belongto = {this.props.id}>
-                            {`${this.props.numSigned} / ${this.props.numReq}`}</th>
+                <td belongto={this.props.id}>
+                    {`${this.props.numSigned} / ${this.props.numReq}`}</td>
 
-                        <th belongto = {this.props.id}>
-                            {this.props.status}</th>
-                    </tr>
-
-                {(this.props.admin === this.props.playerName && this.props.numSigned === 0 ) &&
-
-                            <tr className={"table-close-button"}>
+                <td belongto={this.props.id}>
+                    {this.props.status}</td>
+                {
+                    canDelete ?
+                        (
+                            <td className={"table-close-button"}>
                                 <Button
-                                    belongto = {this.props.id}
+                                    belongto={this.props.id}
                                     className={"close_btn"}
                                     text="✖"
-                                    buttonFunc = {this.props.deleteRoom}
-                                    game = {this.props.lobby} />
-                            </tr>
-}
-
-
-                </tbody>
-
-            </>
-        );
+                                    buttonFunc={this.props.deleteRoom}
+                                    game={this.props.lobby}/>
+                            </td>
+                        ) : <td className='empty-td' />
+                }
+            </tr>)
     }
-
 }
+
 
 export default GameRoom;
 

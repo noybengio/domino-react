@@ -1,41 +1,35 @@
-.gameroom-container{
+.gameroom-container {
     display: flex;
     border: 1px solid black;
     margin: 5px;
 }
 
-tr{
+tr {
     display: flex;
     justify-content: space-between;
     border: 1px solid black;
     text-align: left;
     padding: 8px;
     z-index: 100;
-  }
-  th{
-      width: 20%;
-  }
+}
 
-  tr:hover {
-        background: rgb(71, 71, 71, 0.5);
-        cursor: pointer;
-       
-  }
+td {
+    width: 20%;
+}
 
-  
+tr:hover {
+    background: rgb(71, 71, 71, 0.5);
+    cursor: pointer;
+}
 
-  tbody{
-      width: 100%;
-  }
-  .table-close-button{
-    width: 20px;
-    position: absolute;
-    right: 45px;
-    top: 70px;
-    border: 0px;
+tbody {
+    width: 100%;
+}
 
-  }
-  .table-close-button:hover {
-    background:transparent;
-  }
+.table-close-button:hover {
+    background: transparent;
+}
 
+.empty-td {
+    width: 20px
+}

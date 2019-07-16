@@ -13,31 +13,9 @@ class GamesList extends React.Component {
     render() {
         return (
             <div className={"gameslist-container"}>
-
-
                 <table className={"table-gameslist-container"}>
+                    <tbody>
                     {
-                        /*Object.values(this.props.games).map((game) => {
-                            console.log("gameList map game:", game);
-                            return <GameRoom
-                                key={`room-${game.name}`}
-                                name={game.name}
-                                id={game.id}
-                                playerName={this.props.name}
-                                admin={game.admin}
-                                numReq={game.numReq}
-                                numSigned={game.numSigned}
-                                status={game.status}
-                                enterGame={this.props.enterGame}
-                                game={this.props.game}
-                                lobby={this.props.lobby}
-                                deleteRoom={this.props.deleteRoom}
-                                data = {null}
-
-
-
-                            />
-                        })*/
                         this.props.games.map(game => {
                             return <GameRoom
                                 key={`room-${game.name}`}
@@ -55,7 +33,7 @@ class GamesList extends React.Component {
                                 data = {null} />
                         })
                     }
-
+                    </tbody>
                 </table>
             </div>
         );

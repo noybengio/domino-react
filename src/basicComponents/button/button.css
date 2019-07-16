@@ -7,7 +7,7 @@
 button.square_btn {
     display: inline-block;
     padding: 7px 20px;
-	border-radius: 25px;
+    border-radius: 25px;
     text-decoration: none;
     color: #FFF;
     background-image: -webkit-linear-gradient(45deg, #FFC107 0%, #ff8b5f 100%);
@@ -31,21 +31,16 @@ button.circle_btn{
 
     color: #FFC107;
 
-  }
-  
-  button.circle_btn:hover {
-      background: rgb(255, 174, 0);
-  }
+}
 
-  .close_btn {
+button.circle_btn:hover {
+    background: rgb(255, 174, 0);
+}
+
+.close_btn {
     background: transparent;
     border-radius: 5px;
-    float: right;
-    top: 3px;
-    right: 4px;
     width: 20px;
     height: 20px;
-    position: absolute;
     font-size: 15px;
-    
-  }
+}

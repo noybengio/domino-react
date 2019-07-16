@@ -13,39 +13,28 @@ class Player extends React.Component {
 
     onDragOver(ev) {
         ev.preventDefault();
+
     };
 
     render() {
         return (
-            <div 
-                className={this.props.className ? this.props.className : "player-container"}
-                onDragOver=  { this.props.belongTo === "player" ? (ev) => this.onDragOver(ev) : null}
+            <div
+                className={"player-container"}
+                onDragOver={(ev) => this.onDragOver(ev)}
             >
-                { 
-                    this.props.belongTo === "player" ?
-                     
-                        this.props.bricks.map((brick, i) => {
-                            return (
-                                !brick.used && <Brick
-                                    direction={"vertical"}
-                                    key={`${this.props.name}-brick-${i}`}
-                                    num1={brick.num1}
-                                    num2={brick.num2}
-                                    setDragBrick={this.props.setDragBrick}
-                                    belongTo = { this.props.belongTo }
-                                    game = { this.props.game }
-                                />);
-                        })
-                    :
-                        this.props.bricks.map((brick, i) => {
-                            return (
-                                <Brick
-                                direction = {this.props.className !== "enemie-container-top" ? "horizontal" : "vertical"}
-                                key={`${this.props.name}-brick-${i}`}
-                                className = {"enemie-brick"}
-                                belongTo = { this.props.belongTo } />
-                            );
-                       })
+                {
+                    this.props.bricks.map((brick, i) => {
+                        return (
+                            !brick.used && <Brick
+                                direction={"vertical"}
+                                key={`brick-${i}`}
+                                num1={brick.num1}
+                                num2={brick.num2}
+                                setDragBrick={this.props.setDragBrick}
+                                belongTo = { "player"}
+                                game = { this.props.game }
+                            />);
+                    })
                 }
             </div>
         );

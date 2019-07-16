@@ -5,9 +5,6 @@ const bodyParser = require('body-parser');
 const auth = require('./server/auth');
 const game = require('./server/game');
 
-const userManagement = require('./server/userManagement');
-
-
 const app = express();
 app.use(express.static(path.resolve(__dirname,"..",'public')));
 
@@ -24,16 +21,34 @@ global.userList = [];
 app.get('/a', (req, res) => {
     console.log("new user - cheching connection......");
     if(req.session.index !== undefined) {
-        userList[req.session.index].location = "lobby"
+        userList[req.session.index].location = "lobby";
         res.json({  name: userList[req.session.index].name, location: userList[req.session.index].location});
     }
     else
-    res.json({  name: "", location: "signIn"});
+        res.json({  name: "", location: "signIn"});
 });
 
-app.post('/signIn', auth.addUserToAuthList, (req, res) => {
+app.post('/signIn', (req, res) => {
+    const newUserName = req.body;
+    const isExists = userList.some(user => {
+        return newUserName === user.name;
+    });
 
-    //console.log("server sign in post result: ", res);
+    if(isExists){
+        res.sendStatus(403);
+    }
+    else {
+        req.session.index = Object.keys(userList).length;
+        userList[req.session.index] = {
+            name: req.body,
+            location: "lobby"
+        };
+        console.log("in addUserToAuthList before send req.session.index", req.session.index);
+
+        console.log(" User added :", userList[req.session.index]);
+        console.log("userList: ", userList);
+        res.sendStatus(200);
+    }
 });
 
 app.post('/lobby/addRoom', auth.addRoomToRoomsList, (req, res) => {
@@ -63,65 +78,41 @@ app.delete('/deleteRoom', auth.removeRoomFromAuthList, (req, res) => {
 app.get('/game/:id', (req, res) => {
 
     let roomID = req.params.id;
+    let gamePackage;
 
-
+    console.log('/game/:id');
     if(roomsList[roomID].numSigned !== roomsList[roomID].numReq) {
         roomsList[roomID].players.push(userList[req.session.index]);
         userList[req.session.index].location =  roomsList[roomID].name;
-        console.log("game room ", roomsList[roomID].name ," players: ", roomsList[roomID].players);
-        console.log("game users list: ", userList);
+        //console.log("game room ", roomsList[roomID].name ," players: ", roomsList[roomID].players);
+        //console.log("game users list: ", userList);
 
         roomsList[roomID].numSigned++;
     }
 
     if (roomsList[roomID].data === null && roomsList[roomID].numSigned === roomsList[roomID].numReq) {//start playing
         game.createGame(roomsList[roomID]);
-        console.log("create game: ", roomsList[roomID])
+        //console.log("create game: ", roomsList[roomID])
     }
-        
-        /*roomsList[roomID].status = "playing";
-        console.log("roomsList[roomID]: ", roomsList[roomID]);
 
-        let bricksArr = game.createBricksArray();
-        let res;
-        roomsList[roomID].players.map( player => {
-            res = game.splitBricks(bricksArr);
-            bricksArr = res.bricksArr;
-            player.bricksArr = res.playerBricks;
-            player.availableNumsOnBoard = [],
-            player.scour = 0;
+    gamePackage = game.setPackageGame(userList[req.session.index].name, roomsList[roomID]);
+    //console.log("gamePackage: ",gamePackage);
+    res.json(gamePackage);
 
-            console.log(player.name, " Bricks: ", player.bricksArr);
-            console.log("playerBricks: ", player);
-        });
-    
-        roomsList[roomID].data.players = roomsList[roomID].players;
-        delete roomsList[roomID].players;
-        roomsList[roomID].data.bricksArr = bricksArr;
+});
 
-        roomsList[roomID].data.board = {
-            boardNumBricks: 0,
-            boardCells: game.createBoard(),
-        }
+app.get('/game/grabBrick/:id', (req, res) => {
 
-        roomsList[roomID].data.general = {
-            historyState: [],
-            historyIndex: -1,
-            gameOver: false,
-            winner: "",
-            turnCounter: 0,
-            clock: {
-                interval: null,
-                minutes: 0,
-                seconds: 0,
-                text: "00:00"
-            }
-           
-        }
+    console.log('/grabBrick/:id');
 
-    }*/
-    res.json(roomsList[roomID]);
+    let roomID = req.params.id;
+    console.log('get grab brick roomID' , roomID);
+    let brick = game.grabBrick(roomsList[roomID], userList[req.session.index]);
 
+    if(brick === true)
+        res.sendStatus(200);
+    // else
+////check if bricksArr.lenght =0 then call isGameOver()
 });
 
 /*

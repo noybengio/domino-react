@@ -24,7 +24,7 @@ function shuffleBricks(bricksArr) {
 
 function splitBricks(bricksArr) {
     let playerBricks = [];
-    for (let i = 0; i <= 6; i++) {
+    for (let i = 0; i < 6; i++) {
         playerBricks.push(bricksArr.pop());
     }
 
@@ -48,47 +48,121 @@ function createBoard() {
 function createGame(room){
     let bricksArr = createBricksArray();
     let res, tempPlayers = [];
-
-    
+    room.data = {};
 
     room.players.map( player => {
         res = splitBricks(bricksArr);
         bricksArr = res.bricksArr;
         player.bricksArr = res.playerBricks;
-        player.availableNumsOnBoard = [],
-        player.scour = 0;
+        player.availableNumsOnBoard = [];
+        player.score = 0;
+
+        //console.log(player.name, " Bricks: ", player.bricksArr);
+        // console.log("playerBricks: ", player);
     });
 
     room.status = "playing";
-    room.data = {
 
-        players: room.players,
-        bricksArr: bricksArr,
-        
-        board: {
-            boardNumBricks: 0,
-            boardCells: createBoard(),
-        },
 
-        general: {
-            historyState: [],
-            historyIndex: -1,
-            gameOver: false,
-            winner: "",
-            turnCounter: 0,
-            clock: {
-                interval: null,
-                minutes: 0,
-                seconds: 0,
-                text: "00:00"
-            }
-            
+    room.data.players = room.players;
+    room.data.bricksArr = bricksArr;
+
+    room.data.board =  {
+        boardNumBricks: 0,
+        boardCells: createBoard(),
+
+    };
+
+    room.data.general = {
+        historyState: [],
+        historyIndex: -1,
+        gameOver: false,
+        winner: "",
+        turnCounter: 0,
+        turn: room.data.players[0].name,
+        bricksArrayLength: room.data.bricksArr.length,
+
+        clock: {
+            interval: null,
+            minutes: 0,
+            seconds: 0,
+            text: "00:00"
         }
 
-    }
+    };
+
     delete room.players;
-    
+
+}
+
+function setPackageGame(playerName, room) {
+
+    let player, enemies = [];
+    let gamePackage = {
+
+        status: room.status,
+        name: room.name,
+        numReq: room.numReq,
+        numSigned: room.numSigned,
+        id: room.id
+
+    };
+
+    if (room.status === "playing") {
+
+        //console.log("roomplayers :", room.data.players);
+        for (let i = 0; i < room.data.players.length; i++) {
+            if (room.data.players[i].name === playerName)
+                player = room.data.players[i];
+
+            else {
+                //console.log("set enemies");
+                enemies.push({
+
+                    name: room.data.players[i].name,
+                    numBricks: room.data.players[i].bricksArr.length,
+                    score: room.data.players[i].score
+                })
+            }
+        }
+
+        gamePackage.general = room.data.general;
+        gamePackage.board = room.data.board;
+        gamePackage.player =  player;
+        gamePackage.enemies = enemies;
+        console.log("set package player:", player);
+
+
+    }
+
+    return gamePackage;
+
+}
+
+function grabBrick(room, playerName) {
+
+    room.data.players.map(player => {
+        console.log("grab brick player :" , player);
+
+        if (player.name === playerName) {
+            //this.setHistoryState();
+
+            if (room.data.bricksArr.length > 0) {
+                player.bricksArr.push(room.data.bricksArr.pop());
+
+                room.general.turnCounter++;
+
+                return true;
+            }
+
+
+        }
+
+
+    });
+
+
 }
 
 
-module.exports = {createGame };
+module.exports = {createGame,setPackageGame,grabBrick};
