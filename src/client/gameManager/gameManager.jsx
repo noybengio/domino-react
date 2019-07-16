@@ -119,7 +119,7 @@ class gameManager extends React.Component {
 
 
 
-        fetch(`${url}/signIn`, {
+            fetch(`${url}/signIn`, {
             body:name,
             method:"POST",
             mode: "no-cors"} )

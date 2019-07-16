@@ -14,6 +14,8 @@ class GameRoom extends React.Component {
     }
 
     render() {
+        { console.log("in game room this.props.playerName is:", this.props.playerName)}
+        { console.log("in game room this.props.admin  is:", this.props.admin )}
         return (
             <>
                 <tbody>
@@ -45,8 +47,8 @@ class GameRoom extends React.Component {
                                     buttonFunc = {this.props.deleteRoom}
                                     game = {this.props.lobby} />
                             </tr>
+}
 
-                        }
 
                 </tbody>
 
