@@ -1,5 +1,4 @@
-global.userList = [];
-global.roomsList = [];
+
 
 function userAuthentication(req, res, next) {
     if (userList[req.session.index] === undefined) {

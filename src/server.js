@@ -17,6 +17,7 @@ app.use(session({
 }));
 
 global.userList = [];
+global.roomsList = [];
 
 app.get('/a', (req, res) => {
     console.log("new user - cheching connection......");
@@ -80,7 +81,9 @@ app.get('/game/:id', (req, res) => {
     let roomID = req.params.id;
     let gamePackage;
 
-    console.log('/game/:id');
+    console.log('roomID', roomID);
+    console.log('roomsList', roomsList);
+
     if(roomsList[roomID].numSigned !== roomsList[roomID].numReq) {
         roomsList[roomID].players.push(userList[req.session.index]);
         userList[req.session.index].location =  roomsList[roomID].name;
