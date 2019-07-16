@@ -44,6 +44,7 @@ class AddRoom extends React.Component {
                         <div className={"addRoom-select-container"}>
                             <p>Number Of Players: </p>
                             <select id = "playerNum">
+                                <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                             </select>

@@ -72,24 +72,21 @@ let enemies = [
 ];
 */
 
-let url = 'http://192.168.1.107:3000';
+let url = 'http://10.0.0.1:3000';
 
 class gameManager extends React.Component {
     constructor(props) {
+        let res = getFirstScreen();
+        console.log("constractior res:", res);
+
         super(props);
         this.state = {
+            //screen: res.location,
+            //name: res.name,
             screen: "signIn",
             name: "",
             status: "", //where is the player - lobby/playing
             error: null,
-            game: {
-                name: "",
-                admin: "",
-                player: null,
-                enemies: [],
-                numOfPlayers: 0,
-            },
-
         };
 
         window.addEventListener("unload", function (e) {
@@ -109,22 +106,23 @@ class gameManager extends React.Component {
                 });
 
 
-        })
+        }) //set logout from server if user closed the tab  
     }
+
+    
 
     signIn() {
 
         let name = document.getElementById("input").value;
         console.log("game manager sign in name: " , name);
 
-
-
         fetch(`${url}/signIn`, {
-            body:name,
             method:"POST",
-            mode: "no-cors"} )
+            mode: "no-cors",
+            body: name,
+        } )
             .then(res =>{
-
+                console.log("getFirstScreen res: ", res)
                 if(res.status !== 200)
                 {
                     res.text().then(error => {
@@ -239,10 +237,37 @@ class gameManager extends React.Component {
                                     enemies = {game.enemies}
                                 />;
                 }
-        })(screen)}
+                 })(screen)}
             </div>
         );
    }
+}
+
+function getFirstScreen() {
+    fetch(`${url}/a`, {
+        method:"GET",
+        mode: "no-cors",
+    })
+        .then(res =>{
+            console.log("in first then");
+            if(res.status !== 200)
+            {
+                res.text().then(error => {
+                    console.log("log in error from server - trying again", error);
+                    return this.getFirstScreen();
+                })
+            }
+            else {
+                return res.json();
+                
+            }
+        })
+        .then(screen => {
+            console.log("screen", screen);
+            return screen;
+        })
+        .catch(error => console.log("in catch error :" , error));
+
 }
 
 export default gameManager;

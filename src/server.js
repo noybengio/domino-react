@@ -11,7 +11,7 @@ const userManagement = require('./server/userManagement');
 const app = express();
 app.use(express.static(path.resolve(__dirname,"..",'public')));
 
-app.use(bodyParser.json());
+app.use(bodyParser.text());
 app.use(express.static('public'));
 app.use(session({
     secret: 'topSecret',
@@ -21,6 +21,15 @@ app.use(session({
 
 global.userList = [];
 
+app.get('/a', (req, res) => {
+    console.log("new user - cheching connection......");
+    if(req.session.index !== undefined) {
+        userList[req.session.index].location = "lobby"
+        res.json({  name: userList[req.session.index].name, location: userList[req.session.index].location});
+    }
+    else
+    res.json({  name: "", location: "signIn"});
+});
 
 app.post('/signIn', auth.addUserToAuthList, (req, res) => {
 
@@ -33,10 +42,9 @@ app.post('/lobby/addRoom', auth.addRoomToRoomsList, (req, res) => {
 
 app.get('/lobby',(req, res) => {
 
-    let lobbyBody;
-    lobbyBody = {
+    let lobbyBody = {
         rooms: roomsList,
-        players: userList
+        players: userList,
     };
 
     res.json(lobbyBody);
@@ -52,45 +60,71 @@ app.delete('/deleteRoom', auth.removeRoomFromAuthList, (req, res) => {
 
 });
 
-app.get('/game/:id',(req, res) => {
+app.get('/game/:id', (req, res) => {
 
-    let lobbyBody;
-    lobbyBody = {
-        rooms: roomsList,
-        players: userList
-    };
     let roomID = req.params.id;
 
     console.log("roomID", roomID);
-    console.log("roomsList[roomID].data", roomsList[roomID].data);
-    console.log("roomsList[roomID].status", roomsList[roomID].status);
+    console.log("roomsList[roomID].data: ", roomsList[roomID].data);
+    console.log("roomsList[roomID].status: ", roomsList[roomID].status);
 
-    if(roomsList[roomID].numSigned !== parseInt(roomsList[roomID].numReq)) {
-        roomsList[roomID].players.push(userList[req.session.id]);
-        console.log("game room players: ", roomsList[roomID].players);
+    if(roomsList[roomID].numSigned !== roomsList[roomID].numReq) {
+        roomsList[roomID].players.push(userList[req.session.index]);
+        userList[req.session.index].location =  roomsList[roomID].name;
+        console.log("game room ", roomsList[roomID].name ," players: ", roomsList[roomID].players);
+        console.log("game users list: ", userList);
+
         roomsList[roomID].numSigned++;
     }
 
-           if (roomsList[roomID].data === null &&
-               roomsList[roomID].numSigned === parseInt(roomsList[roomID].numReq))//first enter
-        {
-            roomsList[roomID].status = "playing";
-            console.log("roomsList[roomID]:", roomsList[roomID]);
+    if (roomsList[roomID].data === null && roomsList[roomID].numSigned === roomsList[roomID].numReq) {//start playing
+        game.createGame(roomsList[roomID]);
+        console.log("create gmae: ", roomsList[roomID])
+    }
+        
+        /*roomsList[roomID].status = "playing";
+        console.log("roomsList[roomID]: ", roomsList[roomID]);
 
-            let bricksArr = game.createBricksArray();
+        let bricksArr = game.createBricksArray();
+        let res;
+        roomsList[roomID].players.map( player => {
+            res = game.splitBricks(bricksArr);
+            bricksArr = res.bricksArr;
+            player.bricksArr = res.playerBricks;
+            player.availableNumsOnBoard = [],
+            player.scour = 0;
 
-            for(let i = 0; i < roomsList[roomID].players.length; i++ ) {
+            console.log(player.name, " Bricks: ", player.bricksArr);
+            console.log("playerBricks: ", player);
+        });
+    
+        roomsList[roomID].data.players = roomsList[roomID].players;
+        delete roomsList[roomID].players;
+        roomsList[roomID].data.bricksArr = bricksArr;
 
-                let res = game.splitBricks(bricksArr);
-                let playerBricks = res.playerBricks;
-                bricksArr = res.bricksArr;
-
-                console.log("playerBricks: ", playerBricks);
-                console.log("bricksArr: ", bricksArr);
-            }
+        roomsList[roomID].data.board = {
+            boardNumBricks: 0,
+            boardCells: game.createBoard(),
         }
 
-    res.json(lobbyBody);
+        roomsList[roomID].data.general = {
+            historyState: [],
+            historyIndex: -1,
+            gameOver: false,
+            winner: "",
+            turnCounter: 0,
+            clock: {
+                interval: null,
+                minutes: 0,
+                seconds: 0,
+                text: "00:00"
+            }
+           
+        }
+
+    }*/
+    console.log("start game: ",roomsList[roomID] )
+    res.json(roomsList[roomID]);
 
 });
 

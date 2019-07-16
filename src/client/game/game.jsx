@@ -44,12 +44,13 @@ class Game extends React.Component {
             gameOver: false,
             winner: "",
             turnCounter: 0,
-            zoom: 100,
+            
             minutes: 0,
             seconds: 0,
             interval: null,
-            time: "00:00"
+            time: "00:00",
             
+            zoom: 100,
         };
 
         this.state.interval = setInterval(this.setTime.bind(this), 1000);
@@ -656,8 +657,8 @@ class Game extends React.Component {
                     />
 
                 </div>
-
-                <Player
+                {this.state.numPlayers > 1 &&
+                    <Player
                         id="enemie1"
                         belongTo = {"enemie"}
                         className = {this.state.numPlayers === 2 ? "enemie-container-top" : "enemie-container-left"}
@@ -665,6 +666,8 @@ class Game extends React.Component {
                         numOfBricks = {this.state.enemies[0].numOfBricks}
                         bricks= {this.state.enemies[0].bricks}
                     /> 
+                }
+               
 
                 {this.state.numPlayers === 3 &&
                     <Player
@@ -674,10 +677,7 @@ class Game extends React.Component {
                         name = {this.state.enemies[1].name}
                         numOfBricks = {this.state.enemies[1].numOfBricks}
                         bricks= {this.state.enemies[1].bricks}
-                    />
-            
-            
-            
+                    />         
                 }
             </div>
         );
