@@ -24,7 +24,6 @@ class Menu extends React.Component {
                         className={"square_btn"}
                         game = {this.props.lobby}
                         buttonFunc = {this.props.addRoomPopUp}
-                        /*disabled = {this.props.myRoom === null ? false : true}*/
                     />
                     <Button
                         text="Log Out"

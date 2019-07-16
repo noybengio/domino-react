@@ -20,15 +20,14 @@ class GameRoom extends React.Component {
             <>
                 <tbody>
                     <tr
+                        key = {`room-${this.props.id}`}
                         className="gameroom-container"
                         onClick={this.props.status  !== "playing" ? function (e) {this.props.enterGame.bind(this.props.game)(e);}.bind(this): null}
                         belongto = {this.props.id}
                     >
-                        <th belongto = {this.props.id}>
-                            {this.props.name}</th>
+                        <th belongto = {this.props.id}> {this.props.name} </th>
 
-                        <th belongto = {this.props.id}>
-                            {this.props.admin}</th>
+                        <th belongto = {this.props.id}> {this.props.admin} </th>
 
                         <th belongto = {this.props.id}>
                             {`${this.props.numSigned} / ${this.props.numReq}`}</th>

@@ -78,10 +78,7 @@ class Lobby extends React.Component {
         
         myRoom = {
             name: gameName,
-            //admin: this.props.name,
             numReq:playersNum,
-            //numSigned: 0,
-            //status: "waiting",
         };
 
         stringifiedRoom = JSON.stringify(myRoom); //sringify the new room object
@@ -99,11 +96,10 @@ class Lobby extends React.Component {
                         });
                     })
                 }
-            else
-                {
+                else {
                     this.setState({
                         screen: "Lobby",
-                        myRoom: myRoom
+                        error: null
                     });
                 }
             })
@@ -141,8 +137,6 @@ class Lobby extends React.Component {
      getDataForLobby()
     {
 
-        console.log("in get data to lobby");
-
         fetch(`${this.props.url}/lobby`, {
             method:"GET",
             mode: "no-cors"} )
@@ -153,7 +147,6 @@ class Lobby extends React.Component {
                 }
             })
             .then(lobbyBody => {
-                console.log(lobbyBody);
                 this.setState({
                     rooms: lobbyBody.rooms,
                     players: lobbyBody.players,
@@ -163,14 +156,11 @@ class Lobby extends React.Component {
 
     }
 
-
     logOut()
     {
         clearTimeout(this.state.dataTimeOut);
         this.props.logOut.bind(this.props.game)();
     }
-
-
 
     render() {
         let screen = this.state.screen;
@@ -196,7 +186,6 @@ class Lobby extends React.Component {
                        lobby = {this}
                        addRoomPopUp = {this.addRoomPopUp}
                        logOut = {this.logOut}
-                       myRoom = {this.state.myRoom}
 
                     />
                     <GamesList

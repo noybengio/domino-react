@@ -25,7 +25,6 @@ class SignIn extends React.Component {
                             data = {null}/>
                     }
                     <Input text = "User Name" />
-
                     <Button
                         className={"square_btn"}
                         text="Sign In"
