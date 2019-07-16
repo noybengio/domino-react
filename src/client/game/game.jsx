@@ -2,6 +2,7 @@ import React from 'react';
 import Player from "./player/player.jsx";
 import Board from "./board/board.jsx";
 import Statistics from "./statistics/statistics.jsx";
+import WaitingPopUp from "./waitingPopUp/waitingPopUp.jsx";
 import './game.css'
 
 class Game extends React.Component {
@@ -678,6 +679,16 @@ class Game extends React.Component {
                         numOfBricks = {this.state.enemies[1].numOfBricks}
                         bricks= {this.state.enemies[1].bricks}
                     />         
+                }
+
+                {this.state.status === "waiting" && 
+                    <WaitingPopUp 
+                        numSigned = {this.state.numSigned}
+                        numReq = {this.state.numReq}
+                        status = {this.state.status}
+                        lobby = {this.props.lobby}
+                        goLobby = {this.props.goLobby}
+                    />
                 }
             </div>
         );

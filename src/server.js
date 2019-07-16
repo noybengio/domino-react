@@ -64,9 +64,6 @@ app.get('/game/:id', (req, res) => {
 
     let roomID = req.params.id;
 
-    console.log("roomID", roomID);
-    console.log("roomsList[roomID].data: ", roomsList[roomID].data);
-    console.log("roomsList[roomID].status: ", roomsList[roomID].status);
 
     if(roomsList[roomID].numSigned !== roomsList[roomID].numReq) {
         roomsList[roomID].players.push(userList[req.session.index]);
@@ -79,7 +76,7 @@ app.get('/game/:id', (req, res) => {
 
     if (roomsList[roomID].data === null && roomsList[roomID].numSigned === roomsList[roomID].numReq) {//start playing
         game.createGame(roomsList[roomID]);
-        console.log("create gmae: ", roomsList[roomID])
+        console.log("create game: ", roomsList[roomID])
     }
         
         /*roomsList[roomID].status = "playing";
@@ -123,7 +120,6 @@ app.get('/game/:id', (req, res) => {
         }
 
     }*/
-    console.log("start game: ",roomsList[roomID] )
     res.json(roomsList[roomID]);
 
 });

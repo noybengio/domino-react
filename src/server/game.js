@@ -46,20 +46,17 @@ function createBoard() {
 }
 
 function createGame(room){
-    let bricksArr = this.createBricksArray();
+    let bricksArr = createBricksArray();
     let res, tempPlayers = [];
 
     
 
     room.players.map( player => {
-        res = this.splitBricks(bricksArr);
+        res = splitBricks(bricksArr);
         bricksArr = res.bricksArr;
         player.bricksArr = res.playerBricks;
         player.availableNumsOnBoard = [],
         player.scour = 0;
-
-        console.log(player.name, " Bricks: ", player.bricksArr);
-        console.log("playerBricks: ", player);
     });
 
     room.status = "playing";
@@ -70,7 +67,7 @@ function createGame(room){
         
         board: {
             boardNumBricks: 0,
-            boardCells: this.createBoard(),
+            boardCells: createBoard(),
         },
 
         general: {

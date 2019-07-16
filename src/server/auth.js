@@ -19,8 +19,8 @@ function addUserToAuthList(req, res, next) {
         userList.map(user => {
             if(newUserName == user.name)
                 console.log("inside for - user already exist");
-                        res.status(403).send('user name already exist');
-                        return;
+                res.status(403).send('user name already exist');
+                return;
             })
 
         req.session.index = Object.keys(userList).length;

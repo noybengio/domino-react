@@ -76,8 +76,8 @@ let url = 'http://10.0.0.1:3000';
 
 class gameManager extends React.Component {
     constructor(props) {
-        let res = getFirstScreen();
-        console.log("constractior res:", res);
+        //let res = getFirstScreen();
+        //console.log("constractior res:", res);
 
         super(props);
         this.state = {
