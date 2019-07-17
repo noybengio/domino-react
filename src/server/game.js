@@ -289,8 +289,9 @@ function removeBrickFromPlayerDeck(room, onDragBrick ,player) {
     let i = 0;
     while (i < player.bricksArr.length) {
         const playerBrick = player.bricksArr[i];
-        if (onDragBrick.num1 === playerBrick.num1 &&
-            onDragBrick.num2 === playerBrick.num2) {
+        if ((onDragBrick.num1 === playerBrick.num1 &&
+            onDragBrick.num2 === playerBrick.num2) || (onDragBrick.num1 === playerBrick.num2 &&
+            onDragBrick.num2 === playerBrick.num1)) {
             player.bricksArr.splice(i, 1);
             i = player.bricksArr.length;
         } else
