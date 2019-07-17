@@ -1,8 +1,8 @@
 
 function createBricksArray() {
     let bricksArr = [];
-    for (let i = 0; i < 7; i++)
-        for (let j = i; j < 7; j++) {
+    for (let i = 0; i < 3; i++)
+        for (let j = i; j < 3; j++) {
             bricksArr.push({num1: i, num2: j, used: false});
 
         }
@@ -187,7 +187,7 @@ function isGameOver(room,player) {
     }
     //if no more bricks to drag
     else if (room.data.bricksArr.length === 0 && room.data.board.boardNumBricks > 0) {
-        if (isTurnPossible() === false)
+        if (isTurnPossible(room,player) === false)
             res.gameOver = true;
     }
     if( res.gameOver === true) {
@@ -197,9 +197,9 @@ function isGameOver(room,player) {
         //this.setHistoryState();
 }
 
-function isTurnPossible(room) {
-    let availableNumsOnBoard = getAvailableBoardNums();
-    let playerBricks= room.data.players.player.bricksArr;
+function isTurnPossible(room,player) {
+    let availableNumsOnBoard = getAvailableBoardNums(room);
+    let playerBricks= player.bricksArr;
     for (let i = 0 ; i < playerBricks.length ; i++){
         if (availableNumsOnBoard.includes( playerBricks[i].num1) || availableNumsOnBoard.includes(playerBricks[i].num2))
             return true;

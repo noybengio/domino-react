@@ -142,9 +142,7 @@ class Game extends React.Component {
 
             });
     }
-    noy(){
-        console.log("noy");
-    }
+
     getGameData()
     {
         fetch(`${this.props.url}/game/${this.props.roomId}`, {
@@ -180,7 +178,6 @@ class Game extends React.Component {
 
     handleDrop(index)
     {
-        let noy;
         let brickObject = {index: index,
             brick: this.state.onDragBrick};
 
