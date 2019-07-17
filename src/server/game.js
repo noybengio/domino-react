@@ -44,11 +44,13 @@ function changeTurn(room,time) {
     let turnPlayerIndex = room.data.general.turnCounter % room.data.players.length;
     let curPlayer = room.data.players[turnPlayerIndex];
     curPlayer.statistics.countTurn++;
+
     calcAvg(curPlayer, time, room);
 
     room.data.general.turnCounter++;
 
     turnPlayerIndex = room.data.general.turnCounter % room.data.players.length;
+
 
     curPlayer = room.data.players[turnPlayerIndex];
 
@@ -57,7 +59,6 @@ function changeTurn(room,time) {
         if(turnPlayerIndex > room.data.players.length - 1)
             turnPlayerIndex = 0;
     }
-
 
     room.data.general.turn = room.data.players[turnPlayerIndex].name;
 
@@ -72,7 +73,7 @@ function calcAvg(player, time, room){
     let timeInSec = (time.minutes * 60) + time.seconds;
     player.statistics.sumTurnTime += timeInSec - room.data.general.turnStartTime;
 
-    player.statistics.avgTurn = player.statistics.sumTurnTime/ player.statistics.countTurn;
+    player.statistics.avgTurn = player.statistics.sumTurnTime / player.statistics.countTurn;
 
 
 }
@@ -157,7 +158,7 @@ function setPackageGame(playerName, room) {
         numReq: room.numReq,
         numSigned: room.numSigned,
         id: room.id,
-        players: room.players
+
     };
 
     if (room.status === "playing") {
@@ -168,7 +169,6 @@ function setPackageGame(playerName, room) {
 
             else {
                 enemies.push({
-                    
                     name: room.data.players[i].name,
                     numBricks: room.data.players[i].bricksArr.length,
                 })
@@ -179,7 +179,19 @@ function setPackageGame(playerName, room) {
         gamePackage.board = room.data.board;
         gamePackage.player =  player;
         gamePackage.enemies = enemies;
+    }
+    else {
+        for (let i = 0; i < room.players.length; i++) {
+            if (room.players[i].name === playerName)
+                player = room.players[i];
 
+            else {
+                //console.log("set enemies");
+                enemies.push( room.players[i])
+            }
+        }
+        gamePackage.player = player;
+        gamePackage.enemies = enemies;
     }
     else{
         for (let i = 0; i < room.players.length; i++) {
@@ -253,7 +265,6 @@ function isGameOver(room)
     }
 
 }
-
 
 function isPlayerGameOver(room,player) {
 
