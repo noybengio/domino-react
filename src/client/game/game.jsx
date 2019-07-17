@@ -40,6 +40,7 @@ class Game extends React.Component {
         this.state.clock.minutes = today.getMinutes() - this.props.general.clock.minutes;
         this.state.clock.seconds = today.getSeconds() - this.props.general.clock.seconds;
 
+
         this.state.clockInterval = setInterval(this.setTime.bind(this), 1000);
        
 

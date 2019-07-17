@@ -166,7 +166,7 @@ class Game extends React.Component {
     isLegalDrop(index) {
 
         let res = null;
-        res = this.scanDown(index);
+        res = this.scanDown(index,room);
         if (res !== null)
             return res;
 
@@ -261,7 +261,7 @@ class Game extends React.Component {
         return res;
     }
 
-    scanUp(index) {
+    scanUp(index,brick,room) {
         let res = null;
         if (index - 30 >= 0 && this.state.boardCells[index - 30].brick && this.state.boardCells[index - 30].brick.down !== null) {
             if (this.state.boardCells[index - 30].brick.down === this.state.onDragBrick.num1) {
@@ -288,7 +288,7 @@ class Game extends React.Component {
         return res;
     }
 
-    scanDown(index) {
+    scanDown(index,brick,room) {
 
         let res = null;
         if (index + 30 < 900 && this.state.boardCells[index + 30].brick !== null && this.state.boardCells[index + 30].brick.up !== null) {
@@ -315,7 +315,7 @@ class Game extends React.Component {
         return res;
     }
 
-    scanRight(index) {
+    scanRight(index,brick,room) {
         let res = null;
         if ((index + 1) % 30 < 30 && this.state.boardCells[index + 1].brick !== null && this.state.boardCells[index + 1].brick.left !== null) {
             if (this.state.boardCells[index + 1].brick.left === this.state.onDragBrick.num1) {
@@ -340,7 +340,7 @@ class Game extends React.Component {
         return res;
     }
 
-    scanLeft(index) {
+    scanLeft(index,brick,room) {
         let res = null;
         if ((index - 1) % 30 >= 0 && this.state.boardCells[index - 1].brick !== null && this.state.boardCells[index - 1].brick.right !== null) {
             if (this.state.boardCells[index - 1].brick.right === this.state.onDragBrick.num1) {
