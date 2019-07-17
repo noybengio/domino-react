@@ -23,7 +23,10 @@ class Brick extends React.Component {
     };
 
    render() {
-        return (
+       console.log("brick num1:", this.props.num1);
+       console.log("brick num2:", this.props.num2);
+
+       return (
             this.state.belongTo === "player" ?
             <div
                 id = {`brick${this.state.num1},${this.state.num2}` }

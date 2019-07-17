@@ -1,7 +1,5 @@
 import React from 'react';
 import './board.css'
-
-
 import EmptyCell from '../emptyCell/emptyCell.jsx'
 import Brick from '../brick/brick.jsx'
 
@@ -22,7 +20,10 @@ class Board extends React.Component {
     };
 
     onDrop(ev) {
-        this.handleDrop(ev.target);
+       //this.handleDrop(ev.target); // before
+        let index = ev.target.getAttribute('cellindex');
+        this.handleDrop(index);
+
     };
 
     render() {

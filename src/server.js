@@ -119,6 +119,22 @@ app.get('/game/grabBrick/:id', (req, res) => {
 ////check if bricksArr.lenght =0 then call isGameOver()
 });
 
+app.post('/game/onDrop/:id', (req, res) => {
+
+    console.log('/onDrop/:id');
+    let roomID = req.params.id;
+    let dropData = JSON.parse(req.body);
+
+    let dropped = game.handleDrop(roomsList[roomID],dropData,userList[req.session.index]);
+
+    if(dropped === true)
+        res.sendStatus(200);
+    else
+        res.sendStatus(400);
+
+});
+
+
 /*
     We don't need to set up a app.get('/', (req,res)={...}) method
     because we have in our static folder an html file named - 'index.html' - the defualt html file name.
