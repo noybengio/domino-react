@@ -41,24 +41,27 @@ function splitBricks(bricksArr) {
     })
 }
 
-function changeTurn(room) {
+function changeTurn(room,time) {
     
     let thisTurnName = room.data.general.turn;
     let turnPlayerIndex = 0;
 
-    room.data.players.forEach( plater, i => {
-        if(player.name === ththisTurnNameisturn)
+    room.data.players.forEach( player, i => {
+        if(player.name === thisTurnName){
+            player.statistics.countTurn++;
+            calcAvg(player, time, room);
             turnPlayerIndex = i;
+        }
     });
 
-    turnPlayerIndex++
+    turnPlayerIndex++;
 
 
     if(turnPlayerIndex > room.numReq)
         nextPlayerIndex = 0;
 
     room.data.general.turn = room.data.players[turnPlayerIndex].name;
-
+    room.data.general.turnCounter++;
 
     let today = new Date;
 
@@ -189,10 +192,9 @@ function setPackageGame(playerName, room) {
 
 }
 
-function grabBrick(room, player, time) {
+function grabBrick(room, player) {
 
       let grabedBrick = null;
-
 
       if (room.data.bricksArr.length > 0) {
         grabedBrick = room.data.bricksArr.pop()
@@ -201,9 +203,6 @@ function grabBrick(room, player, time) {
         player.statistics.score += grabedBrick.num1 + grabedBrick.num2;
 
         player.statistics.grabCount++;
-        player.statistics.countTurn++;
-        calcAvg(player, time, room);
-        room.data.general.turnCounter++;
 
         console.log("player after grab brick:" , player);
 
@@ -216,16 +215,18 @@ function grabBrick(room, player, time) {
 
 }
 
-function onBrickDropped(droppedIndex, res,room,player) {
+function onBrickDropped(droppedIndex, brick,room,player) {
 
     room.data.board.boardNumBricks++;
     //let boardCells = room.data.board.boardCells;
     room.data.board.turnCounter ++;
    // this.setHistoryState();
 
-    room.data.board.boardCells[droppedIndex].brick = res;
+    room.data.board.boardCells[droppedIndex].brick = brick;
 
-    removeBrickFromPlayerDeck(room, res, player);
+    player.statistics.score -= brick.num1 + brick.num2;
+
+    removeBrickFromPlayerDeck(room, brick, player);
     console.log("after removeBrickFromPlayerDeck: ",player.bricksArr );
 
     isGameOver(room,player);
@@ -284,7 +285,7 @@ function getAvailableBoardNums(room) {
     return availableNums;
 }
 
-function  removeBrickFromPlayerDeck(room, onDragBrick ,player) {
+function removeBrickFromPlayerDeck(room, onDragBrick ,player) {
     let i = 0;
     while (i < player.bricksArr.length) {
         const playerBrick = player.bricksArr[i];
@@ -355,7 +356,7 @@ function isLegalDrop(index,brick,room) {
 
 }
 
-function  createDroppedBrick(room, neighborIndex, offNum, onNum, num1, num2, scanDir) {
+function createDroppedBrick(room, neighborIndex, offNum, onNum, num1, num2, scanDir) {
     let res = null;
     console.log("createDroppedBrick room:", room);
     if (room.data.board.boardNumBricks > 0) {
@@ -540,4 +541,8 @@ function scanLeft(index,brick,room) {
 
 
 
-module.exports = {createGame,setPackageGame,grabBrick,handleDrop};
+module.exports = {createGame,
+                setPackageGame,
+                grabBrick,
+                handleDrop,
+                changeTurn};

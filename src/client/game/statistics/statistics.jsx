@@ -19,6 +19,11 @@ class Statistics extends React.Component {
                <div className = "general-container">
                     <div className = "info-container">  
 
+                    <Info
+                            text = "Player Turn : "
+                            data = {this.props.turn}
+                        />
+
                         <Info
                             text = "Score: "
                             data = {this.props.playerStatistics.score}

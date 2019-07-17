@@ -298,7 +298,7 @@ class Game extends React.Component {
         let res = null;
         if (index + 30 < 900 && this.state.boardCells[index + 30].brick !== null && this.state.boardCells[index + 30].brick.up !== null) {
             if (this.state.boardCells[index + 30].brick.up === this.state.onDragBrick.num1) {
-                this.state.boardCells[index + 30].brick.up = null;
+              this.state.boardCells[index + 30].brick.up = null;
                 res = {
                     brick: this.createDroppedBrick(index + 30, this.state.onDragBrick.num1, this.state.onDragBrick.num2, this.state.onDragBrick.num2, this.state.onDragBrick.num1, "down"),
                     neighborIndex: index + 30,
@@ -386,9 +386,8 @@ class Game extends React.Component {
 
             });
     }
-    noy(){
-        console.log("noy");
-    }
+
+
     getGameData()
     {
         fetch(`${this.props.url}/game/${this.props.roomId}`, {
@@ -420,6 +419,29 @@ class Game extends React.Component {
             })
             .catch(error => console.log("in catch error :" , error))
 
+    }
+
+    handleDrop(index)
+    {
+    
+        let brickObject = {index: index,
+            brick: this.state.onDragBrick};
+
+        console.log("client handleDrop brick: ", brickObject.brick);
+        fetch(`${this.props.url}/game/onDrop/${this.props.roomId}`, {
+            body: JSON.stringify(brickObject),
+            method: "POST"
+        })
+            .then(res => {
+
+                if (res.status !== 200) {
+                    res.text().then(error => {
+                        console.log("on drop error: ", error);
+                        return;
+                    })
+                }
+
+            });
     }
 
     isGameOver() {
@@ -605,7 +627,7 @@ class Game extends React.Component {
             seconds = 0;
         }
 
-        time = (minutes < 10 && "0") + `${minutes}` + ":" + (seconds < 10 &&  "0") +  `${seconds}`;
+        time = (minutes < 10 ? `0${minutes}` : `${minutes}`) + ":" + (seconds < 10 ? `0${seconds}` : `${seconds}`);
 
         this.setState({
             clock: {
@@ -678,6 +700,7 @@ class Game extends React.Component {
                         zoomOut = {this.zoomOut}
 
                         time = {this.state.clock.time}
+                        turn = {this.state.general.turn}
                     />
 
                     <Player

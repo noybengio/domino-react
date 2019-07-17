@@ -113,13 +113,13 @@ app.get('/game/grabBrick/:id', (req, res) => {
     }
 
     let roomID = req.params.id;
-    console.log('get grab brick roomID' , roomID);
     
-    let brick = game.grabBrick(roomsList[roomID], userList[req.session.index], time);
-    console.log("grabed brick :" ,brick );
+    
+    let brick = game.grabBrick(roomsList[roomID], userList[req.session.index]);
+   
 
     if(brick === true){
-        game.changeTurn(roomsList[roomID]);
+        game.changeTurn(roomsList[roomID], time);
         res.sendStatus(200);
     }
     // else
@@ -128,14 +128,21 @@ app.get('/game/grabBrick/:id', (req, res) => {
 
 app.post('/game/onDrop/:id', (req, res) => {
 
-    console.log('/onDrop/:id');
+    let date = new Date;
+    let time = {
+        minutes: date.getMinutes(),
+        seconds: date.getSeconds()
+    }
+    
     let roomID = req.params.id;
     let dropData = JSON.parse(req.body);
 
     let dropped = game.handleDrop(roomsList[roomID],dropData,userList[req.session.index]);
 
-    if(dropped === true)
+    if(dropped === true){
+        game.changeTurn(roomsList[roomID], time);
         res.sendStatus(200);
+    }
     else
         res.sendStatus(400);
 
