@@ -41,43 +41,23 @@ function splitBricks(bricksArr) {
 
 function changeTurn(room,time) {
     
-<<<<<<< HEAD
-    let turnPlayerIndex = room.datat.general.turnCounter % room.data.players.length;
+    let turnPlayerIndex = room.data.general.turnCounter % room.data.players.length;
     let curPlayer = room.data.players[turnPlayerIndex];
-
+    curPlayer.statistics.countTurn++
     calcAvg(curPlayer, time, room);
 
     room.data.general.turnCounter++;
-=======
-    let thisTurnName = room.data.general.turn;
-    let turnPlayerIndex = 0;
 
-    room.data.players.forEach((player, i) => {
-        if(player.name === thisTurnName){
-            player.statistics.countTurn++;
-            calcAvg(player, time, room);
-            turnPlayerIndex = i;
-        }
-    });
->>>>>>> 6a1ebd6a12b644fb89ba914daf6f464cd54b97d8
-
-    turnPlayerIndex++;
+    
     turnPlayerIndex = room.datat.general.turnCounter % room.data.players.length;
 
     curPlayer = room.data.players[turnPlayerIndex]
 
-    if(curPlayer.gameOver === ture){
+    if(curPlayer.gameOver === true){
         turnPlayerIndex++;
         if(turnPlayerIndex > room.data.players.length - 1)
             turnPlayerIndex = 0;
     }
-
-<<<<<<< HEAD
-    
-=======
-    if(turnPlayerIndex > room.numReq-1)
-        turnPlayerIndex = 0;
->>>>>>> 6a1ebd6a12b644fb89ba914daf6f464cd54b97d8
 
     room.data.general.turn = room.data.players[turnPlayerIndex].name;
 
@@ -92,7 +72,7 @@ function calcAvg(player, time, room){
     let timeInSec = (time.minutes * 60) + time.seconds;
     player.statistics.sumTurnTime += timeInSec - room.data.general.turnStartTime;
 
-    player.statistics.avgTurn = player.statistics.sumTurnTime/ player.statistics.countTurn;
+    player.statistics.avgTurn = player.statistics.sumTurnTime / player.statistics.countTurn;
 
 
 }
@@ -176,7 +156,7 @@ function setPackageGame(playerName, room) {
         name: room.name,
         numReq: room.numReq,
         numSigned: room.numSigned,
-        id: room.id
+        id: room.id,
 
     };
 
@@ -190,10 +170,8 @@ function setPackageGame(playerName, room) {
             else {
                 //console.log("set enemies");
                 enemies.push({
-                    
                     name: room.data.players[i].name,
                     numBricks: room.data.players[i].bricksArr.length,
-                    score: room.data.players[i].score
                 })
             }
         }
@@ -202,9 +180,22 @@ function setPackageGame(playerName, room) {
         gamePackage.board = room.data.board;
         gamePackage.player =  player;
         gamePackage.enemies = enemies;
-       // console.log("set package player:", player);
+       //console.log("set package player:", player);
 
 
+    }
+    else {
+        for (let i = 0; i < room.players.length; i++) {
+            if (room.players[i].name === playerName)
+                player = room.players[i];
+
+            else {
+                //console.log("set enemies");
+                enemies.push( room.players[i])
+            }
+        }
+        gamePackage.player = player;
+        gamePackage.enemies = enemies;
     }
 
     return gamePackage;
@@ -268,7 +259,6 @@ function isGameOver(room)
     }
 
 }
-
 
 function isPlayerGameOver(room,player) {
 
