@@ -1,5 +1,3 @@
-const server = require('../server.js');
-
 
 function createBricksArray() {
     let bricksArr = [];
@@ -43,25 +41,27 @@ function splitBricks(bricksArr) {
 
 function changeTurn(room,time) {
     
-    let thisTurnName = room.data.general.turn;
-    let turnPlayerIndex = 0;
+    let turnPlayerIndex = room.datat.general.turnCounter % room.data.players.length;
+    let curPlayer = room.data.players[turnPlayerIndex];
 
-    room.data.players.forEach( player, i => {
-        if(player.name === thisTurnName){
-            player.statistics.countTurn++;
-            calcAvg(player, time, room);
-            turnPlayerIndex = i;
-        }
-    });
+    calcAvg(curPlayer, time, room);
+
+    room.data.general.turnCounter++;
 
     turnPlayerIndex++;
+    turnPlayerIndex = room.datat.general.turnCounter % room.data.players.length;
 
+    curPlayer = room.data.players[turnPlayerIndex]
 
-    if(turnPlayerIndex > room.numReq)
-        nextPlayerIndex = 0;
+    if(curPlayer.gameOver === ture){
+        turnPlayerIndex++;
+        if(turnPlayerIndex > room.data.players.length - 1)
+            turnPlayerIndex = 0;
+    }
+
+    
 
     room.data.general.turn = room.data.players[turnPlayerIndex].name;
-    room.data.general.turnCounter++;
 
     let today = new Date;
 
@@ -171,7 +171,7 @@ function setPackageGame(playerName, room) {
             else {
                 //console.log("set enemies");
                 enemies.push({
-
+                    
                     name: room.data.players[i].name,
                     numBricks: room.data.players[i].bricksArr.length,
                     score: room.data.players[i].score
@@ -534,13 +534,6 @@ function scanLeft(index,brick,room) {
     }
     return res;
 }
-
-
-
-
-
-
-
 
 module.exports = {createGame,
                 setPackageGame,

@@ -35,7 +35,10 @@
     border-radius: 10px;
     justify-content: space-evenly;
     overflow: auto;
+}
 
+.enemie-container-top[isturn = true] { 
+    border: 1px solid rgb(229, 255, 0); 
 }
 
 .enemie-container-left {
@@ -55,6 +58,10 @@
 
 }
 
+.enemie-container-left[isturn = true] { 
+    border: 1px solid rgb(229, 255, 0); 
+}
+
 .enemie-container-right {
     display: flex;
 	flex-direction: column;
@@ -71,4 +78,23 @@
     justify-content: space-evenly;
     overflow: auto;
 
+}
+
+.enemie-container-right[isturn = true] { 
+    border: 1px solid rgb(229, 255, 0); 
+}
+
+.disable-player {
+    position: absolute;
+    height: 130px ;
+    width: 900px;
+	bottom: 5px;
+    /* margin: 0 5px 0 5px; */
+    margin: 0 auto;
+    left: 0;
+    border-radius: 10px;
+    background-color:rgba(12, 12, 12, 0.75);
+    background-size: cover;
+    /*overflow: hidden;*/
+    z-index: 100;
 }

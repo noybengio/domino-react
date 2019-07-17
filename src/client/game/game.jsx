@@ -579,32 +579,34 @@ class Game extends React.Component {
                         bricks={this.state.player.bricksArr}
                         setDragBrick={this.setDragBrick}
                         game={this}
+                        turn = {this.state.general.turn}
+                        isTurn = {this.setState.general.turn == this.state.player.name}
                     />
 
                 </div>
                 {this.state.enemies[0] !== undefined &&
                 <Player
-                    id="enemy1"
                     belongTo = {"enemy"}
                     className = {this.state.numPlayers === 2 ? "enemy-container-top" : "enemy-container-left"}
                     name = {this.state.enemies[0].name}
                     numOfBricks = {this.state.enemies[0].numBricks}
                     bricks= {this.state.enemies[0].bricks}
                     score = {this.state.enemies[0].score}
+                    turn = {this.state.general.turn}
+                    isTurn = {this.setState.general.turn == this.state.enemies[0].name}
                 />
                 }
 
 
                 {this.state.enemies[1] !== undefined &&
                 <Player
-                    id="enemy2"
                     belongTo = {"enemy"}
                     className = "enemy-container-right"
                     name = {this.state.enemies[1].name}
                     numOfBricks = {this.state.enemies[1].numBricks}
                     bricks= {this.state.enemies[1].bricks}
                     score = {this.state.enemies[1].score}
-
+                    isTurn = {this.setState.general.turn == this.state.enemies[0].name}
                 />
                 }
 
@@ -615,6 +617,7 @@ class Game extends React.Component {
                     status = {this.state.status}
                     lobby = {this.props.lobby}
                     goLobby = {this.props.goLobby}
+                    isTurn = {this.setState.general.turn == this.state.enemies[1].name}
                 />
                 }
             </div>

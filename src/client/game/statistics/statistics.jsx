@@ -14,13 +14,14 @@ class Statistics extends React.Component {
     }
 
     render() {
+        let enemyTurn = this.props.turn !== this.props.name;
          return(  
            <div className="statistics-container">
                <div className = "general-container">
                     <div className = "info-container">  
 
                     <Info
-                            text = "Player Turn : "
+                            text = "Player Turn: "
                             data = {this.props.turn}
                         />
 
@@ -58,7 +59,7 @@ class Statistics extends React.Component {
                             text="Grab Brick"
                             buttonFunc = {this.props.grabBrick}
                             game = {this.props.game}
-                            disabled = { this.props.bricksArrayLength === 0 || this.props.gameOver }
+                            disabled = { this.props.bricksArrayLength === 0 || this.props.gameOver || enemyTurn }
                         />
                         
                         <Zoom
