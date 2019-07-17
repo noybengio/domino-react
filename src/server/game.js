@@ -226,6 +226,7 @@ function onBrickDropped(droppedIndex, res,room,player) {
     room.data.board.boardCells[droppedIndex].brick = res;
 
     removeBrickFromPlayerDeck(room, res, player);
+    console.log("after removeBrickFromPlayerDeck: ",player.bricksArr );
 
     isGameOver(room,player);
 
@@ -284,19 +285,17 @@ function getAvailableBoardNums(room) {
 }
 
 function  removeBrickFromPlayerDeck(room, onDragBrick ,player) {
-    let playerBricks = player.bricksArr;
     let i = 0;
-    while (i < playerBricks.length) {
-        const playerBrick = playerBricks[i];
+    while (i < player.bricksArr.length) {
+        const playerBrick = player.bricksArr[i];
         if (onDragBrick.num1 === playerBrick.num1 &&
             onDragBrick.num2 === playerBrick.num2) {
-            playerBricks.splice(i, 1);
-            i = playerBricks.length;
+            player.bricksArr.splice(i, 1);
+            i = player.bricksArr.length;
         } else
             i++;
     }
 
-    player.bricksArr = playerBricks;
     //this.setState({playerBricks: playerBricks});
 }
 
