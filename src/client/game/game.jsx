@@ -259,6 +259,7 @@ class Game extends React.Component {
 
     handleDrop(index)
     {
+        let noy;
         let brickObject = {index: index,
             brick: this.state.onDragBrick};
 
