@@ -569,6 +569,7 @@ class Game extends React.Component {
 
                         time = {this.state.clock.time}
                         turn = {this.state.general.turn}
+                        name = {this.state.player.name}
                     />
 
                     <Player

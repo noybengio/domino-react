@@ -77,8 +77,8 @@ class Statistics extends React.Component {
                             className = {"general-container"}>
                                 <div className = "info-container">
                                     <Info
-                                        text="Game Over "
-                                        data = {this.props.winner === "player1" ? "You Win!" : "Loser..."}
+                                        text="Game Over"
+                                        data = {this.props.winner === name ? "You Win!" : "Loser..."}
                                     />
                                 </div>
                                 <hr/>
