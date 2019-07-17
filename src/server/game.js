@@ -1,8 +1,10 @@
+const server = require('../server.js');
+
 
 function createBricksArray() {
     let bricksArr = [];
-    for (let i = 0; i < 8; i++)
-        for (let j = i; j < 8; j++) {
+    for (let i = 0; i < 7; i++)
+        for (let j = i; j < 7; j++) {
             bricksArr.push({num1: i, num2: j, used: false});
 
         }
@@ -23,15 +25,55 @@ function shuffleBricks(bricksArr) {
 }
 
 function splitBricks(bricksArr) {
+    let bricksScore = 0;
+    let brick = null;
     let playerBricks = [];
     for (let i = 0; i < 6; i++) {
+        brick = bricksArr.pop();
+        bricksScore += brick.num1 + brick.num2;
         playerBricks.push(bricksArr.pop());
     }
 
     return ({
         playerBricks: playerBricks,
-        bricksArr: bricksArr
+        bricksArr: bricksArr,
+        bricksScore: bricksScore
     })
+}
+
+function changeTurn(room) {
+    
+    let thisTurnName = room.data.general.turn;
+    let turnPlayerIndex = 0;
+
+    room.data.players.forEach( plater, i => {
+        if(player.name === ththisTurnNameisturn)
+            turnPlayerIndex = i;
+    });
+
+    turnPlayerIndex++
+
+
+    if(turnPlayerIndex > room.numReq)
+        nextPlayerIndex = 0;
+
+    room.data.general.turn = room.data.players[turnPlayerIndex].name;
+
+
+    let today = new Date;
+
+    room.data.general.turnStartTime = (today.getMinutes() * 60) + today.getSeconds();
+
+}
+
+function calcAvg(player, time, room){
+
+    let timeInSec = (time.minutes * 60) + time.seconds;
+    player.statistics.sumTurnTime += timeInSec - room.data.general.turnStartTime;
+
+    player.statistics.avgTurn = player.statistics.sumTurnTime/ player.statistics.countTurn;
+
+
 }
 
 function createBoard() {
@@ -55,7 +97,13 @@ function createGame(room){
         bricksArr = res.bricksArr;
         player.bricksArr = res.playerBricks;
         player.availableNumsOnBoard = [];
-        player.score = 0;
+        player.statistics = {
+            score: res.bricksScore,
+            grabCount: 0,
+            avgTurn: 0.0,
+            sumTurnTime: 0,
+            countTurn: 0,
+        }
 
         //console.log(player.name, " Bricks: ", player.bricksArr);
         // console.log("playerBricks: ", player);
@@ -73,6 +121,10 @@ function createGame(room){
 
     };
 
+    let today = new Date();
+    let minutes = today.getMinutes();
+    let seconds = today.getSeconds();
+  
     room.data.general = {
         historyState: [],
         historyIndex: -1,
@@ -81,12 +133,11 @@ function createGame(room){
         turnCounter: 0,
         turn: room.data.players[0].name,
         bricksArrayLength: room.data.bricksArr.length,
+        turnStartTime: (minutes * 60) + seconds, //the time turn start
 
         clock: {
-            interval: null,
-            minutes: 0,
-            seconds: 0,
-            text: "00:00"
+            minutes: minutes,
+            seconds: seconds,
         }
 
     };
@@ -130,7 +181,7 @@ function setPackageGame(playerName, room) {
         gamePackage.board = room.data.board;
         gamePackage.player =  player;
         gamePackage.enemies = enemies;
-        console.log("set package player:", player);
+        //console.log("set package player:", player);
 
 
     }
@@ -139,22 +190,28 @@ function setPackageGame(playerName, room) {
 
 }
 
-function grabBrick(room, playerName) {
+function grabBrick(room, player, time) {
 
-        for(let i = 0; i < room.data.players.length; i++ ) {
-            //if (room.data.players[i].name === playerName) {
-                //this.setHistoryState();
+      let grabedBrick = null;
 
-                if (room.data.bricksArr.length > 0) {
-                    room.data.players[i].bricksArr.push(room.data.bricksArr.pop());
-                    console.log("grab brick player bricks:" , room.data.players[i].bricksArr);
-                    room.general.turnCounter++;
 
-                    return true;
-                }
+      if (room.data.bricksArr.length > 0) {
+        grabedBrick = room.data.bricksArr.pop()
+        player.bricksArr.push(grabedBrick);
 
-            }
-      //  }
+        player.statistics.score += grabedBrick.num1 + grabedBrick.num2;
+
+        player.statistics.grabCount++;
+        player.statistics.countTurn++;
+        calcAvg(player, time, room);
+        room.data.general.turnCounter++;
+
+        console.log("player after grab brick:" , player);
+
+        return true;
+    }
+
+    return false;
 
 
 

@@ -17,7 +17,23 @@ class Statistics extends React.Component {
          return(  
            <div className="statistics-container">
                <div className = "general-container">
-                    <div className = "info-container">                  
+                    <div className = "info-container">  
+
+                        <Info
+                            text = "Score: "
+                            data = {this.props.playerStatistics.score}
+                        />
+
+                        <Info
+                            text="Grab Counter: "
+                            data={this.props.playerStatistics.grabCount}
+                        /> 
+
+                         <Info
+                            text = {`Avg Turn: ${this.props.playerStatistics.avgTurn} sec`}
+                            data = {null}
+                        />
+
                         <Info
                             text="Time:"
                             data={this.props.time}
@@ -27,6 +43,7 @@ class Statistics extends React.Component {
                             text="Turn Counter: "
                             data={this.props.turnCounter}
                         />
+
                     </div>
 
                     <hr/>

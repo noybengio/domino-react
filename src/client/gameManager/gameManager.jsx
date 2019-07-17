@@ -72,7 +72,7 @@ let enemies = [
 ];
 */
 
-let url = 'http://192.168.1.107:3000';
+let url = 'http://192.168.1.104:3000';
 
 class gameManager extends React.Component {
     constructor(props) {

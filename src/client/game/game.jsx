@@ -11,6 +11,8 @@ class Game extends React.Component {
         super(props);
 
         /*call function to get bricks and data from server */
+       
+        
 
         this.state = {
             player: this.props.player,
@@ -22,13 +24,24 @@ class Game extends React.Component {
             board: this.props.board,
 
             dataInterval: setTimeout(this.getGameData.bind(this), 1000),
+            clockInterval: null,
 
             onDragBrick: null,
 
             zoom: 100,
+            clock: {
+                minutes: 0,
+                seconds: 0,
+                time: "00:00"
+            }
         };
+        let today = new Date();
 
-        //this.state.interval = setInterval(this.setTime.bind(this), 1000);
+        this.state.clock.minutes = today.getMinutes() - this.props.general.clock.minutes;
+        this.state.clock.seconds = today.getSeconds() - this.props.general.clock.seconds;
+
+        this.state.clockInterval = setInterval(this.setTime.bind(this), 1000);
+       
 
     }
 
@@ -357,7 +370,7 @@ class Game extends React.Component {
     }
 
     grabBrick() {
-
+        let date = new Date;
         fetch(`${this.props.url}/game/grabBrick/${this.props.roomId}`, {
             method: "Get"
         })
@@ -365,7 +378,7 @@ class Game extends React.Component {
 
                 if (res.status !== 200) {
                     res.text().then(error => {
-                        console.log("grab brick fetch error: ", error);
+                        console.log("grab brick fetch error: ");
                         return;
                     })
                 }
@@ -391,7 +404,7 @@ class Game extends React.Component {
             })
             .then(gamePackage => {
 
-                console.log("get data game player :",gamePackage.player);
+                console.log("get data gamer :",gamePackage);
 
                 this.setState({
                     player: gamePackage.player,
@@ -578,8 +591,8 @@ class Game extends React.Component {
     }
 
     setTime(){
-        let minutes = this.state.minutes;
-        let seconds = this.state.seconds;
+        let minutes = this.state.clock.minutes;
+        let seconds = this.state.clock.seconds;
         let time = "";
 
         seconds++;
@@ -589,12 +602,14 @@ class Game extends React.Component {
             seconds = 0;
         }
 
-        time = (minutes < 10 ? `0${minutes}` : minutes) + ":" + (seconds < 10 ? `0${seconds}` : seconds);
+        time = (minutes < 10 && "0") + `${minutes}` + ":" + (seconds < 10 &&  "0") +  `${seconds}`;
 
         this.setState({
-            minutes: minutes,
-            seconds: seconds,
-            time: time
+            clock: {
+                minutes: minutes,
+                seconds: seconds,
+                time: time
+            }
         });
 
 
@@ -612,7 +627,7 @@ class Game extends React.Component {
     }
 
     render() {
-        const historyLength = this.state.general.historyState.length;
+        //const historyLength = this.state.general.historyState.length;
         if(this.state.gameOver === true)
             this.stopClock();
 
@@ -638,7 +653,10 @@ class Game extends React.Component {
                         bricksArrayLength={this.state.general.bricksArrayLength}
                         winner={this.state.general.winner}
 
-                        nextButton={this.state.general.historyIndex === this.state.general.historyState.length - 1}
+                        playerStatistics = {this.state.player.statistics}
+
+                        //nextButton={this.state.general.historyIndex === this.state.general.historyState.length - 1}
+                        nextButton = {true}
                         setNextHistory={this.setNextHistory}
 
                         prevButton={this.state.general.historyIndex === 0}
@@ -656,7 +674,7 @@ class Game extends React.Component {
                         zoomIn = {this.zoomIn}
                         zoomOut = {this.zoomOut}
 
-                        time = {this.state.general.time}
+                        time = {this.state.clock.time}
                     />
 
                     <Player
