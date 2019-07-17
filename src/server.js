@@ -81,8 +81,8 @@ app.get('/game/:id', (req, res) => {
     let roomID = req.params.id;
     let gamePackage;
 
-    console.log('roomID', roomID);
-    console.log('roomsList', roomsList);
+    //console.log('roomID', roomID);
+    //console.log('roomsList', roomsList);
 
     if(roomsList[roomID].numSigned !== roomsList[roomID].numReq) {
         roomsList[roomID].players.push(userList[req.session.index]);
@@ -105,30 +105,44 @@ app.get('/game/:id', (req, res) => {
 });
 
 app.get('/game/grabBrick/:id', (req, res) => {
-
-    console.log('/grabBrick/:id');
+    
+    let date = new Date;
+    let time = {
+        minutes: date.getMinutes(),
+        seconds: date.getSeconds()
+    }
 
     let roomID = req.params.id;
-    console.log('get grab brick roomID' , roomID);
+    
+    
     let brick = game.grabBrick(roomsList[roomID], userList[req.session.index]);
-    console.log("grabed brick :" ,brick );
+   
 
-    if(brick === true)
+    if(brick === true){
+        game.changeTurn(roomsList[roomID], time);
         res.sendStatus(200);
+    }
     // else
 ////check if bricksArr.lenght =0 then call isGameOver()
 });
 
 app.post('/game/onDrop/:id', (req, res) => {
 
-    console.log('/onDrop/:id');
+    let date = new Date;
+    let time = {
+        minutes: date.getMinutes(),
+        seconds: date.getSeconds()
+    }
+    
     let roomID = req.params.id;
     let dropData = JSON.parse(req.body);
 
     let dropped = game.handleDrop(roomsList[roomID],dropData,userList[req.session.index]);
 
-    if(dropped === true)
+    if(dropped === true){
+        game.changeTurn(roomsList[roomID], time);
         res.sendStatus(200);
+    }
     else
         res.sendStatus(400);
 
