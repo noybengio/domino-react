@@ -81,25 +81,18 @@ app.get('/game/:id', (req, res) => {
     let roomID = req.params.id;
     let gamePackage;
 
-    //console.log('roomID', roomID);
-    //console.log('roomsList', roomsList);
-
     if(roomsList[roomID].numSigned !== roomsList[roomID].numReq) {
         roomsList[roomID].players.push(userList[req.session.index]);
         userList[req.session.index].location =  roomsList[roomID].name;
-        //console.log("game room ", roomsList[roomID].name ," players: ", roomsList[roomID].players);
-        //console.log("game users list: ", userList);
 
         roomsList[roomID].numSigned++;
     }
 
     if (roomsList[roomID].data === null && roomsList[roomID].numSigned === roomsList[roomID].numReq) {//start playing
         game.createGame(roomsList[roomID]);
-        //console.log("create game: ", roomsList[roomID])
     }
 
     gamePackage = game.setPackageGame(userList[req.session.index].name, roomsList[roomID]);
-    //console.log("gamePackage: ",gamePackage);
     res.json(gamePackage);
 
 });
@@ -110,7 +103,7 @@ app.get('/game/grabBrick/:id', (req, res) => {
     let time = {
         minutes: date.getMinutes(),
         seconds: date.getSeconds()
-    }
+    };
 
     let roomID = req.params.id;
     
@@ -132,7 +125,7 @@ app.post('/game/onDrop/:id', (req, res) => {
     let time = {
         minutes: date.getMinutes(),
         seconds: date.getSeconds()
-    }
+    };
     
     let roomID = req.params.id;
     let dropData = JSON.parse(req.body);

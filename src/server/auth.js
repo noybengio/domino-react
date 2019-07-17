@@ -14,7 +14,6 @@ function removeUserFromAuthList(req, res, next) {
     } else {
         console.log("user logged out:", userList[req.session.index]);
         userList.splice(req.session.index, 1);
-        //delete userList[req.session.index];
         res.status(204).send('user deleted successfully');
         next();
     }
@@ -26,7 +25,6 @@ function getUserInfo(id) {
 
 function addRoomToRoomsList(req, res, next) {
     let roomObject = JSON.parse(req.body);
-    //let roomObject = req.body;
 
     console.log("roomObject:", roomObject);
     roomsList.map(room => {
@@ -36,11 +34,7 @@ function addRoomToRoomsList(req, res, next) {
             return;
         }
     });
-    /*if (roomsList[roomObject.name] !== undefined) {
-        console.log("inside for - user already exist");
-        res.status(403).send('room name already exists');
-        return;
-    }*/
+
     roomObject.numReq = parseInt(roomObject.numReq);
     roomObject.admin = userList[req.session.index].name;
     roomObject.numSigned = 0;
@@ -63,7 +57,6 @@ function removeRoomFromAuthList(req, res, next) {
         res.status(403).send('room name does not exist');
     } else {
         roomsList.splice(roomIndex, 1);
-        //delete roomsList[req.body];
         res.status(204).send('room deleted successfully');
         next();
     }
@@ -72,8 +65,6 @@ function removeRoomFromAuthList(req, res, next) {
 
 module.exports = {
     removeRoomFromAuthList,
-    userAuthentication,
     removeUserFromAuthList,
-    getUserInfo,
     addRoomToRoomsList
 };

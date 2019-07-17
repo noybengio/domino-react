@@ -41,43 +41,23 @@ function splitBricks(bricksArr) {
 
 function changeTurn(room,time) {
     
-<<<<<<< HEAD
-    let turnPlayerIndex = room.datat.general.turnCounter % room.data.players.length;
+    let turnPlayerIndex = room.data.general.turnCounter % room.data.players.length;
     let curPlayer = room.data.players[turnPlayerIndex];
-
+    curPlayer.statistics.countTurn++;
     calcAvg(curPlayer, time, room);
 
     room.data.general.turnCounter++;
-=======
-    let thisTurnName = room.data.general.turn;
-    let turnPlayerIndex = 0;
 
-    room.data.players.forEach((player, i) => {
-        if(player.name === thisTurnName){
-            player.statistics.countTurn++;
-            calcAvg(player, time, room);
-            turnPlayerIndex = i;
-        }
-    });
->>>>>>> 6a1ebd6a12b644fb89ba914daf6f464cd54b97d8
+    turnPlayerIndex = room.data.general.turnCounter % room.data.players.length;
 
-    turnPlayerIndex++;
-    turnPlayerIndex = room.datat.general.turnCounter % room.data.players.length;
+    curPlayer = room.data.players[turnPlayerIndex];
 
-    curPlayer = room.data.players[turnPlayerIndex]
-
-    if(curPlayer.gameOver === ture){
+    if(curPlayer.gameOver === true){
         turnPlayerIndex++;
         if(turnPlayerIndex > room.data.players.length - 1)
             turnPlayerIndex = 0;
     }
 
-<<<<<<< HEAD
-    
-=======
-    if(turnPlayerIndex > room.numReq-1)
-        turnPlayerIndex = 0;
->>>>>>> 6a1ebd6a12b644fb89ba914daf6f464cd54b97d8
 
     room.data.general.turn = room.data.players[turnPlayerIndex].name;
 
@@ -176,24 +156,21 @@ function setPackageGame(playerName, room) {
         name: room.name,
         numReq: room.numReq,
         numSigned: room.numSigned,
-        id: room.id
-
+        id: room.id,
+        players: room.players
     };
 
     if (room.status === "playing") {
 
-        //console.log("roomplayers :", room.data.players);
         for (let i = 0; i < room.data.players.length; i++) {
             if (room.data.players[i].name === playerName)
                 player = room.data.players[i];
 
             else {
-                //console.log("set enemies");
                 enemies.push({
                     
                     name: room.data.players[i].name,
                     numBricks: room.data.players[i].bricksArr.length,
-                    score: room.data.players[i].score
                 })
             }
         }
@@ -202,13 +179,24 @@ function setPackageGame(playerName, room) {
         gamePackage.board = room.data.board;
         gamePackage.player =  player;
         gamePackage.enemies = enemies;
-       // console.log("set package player:", player);
-
 
     }
+    else{
+        for (let i = 0; i < room.players.length; i++) {
+            if (room.players[i].name === playerName)
+                player = room.players[i];
 
+            else {
+                //console.log("set enemies");
+                enemies.push(room.players[i]);
+
+            }
+        }
+        gamePackage.player = player;
+        gamePackage.enemies = enemies;
+
+    }
     return gamePackage;
-
 }
 
 function grabBrick(room, player) {
@@ -222,8 +210,6 @@ function grabBrick(room, player) {
         player.statistics.score += grabedBrick.num1 + grabedBrick.num2;
 
         player.statistics.grabCount++;
-
-        console.log("player after grab brick:" , player);
 
         return true;
     }
@@ -246,7 +232,6 @@ function onBrickDropped(droppedIndex, brick,room,player) {
     player.statistics.score -= brick.num1 + brick.num2;
 
     removeBrickFromPlayerDeck(room, brick, player);
-    console.log("after removeBrickFromPlayerDeck: ",player.bricksArr );
 
     isPlayerGameOver(room,player);
 
@@ -332,8 +317,6 @@ function removeBrickFromPlayerDeck(room, onDragBrick ,player) {
         } else
             i++;
     }
-
-    //this.setState({playerBricks: playerBricks});
 }
 
 function handleDrop(room,dropData,player) {
@@ -394,7 +377,6 @@ function isLegalDrop(index,brick,room) {
 
 function createDroppedBrick(room, neighborIndex, offNum, onNum, num1, num2, scanDir) {
     let res = null;
-    console.log("createDroppedBrick room:", room);
     if (room.data.board.boardNumBricks > 0) {
 
         if (num1 === num2) {

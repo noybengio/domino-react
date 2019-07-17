@@ -6,9 +6,7 @@ class Player extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-
-        };
+        this.state = {};
     }
 
     onDragOver(ev) {
@@ -18,32 +16,39 @@ class Player extends React.Component {
 
     render() {
 
+
+
         return (
             <>
-                <div
-                    className={this.props.className ? this.props.className : "player-container"}
-                    onDragOver={(ev) => this.onDragOver(ev)}
-                    isturn = {this.props.isTurn}
-                >
-                    {
-                        this.props.bricks.map((brick, i) => {
-                            return (
-                                !brick.used && <Brick
-                                    direction={"vertical"}
-                                    key={`brick-${i}`}
-                                    num1={brick.num1}
-                                    num2={brick.num2}
-                                    setDragBrick={this.props.setDragBrick}
-                                    belongTo = { "player"}
-                                    game = { this.props.game }
-                                />);
-                        })
-                    }
-                </div>
-                    {(this.props.isTurn === false && this.props.belongTo === "player") &&
-                        <div className = "disable-player"/>
-                    }
+                {
+                    this.props.status === "playing" ?
+                        (<>
+                            <div
+                                className={this.props.className ? this.props.className : "player-container"}
+                                onDragOver={(ev) => this.onDragOver(ev)}
+                                isturn={this.props.isTurn}>
+                                {
+                                    this.props.bricks.map((brick, i) => {
+                                        return (
+                                            !brick.used && <Brick
+                                                direction={"vertical"}
+                                                key={`brick-${i}`}
+                                                num1={brick.num1}
+                                                num2={brick.num2}
+                                                setDragBrick={this.props.setDragBrick}
+                                                belongTo={"player"}
+                                                game={this.props.game}
+                                            />);
+                                    })
 
+                                }
+                            </div>
+                            {this.props.isTurn === false && <div className="disable-player"/>}
+                        </>)
+                        : (
+                            <div className={this.props.className ? this.props.className : "player-container"}/>
+                        )
+                })
             </>
 
         );
