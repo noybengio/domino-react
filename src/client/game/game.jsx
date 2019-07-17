@@ -386,7 +386,9 @@ class Game extends React.Component {
 
             });
     }
-
+    noy(){
+        console.log("noy");
+    }
     getGameData()
     {
         fetch(`${this.props.url}/game/${this.props.roomId}`, {
