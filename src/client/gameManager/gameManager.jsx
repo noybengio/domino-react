@@ -4,75 +4,8 @@ import SignIn from '../signIn/signIn.jsx';
 import Lobby from '../lobby/lobby.jsx';
 import Game from '../game/game.jsx';
 
-/* get data from array of objects
-        let gamesDB = {
-            a:{
-                name: "Noys Game",
-                admin:"Noy",
-                numReq:3,
-                numSigned:0,
-                status: "waiting"
-            }
-            ,
-            b:{
-                name:"Oz Game",
-                admin:"Oz",
-                numReq:2,
-                numSigned:0,
-                status: "waiting"
-            }
-   };
-        console.log("gameDB ", gamesDB['a'].name);
 
-
-
-
-        for (let i in gamesDB){
-            console.log("for i: ", gamesDB[`${i}`]);
-        }
-
- */
-/*
-let gamesDB = [
-    {
-        name:"Noys Game",
-        admin:"Noy",
-        numReq:3,
-        numSigned:0,
-        status: "waiting"
-    }
-    ,
-    {
-        name:"Oz Game",
-        admin:"Oz",
-        numReq:2,
-        numSigned:0,
-        status: "waiting"
-    }
-
-
-];
-
-let player = {
-        name: "",
-};
-
-let enemies = [
-    {
-        name: "Tal",
-        numOfBricks: 6,
-        bricks: new Array(6).fill(0)
-    },
-    {
-        name: "Shir",
-        numOfBricks: 6,
-        bricks: new Array(6).fill(0)
-    }
-
-];
-*/
-
-let url = 'http://192.168.1.104:3000';
+let url = 'http://192.168.1.107:3000';
 
 class gameManager extends React.Component {
     constructor(props) {

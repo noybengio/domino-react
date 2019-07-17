@@ -40,7 +40,7 @@ class Player extends React.Component {
                         })
                     }
                 </div>
-                    {(this.props.isTurn === false && this.props.belongTo === "player" &&
+                    {(this.props.isTurn === false && this.props.belongTo === "player") &&
                         <div className = "disable-player"/>
                     }
 

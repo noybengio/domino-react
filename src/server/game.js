@@ -41,12 +41,25 @@ function splitBricks(bricksArr) {
 
 function changeTurn(room,time) {
     
+<<<<<<< HEAD
     let turnPlayerIndex = room.datat.general.turnCounter % room.data.players.length;
     let curPlayer = room.data.players[turnPlayerIndex];
 
     calcAvg(curPlayer, time, room);
 
     room.data.general.turnCounter++;
+=======
+    let thisTurnName = room.data.general.turn;
+    let turnPlayerIndex = 0;
+
+    room.data.players.forEach((player, i) => {
+        if(player.name === thisTurnName){
+            player.statistics.countTurn++;
+            calcAvg(player, time, room);
+            turnPlayerIndex = i;
+        }
+    });
+>>>>>>> 6a1ebd6a12b644fb89ba914daf6f464cd54b97d8
 
     turnPlayerIndex++;
     turnPlayerIndex = room.datat.general.turnCounter % room.data.players.length;
@@ -59,7 +72,12 @@ function changeTurn(room,time) {
             turnPlayerIndex = 0;
     }
 
+<<<<<<< HEAD
     
+=======
+    if(turnPlayerIndex > room.numReq-1)
+        turnPlayerIndex = 0;
+>>>>>>> 6a1ebd6a12b644fb89ba914daf6f464cd54b97d8
 
     room.data.general.turn = room.data.players[turnPlayerIndex].name;
 
@@ -100,6 +118,7 @@ function createGame(room){
         bricksArr = res.bricksArr;
         player.bricksArr = res.playerBricks;
         player.availableNumsOnBoard = [];
+        player.gameOver = false;
         player.statistics = {
             score: res.bricksScore,
             grabCount: 0,
@@ -131,7 +150,7 @@ function createGame(room){
         historyState: [],
         historyIndex: -1,
         gameOver: false,
-        winner: "",
+        winner: null,
         turnCounter: 0,
         turn: room.data.players[0].name,
         bricksArrayLength: room.data.bricksArr.length,
@@ -197,7 +216,7 @@ function grabBrick(room, player) {
       let grabedBrick = null;
 
       if (room.data.bricksArr.length > 0) {
-        grabedBrick = room.data.bricksArr.pop()
+        grabedBrick = room.data.bricksArr.pop();
         player.bricksArr.push(grabedBrick);
 
         player.statistics.score += grabedBrick.num1 + grabedBrick.num2;
@@ -229,35 +248,51 @@ function onBrickDropped(droppedIndex, brick,room,player) {
     removeBrickFromPlayerDeck(room, brick, player);
     console.log("after removeBrickFromPlayerDeck: ",player.bricksArr );
 
-    isGameOver(room,player);
+    isPlayerGameOver(room,player);
 
     return true;
 }
 
-function isGameOver(room,player) {
-    let res = {
-        gameOver: false,
-        winner: ""
-    };
+function isGameOver(room)
+{
+    let gameOverCounter = 0;
+    for(let i = 0; i < room.data.players.length; i++){
+        if(room.data.players[i].gameOver === false)
+            gameOverCounter++;
+    }
+    if(gameOverCounter === 1 && room.data.players.length > 1)
+        room.data.general.gameOver = true;
+    else{
+        if(gameOverCounter === 0 && room.data.players.length === 1)
+            room.data.general.gameOver = true;
+    }
+
+}
+
+
+function isPlayerGameOver(room,player) {
+
     if (player.bricksArr.length === 0) {
-        res.gameOver = true;
-        res.winner = room.turn;
+        player.gameOver = true;
+        player.score = 0;
+
+        if(room.data.general.winner === null)
+            room.data.general.winner = player.name;
     }
     //if no more bricks to drag
     else if (room.data.bricksArr.length === 0 && room.data.board.boardNumBricks > 0) {
-        if (isTurnPossible() === false)
-            res.gameOver = true;
-    }
-    if( res.gameOver === true) {
-        room.data.general.gameOver = true;
-        room.data.general.winner = res.winner;
+        if (isTurnPossible(room,player) === false) {
+            player.gameOver = true;
         }
+    }
+
+   isGameOver(room);
         //this.setHistoryState();
 }
 
-function isTurnPossible(room) {
-    let availableNumsOnBoard = getAvailableBoardNums();
-    let playerBricks= room.data.players.player.bricksArr;
+function isTurnPossible(room,player) {
+    let availableNumsOnBoard = getAvailableBoardNums(room);
+    let playerBricks= player.bricksArr;
     for (let i = 0 ; i < playerBricks.length ; i++){
         if (availableNumsOnBoard.includes( playerBricks[i].num1) || availableNumsOnBoard.includes(playerBricks[i].num2))
             return true;

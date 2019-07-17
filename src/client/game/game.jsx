@@ -11,9 +11,6 @@ class Game extends React.Component {
         super(props);
 
         /*call function to get bricks and data from server */
-       
-        
-
         this.state = {
             player: this.props.player,
             enemies: this.props.enemies,
@@ -308,7 +305,6 @@ class Game extends React.Component {
             });
     }
 
-
     getGameData()
     {
         fetch(`${this.props.url}/game/${this.props.roomId}`, {
@@ -344,7 +340,7 @@ class Game extends React.Component {
 
     handleDrop(index)
     {
-    
+
         let brickObject = {index: index,
             brick: this.state.onDragBrick};
 
