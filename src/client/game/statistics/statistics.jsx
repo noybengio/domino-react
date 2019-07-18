@@ -15,6 +15,7 @@ class Statistics extends React.Component {
 
     render() {
         let enemyTurn = this.props.turn !== this.props.name;
+        let gameOver = this.props.gameOver;
          return(  
            <div className="statistics-container">
                <div className = "general-container">
@@ -50,16 +51,24 @@ class Statistics extends React.Component {
                             data={this.props.turnCounter}
                         />
 
+                        { gameOver === true &&
+                            <Info
+                            text="Game Over"
+                            data = {this.props.winner === this.props.name ? "You Win!" : "Loser..."}
+                        />
+                        }
+                        
+
                     </div>
 
                     <hr/>
 
                     <div className = "buttons-container">
                         <Button
-                            text="Grab Brick"
-                            buttonFunc = {this.props.grabBrick}
+                            text={gameOver === false  ? "Grab Brick" : "Exit"}
+                            buttonFunc = {gameOver === false ? this.props.grabBrick : this.props.exitLobby}
                             game = {this.props.game}
-                            disabled = { this.props.bricksArrayLength === 0 || this.props.gameOver || enemyTurn }
+                            disabled = { gameOver === false ? (this.props.bricksArrayLength === 0 || this.props.gameOver || enemyTurn) : false }
                         />
                         
                         <Zoom
@@ -71,30 +80,6 @@ class Statistics extends React.Component {
                     </div>
                     
                 </div>    
-
-                {
-                    this.props.gameOver === true &&
-                            <div
-                            className = {"general-container"}>
-                                <div className = "info-container">
-                                    <Info
-                                        text="Game Over"
-                                        data = {this.props.winner === this.props.name ? "You Win!" : "Loser..."}
-                                    />
-                                </div>
-                                <hr/>
-                                <div className = "buttons-container">
-                                    <Button
-                                        text="Exit"
-                                        buttonFunc={this.props.exitLobby}
-                                        game={this.props.game}
-                                    />
-                                    <div className = {"next-prev-container"}>
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                }
 
             </div>
 
