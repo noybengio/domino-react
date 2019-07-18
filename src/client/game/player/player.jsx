@@ -47,9 +47,9 @@ class Player extends React.Component {
                               this.props.bricks.map((brick, i) => {
                                   return (
                                       <Brick
-                                      direction = {this.props.className !== "enemie-container-top" ? "horizontal" : "vertical"}
+                                      direction = {this.props.className !== "enemy-container-top" ? "horizontal" : "vertical"}
                                       key={`${this.props.name}-brick-${i}`}
-                                      className = {"enemie-brick"}
+                                      className = {"enemy-brick"}
                                       belongTo = { this.props.belongTo } />
                                   );
                              })

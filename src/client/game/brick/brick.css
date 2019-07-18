@@ -44,7 +44,7 @@
     align-content: center;
 }
 
-.enemie-brick{
+.enemy-brick{
     width: 30px;
     height: 60px;
     border-radius: 2px;
@@ -57,13 +57,13 @@
     justify-content: center;
 }
 
-.enemie-brick[direction="vertical"]{
+.enemy-brick[direction="vertical"]{
     /*display: flex;*/
     width: 30px;
     height: 60px;
 }
 
-.enemie-brick[direction="horizontal"]{
+.enemy-brick[direction="horizontal"]{
     /*display: flex;*/
     width: 60px;
     height: 30px;
