@@ -41,6 +41,8 @@ class Game extends React.Component {
 
         }
 
+        this.props.exitRoom.bind(this.props.game);
+
     }
 
 
@@ -330,12 +332,12 @@ class Game extends React.Component {
 
     }
 
-    goLobby() {
-        this.setState({
-            screen: "Lobby",
-        });
+  exitGame(){
 
-    }
+    clearInterval(this.state.dataInterval);
+    this.props.exitRoom.bind(this.props.game)();
+
+  }
 
     stopClock() {
         clearInterval(this.state.clockInterval);
@@ -343,11 +345,10 @@ class Game extends React.Component {
     }
 
     render() {
-        //const historyLength = this.state.general.historyState.length;
-        if(this.state.general.gameOver === true)
+        let gameStart = this.state.status === "playing";
+        if(gameStart && this.state.general.gameOver === true)
             this.stopClock();
 
-        let gameStart = this.state.status === "playing";
         return (
             <div className="game">
                 {   gameStart === true &&
@@ -442,8 +443,8 @@ class Game extends React.Component {
                     numSigned = {this.state.numSigned}
                     numReq = {this.state.numReq}
                     status = {this.state.status}
-                    lobby = {this.props.lobby}
-                    exitRoom = {this.props.exitRoom}
+                    game = {this}
+                    exitRoom = {this.exitGame}
                 />
                 }
             </div>

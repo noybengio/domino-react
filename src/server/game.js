@@ -180,7 +180,6 @@ function setPackageGame(playerName, room) {
         gamePackage.player =  player;
         gamePackage.enemies = enemies;
     }
-
     else{
         for (let i = 0; i < room.players.length; i++) {
             if (room.players[i].name === playerName)
@@ -245,7 +244,6 @@ function isGameOver(room)
         if(room.data.players[i].gameOver === false)
             gameOverCounter++;
     }
-
     if(gameOverCounter === 1 && room.data.players.length > 1)
         room.data.general.gameOver = true;
     else{
@@ -270,7 +268,9 @@ function isPlayerGameOver(room,player) {
             player.gameOver = true;
         }
     }
+
    isGameOver(room);
+        //this.setHistoryState();
 }
 
 function isTurnPossible(room,player) {

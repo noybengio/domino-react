@@ -5,7 +5,7 @@ import Lobby from '../lobby/lobby.jsx';
 import Game from '../game/game.jsx';
 
 
-let url = 'http://192.168.1.107:3000';
+let url = 'http://192.168.1.104:3000';
 
 class gameManager extends React.Component {
     constructor(props) {
@@ -140,13 +140,14 @@ class gameManager extends React.Component {
 
     exitRoom() {
         fetch(`${url}/exitroom`, {
+            body: this.state.game.id,
             method:"DELETE"} )
             .then(res =>{
 
                 if(res.status !== 204)
                 {
                     res.text().then(error => {
-                        console.log("log in error from server");
+                        console.log("server error - can't delete user from room");
                         this.setState({
                             error: error,
                         })
@@ -154,8 +155,9 @@ class gameManager extends React.Component {
                 }
                 else {
                     this.setState({
-                        screen: "signIn",
-                        error: null
+                        screen: "Lobby",
+                        error: null,
+                        game: null
 
                     });
                 }
@@ -199,6 +201,7 @@ class gameManager extends React.Component {
                                 enemies = {game.enemies}
                                 general = {game.status === "playing" ? game.general : undefined}
                                 board = {game.status === "playing" ? game.board : undefined}
+                                game = {this}
 
                                 status = {game.status}
                                 roomId = {game.id}

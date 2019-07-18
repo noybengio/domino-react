@@ -24,7 +24,7 @@ class WaitingPopUp extends React.Component {
                         className={"square_btn"}
                         text="Exit Room"
                         buttonFunc = {this.props.exitRoom}
-                        game = {this.props.lobby}
+                        game = {this.props.game}
 
                     />
 
