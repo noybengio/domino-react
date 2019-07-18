@@ -1,63 +1,4 @@
-/*let bricksDB = [
-    {
-        num1:0,
-        num2:0,
-    },
-    {
-        num1:0 ,
-        num2:1 ,
-    },
-    {
-        num1: 1,
-        num2: 1,
-    },
-    {
-        num1:2 ,
-        num2:1 ,
-    },
-    {
-        num1:2 ,
-        num2: 2,
-    },
-    {
-        num1:2 ,
-        num2:3 ,
-    },
-    {
-        num1:4 ,
-        num2: 4,
-    },
-    {
-        num1:3 ,
-        num2:3 ,
-    },
-    {
-        num1: 4,
-        num2:3 ,
-    },
-    {
-        num1: 6,
-        num2: 4,
-    },
-    {
-        num1: 5,
-        num2:5 ,
-    },
-    {
-        num1: 5,
-        num2: 1,
-    },
-    {
-        num1:6 ,
-        num2: 6,
-    },
-    {
-        num1:6 ,
-        num2:0 ,
-    }
 
-    ];
-*/
 function createBricksArray() {
     let bricksArr = [];
     for (let i = 0; i < 7; i++)
@@ -123,22 +64,22 @@ function setGameOverStatistics(room) {
 function changeTurn(room,time) {
     
     let turnPlayerIndex = room.data.general.turnCounter % room.data.players.length;
-    let curPlayer = room.data.players[turnPlayerIndex];
-    curPlayer.statistics.countTurn++;
+    let player = room.data.players[turnPlayerIndex];
+    player.statistics.countTurn++;
 
-    calcAvg(curPlayer, time, room);
+    calcAvg(player, time, room);
 
     room.data.general.turnCounter++;
 
     turnPlayerIndex = room.data.general.turnCounter % room.data.players.length;
 
+    player = room.data.players[turnPlayerIndex];
 
-    curPlayer = room.data.players[turnPlayerIndex];
-
-    if(curPlayer.gameOver === true){
+    while(player.gameOver === true){
         turnPlayerIndex++;
         if(turnPlayerIndex > room.data.players.length - 1)
             turnPlayerIndex = 0;
+        urPlayer = room.data.players[turnPlayerIndex];
     }
 
 
@@ -154,10 +95,12 @@ function changeTurn(room,time) {
 function calcAvg(player, time, room){
 
     let timeInSec = (time.minutes * 60) + time.seconds;
+  
     player.statistics.sumTurnTime += timeInSec - room.data.general.turnStartTime;
-    let avg = player.statistics.sumTurnTime / player.statistics.countTurn;
-    player.statistics.avgTurn = avg.toFixed(2);
 
+    let avg = player.statistics.sumTurnTime / player.statistics.countTurn;
+    player.statistics.avgTurn =avg.toFixed(2);
+    
 }
 
 function createBoard() {

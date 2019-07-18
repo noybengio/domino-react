@@ -31,7 +31,7 @@ class Brick extends React.Component {
                 direction={this.state.direction}
                 className={"brick"}
                 onDragStart={(ev)  =>this.onDragStart(ev, `${this.state.num1},${this.state.num2}`)}
-                draggable >
+                draggable = {this.props.isTurn === false ? true : false } >
                 <DotsContainer num={this.props.num1} />
                 <hr/>
                 <DotsContainer num={this.props.num2} />

@@ -22,7 +22,7 @@ class Board extends React.Component {
     onDrop(ev) {
        //this.handleDrop(ev.target); // before
         let index = ev.target.getAttribute('cellindex');
-        this.handleDrop(index);
+        this.handleDrop(index, e.target);
 
     };
 
