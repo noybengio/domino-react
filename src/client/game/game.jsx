@@ -136,6 +136,7 @@ class Game extends React.Component {
 
     }
 
+
     startGame(gamePackage)
     {
         let today = new Date();
@@ -259,6 +260,7 @@ class Game extends React.Component {
     }
 
     render() {
+
         let gameStart = this.state.status === "playing";
         if(gameStart && this.state.general.gameOver === true)
             this.stopClock();

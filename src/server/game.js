@@ -110,8 +110,6 @@ function createGame(room){
             countTurn: 0,
         }
 
-        //console.log(player.name, " Bricks: ", player.bricksArr);
-        // console.log("playerBricks: ", player);
     });
 
     room.status = "playing";
@@ -242,18 +240,42 @@ function onBrickDropped(droppedIndex, brick,room,player) {
 
 function isGameOver(room)
 {
-    let gameOverCounter = 0;
+    let stillPlaying = 0;
     for(let i = 0; i < room.data.players.length; i++){
         if(room.data.players[i].gameOver === false)
-            gameOverCounter++;
+            stillPlaying++;
     }
-    if(gameOverCounter === 1 && room.data.players.length > 1)
-        room.data.general.gameOver = true;
-    else{
-        if(gameOverCounter === 0 && room.data.players.length === 1)
-            room.data.general.gameOver = true;
+    switch(room.numSigned)
+    {
+        case (1):
+            if(stillPlaying === 0)
+                room.data.general.gameOver = true;
+            break;
+
+        case(2):
+        case(3):
+            if(stillPlaying === 1)
+                room.data.general.gameOver = true;
+            break;
+
     }
 
+    if(room.data.general.gameOver === true && room.data.general.winner === null){
+        setWinnerMinScore(room);
+
+    }
+
+}
+
+function setWinnerMinScore(room) {
+
+    let minScore = room.data.players[0].score;
+    for (let i = 0; i < room.data.players.length; i++) {
+        if (room.data.players[i].score <= minScore) {
+            minScore = room.data.players[i].score;
+            room.data.general.winner = room.data.players[i].name;
+        }
+    }
 }
 
 function isPlayerGameOver(room,player) {
@@ -262,18 +284,18 @@ function isPlayerGameOver(room,player) {
         player.gameOver = true;
         player.score = 0;
 
-        if(room.data.general.winner === null)
+        if(room.data.general.winner === null) {
             room.data.general.winner = player.name;
+        }
     }
-    //if no more bricks to drag
+    //if no more bricks to drag and all players have bricks
     else if (room.data.bricksArr.length === 0 && room.data.board.boardNumBricks > 0) {
         if (isTurnPossible(room,player) === false) {
             player.gameOver = true;
         }
     }
-
-   isGameOver(room);
-        //this.setHistoryState();
+    if(player.gameOver === true)
+        isGameOver(room);
 }
 
 function isTurnPossible(room,player) {
@@ -557,4 +579,5 @@ module.exports = {createGame,
                 setPackageGame,
                 grabBrick,
                 handleDrop,
-                changeTurn};
+                changeTurn,
+    isPlayerGameOver};
