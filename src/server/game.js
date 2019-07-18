@@ -1,4 +1,63 @@
+/*let bricksDB = [
+    {
+        num1:0,
+        num2:0,
+    },
+    {
+        num1:0 ,
+        num2:1 ,
+    },
+    {
+        num1: 1,
+        num2: 1,
+    },
+    {
+        num1:2 ,
+        num2:1 ,
+    },
+    {
+        num1:2 ,
+        num2: 2,
+    },
+    {
+        num1:2 ,
+        num2:3 ,
+    },
+    {
+        num1:4 ,
+        num2: 4,
+    },
+    {
+        num1:3 ,
+        num2:3 ,
+    },
+    {
+        num1: 4,
+        num2:3 ,
+    },
+    {
+        num1: 6,
+        num2: 4,
+    },
+    {
+        num1: 5,
+        num2:5 ,
+    },
+    {
+        num1: 5,
+        num2: 1,
+    },
+    {
+        num1:6 ,
+        num2: 6,
+    },
+    {
+        num1:6 ,
+        num2:0 ,
+    }
 
+    ];
+*/
 function createBricksArray() {
     let bricksArr = [];
     for (let i = 0; i < 7; i++)
@@ -24,19 +83,41 @@ function shuffleBricks(bricksArr) {
 
 function splitBricks(bricksArr) {
     let bricksScore = 0;
+    console.log("bricks arr DB:",bricksArr );
     let brick = null;
     let playerBricks = [];
     for (let i = 0; i < 6; i++) {
         brick = bricksArr.pop();
-        bricksScore += brick.num1 + brick.num2;
-        playerBricks.push(bricksArr.pop());
+        bricksScore = bricksScore + brick.num1 + brick.num2;
+        playerBricks.push(brick);
     }
+
+    console.log("playerBricks: ", playerBricks);
 
     return ({
         playerBricks: playerBricks,
         bricksArr: bricksArr,
         bricksScore: bricksScore
     })
+}
+
+function setGameOverStatistics(room) {
+
+    let statisticsArray = [room.players.length];
+    let minScore = room.players[0].statistics.score;
+
+    for(let i = 0; i < statisticsArray.length; i++) {
+        if(room.players[i].statistics.score <= minScore) {
+            statisticsArray[i] = {
+                statistics: room.players[i].statistics,
+                name: room.players[i].name
+            }
+        }
+    }
+
+    statisticsArrray.sort(function(a, b){return (a.statistics.score < b.statistics.score)});
+
+    return statisticsArrray;
 }
 
 function changeTurn(room,time) {
@@ -60,6 +141,8 @@ function changeTurn(room,time) {
             turnPlayerIndex = 0;
     }
 
+
+
     room.data.general.turn = room.data.players[turnPlayerIndex].name;
 
     let today = new Date;
@@ -72,9 +155,8 @@ function calcAvg(player, time, room){
 
     let timeInSec = (time.minutes * 60) + time.seconds;
     player.statistics.sumTurnTime += timeInSec - room.data.general.turnStartTime;
-
-    player.statistics.avgTurn = player.statistics.sumTurnTime / player.statistics.countTurn;
-
+    let avg = player.statistics.sumTurnTime / player.statistics.countTurn;
+    player.statistics.avgTurn = avg.toFixed(2);
 
 }
 
@@ -91,10 +173,12 @@ function createBoard() {
 
 function createGame(room){
     let bricksArr = createBricksArray();
+    //let bricksArr = bricksDB;
     let res;
     room.data = {};
 
     room.players.map( player => {
+        console.log("create game player: ", player);
         res = splitBricks(bricksArr);
         bricksArr = res.bricksArr;
         player.bricksArr = res.playerBricks;
@@ -169,6 +253,8 @@ function setPackageGame(playerName, room) {
                 enemies.push({
                     name: room.data.players[i].name,
                     numBricks: room.data.players[i].bricksArr.length,
+                    gameOver: room.data.players[i].statistics.gameOver
+
                 })
             }
         }
@@ -207,6 +293,7 @@ function grabBrick(room, player) {
         player.statistics.score += grabedBrick.num1 + grabedBrick.num2;
 
         player.statistics.grabCount++;
+        room.data.general.bricksArrayLength = room.data.bricksArr.length;
 
         return true;
     }
@@ -251,7 +338,7 @@ function isGameOver(room)
 
         case(2):
         case(3):
-            if(stillPlaying === 1)
+            if(stillPlaying === 0)
                 room.data.general.gameOver = true;
             break;
 
@@ -259,17 +346,16 @@ function isGameOver(room)
 
     if(room.data.general.gameOver === true && room.data.general.winner === null){
         setWinnerMinScore(room);
-
     }
 
 }
 
 function setWinnerMinScore(room) {
 
-    let minScore = room.data.players[0].score;
+    let minScore = room.data.players[0].statistics.score;
     for (let i = 0; i < room.data.players.length; i++) {
-        if (room.data.players[i].score <= minScore) {
-            minScore = room.data.players[i].score;
+        if (room.data.players[i].statistics.score <= minScore) {
+            minScore = room.data.players[i].statistics.score;
             room.data.general.winner = room.data.players[i].name;
         }
     }
@@ -277,22 +363,34 @@ function setWinnerMinScore(room) {
 
 function isPlayerGameOver(room,player) {
 
+    console.log("is player game over room: ",room);
+    console.log("is player game over player: ",player);
+
     if (player.bricksArr.length === 0) {
+        console.log("player.bricksArr.length === 0");
         player.gameOver = true;
-        player.score = 0;
+        player.statistics.score = 0;
 
         if(room.data.general.winner === null) {
+            console.log("room.data.general.winner === null");
+
             room.data.general.winner = player.name;
         }
     }
     //if no more bricks to drag and all players have bricks
     else if (room.data.bricksArr.length === 0 && room.data.board.boardNumBricks > 0) {
+        console.log("room.data.bricksArr.length === 0 && room.data.board.boardNumBricks > 0");
+
         if (isTurnPossible(room,player) === false) {
+            console.log("isTurnPossible(room,player) === false");
+
             player.gameOver = true;
         }
     }
-    if(player.gameOver === true)
+    if(player.gameOver === true) {
+        console.log("player.gameOver === true");
         isGameOver(room);
+    }
 }
 
 function isTurnPossible(room,player) {
@@ -577,4 +675,5 @@ module.exports = {createGame,
                 grabBrick,
                 handleDrop,
                 changeTurn,
-    isPlayerGameOver};
+    isPlayerGameOver,
+    setGameOverStatistics};

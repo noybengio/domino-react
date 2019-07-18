@@ -22,6 +22,8 @@ class Game extends React.Component {
 
             dataInterval: setTimeout(this.getGameData.bind(this), 1000),
 
+            gameOverStatistics: [],
+
 
             onDragBrick: null,
 
@@ -42,6 +44,31 @@ class Game extends React.Component {
         }
 
         this.props.exitRoom.bind(this.props.game);
+
+    }
+
+    setGameOverStatistics()
+    {
+        let gameOverStatistics = [];
+        fetch(`${this.props.url}/game/gameOverStatistics/${this.props.roomId}`, {
+            method: "Get"
+        })
+            .then(res => {
+
+                if (res.status !== 200) {
+                    res.text().then(error => {
+                        console.log("cannot get gameOverStatistics error: ", error);
+
+                    })
+                }
+                return res.json();
+            })
+            .then(resStatistics => {
+                gameOverStatistics = resStatistics;
+
+            })
+            .catch(error => console.log("in catch error :" , error))
+        return gameOverStatistics;
 
     }
 
@@ -110,6 +137,8 @@ class Game extends React.Component {
 
                     }
                     else {
+                        if(this.general.gameOver === true) {
+                            let gameOverStatistics = this.setGameOverStatistics();
                         this.setState({
                             player: gamePackage.player,
                             enemies: gamePackage.enemies,
@@ -117,6 +146,8 @@ class Game extends React.Component {
                             status: gamePackage.status,
                             board: gamePackage.board,
                             dataInterval: setTimeout(this.getGameData.bind(this), 1000),
+                            gameOverStatistics: gameOverStatistics
+
                         });
                     }
                 }
@@ -133,14 +164,21 @@ class Game extends React.Component {
             })
             .catch(error => console.log("in catch error :" , error))
 
+        if(this.general.gameOver === true) {
+            let gameOverStatistics = this.setGameOverStatistics();
+            this.setState({
+                gameOverStatistics: gameOverStatistics
+            });
+        }
+
     }
 
 
     startGame(gamePackage)
     {
         let today = new Date();
-        let minutes = today.getMinutes() - gamePackage.clock.minutes;
-        let seconds = today.getSeconds() - gamePackage.clock.seconds;
+        let minutes = today.getMinutes() - gamePackage.general.clock.minutes;
+        let seconds = today.getSeconds() - gamePackage.general.clock.seconds;
 
         this.setState({
             player: gamePackage.player,
@@ -340,16 +378,17 @@ class Game extends React.Component {
 
   }
 
-    stopClock() {
+    stopIntervals() {
         clearInterval(this.state.clockInterval);
-        this.setState({clockInterval:null});
+        clearTimeout(this.state.dataInterval);
+        //this.setState({clockInterval:null});
     }
 
     render() {
 
         let gameStart = this.state.status === "playing";
         if(gameStart && this.state.general.gameOver === true)
-            this.stopClock();
+            this.stopIntervals();
 
         return (
             <div className="game">
@@ -399,6 +438,7 @@ class Game extends React.Component {
                     time = {this.state.clock.time}
                     turn = {this.state.general.turn}
                     name = {this.state.player.name}
+
                     />
                 }
 
@@ -422,6 +462,7 @@ class Game extends React.Component {
                     bricks= { this.state.status === "playing" ? new Array(this.state.enemies[0].numBricks).fill(0) : undefined}
                     isTurn = {this.state.status === "playing" ? (this.state.general.turn === this.state.enemies[0].name) : undefined}
                     status = {this.state.status}
+
 
                 />
                 }

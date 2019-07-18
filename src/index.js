@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import GameManager from "./client/gameManager/gameManager.jsx";
 import './index.css'
 
-let url = 'http://192.168.1.104:3000';
+let url = 'http://192.168.1.107:3000';
 
 let sessionData = null;
 
@@ -40,7 +40,7 @@ function getFirstScreen() {
 
 getFirstScreen();
 
-setTimeout(start, 5000);
+setTimeout(start, 500);
 
 
 function start(){
