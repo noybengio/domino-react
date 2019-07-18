@@ -122,7 +122,7 @@ class Game extends React.Component {
 
                     }
                     else {
-                        if(this.general.gameOver === true)
+                        if(this.state.general.gameOver === true)
                              gameOverStatistics = this.setGameOverStatistics();
                         this.setState({
                             player: gamePackage.player,
@@ -148,7 +148,7 @@ class Game extends React.Component {
 
             })
             .catch(error => console.log("in catch error :" , error))
-
+        
     }
 
     startGame(gamePackage)
@@ -378,14 +378,14 @@ class Game extends React.Component {
                 }
 
                 {
-                    (this.state.general.gameOver === true && this.state.showGameOverStatistics === true) && 
+                    ( this.state.status === "playing" && (this.state.general.gameOver === true && this.state.showGameOverStatistics === true) &&
                             <GameOverStatistics
                                 statistics = {this.state.gameOverStatistics}
                                 name = {this.state.player.name}
                                 winner = {this.state.general.winner}
                                 closeGameOverStatistics = {this.closeGameOverStatistics}
                                 game = {this}
-                            />
+                            />)
                 }
             </div>
         );

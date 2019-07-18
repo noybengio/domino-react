@@ -27,7 +27,7 @@ class Player extends React.Component {
                         <div
                             className={this.props.className ? this.props.className : "player-container"}
                             onDragOver={(ev) => this.onDragOver(ev)}
-                            isturn={`$this.props.isTurn}`} >
+                            isturn={`${this.props.isTurn}`} >
                             {
                                 this.props.belongTo === "player" ?
 
@@ -41,7 +41,7 @@ class Player extends React.Component {
                                                 setDragBrick={this.props.setDragBrick}
                                                 belongTo={this.props.belongTo}
                                                 game={this.props.game}
-                                                isturn={`$this.props.isTurn}`}
+                                                isTurn={this.props.isTurn}
                                             />);
                                     })
                                     :
