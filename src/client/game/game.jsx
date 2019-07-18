@@ -116,6 +116,7 @@ class Game extends React.Component {
 
     getGameData()
     {
+        let gameOverStatistics = null;
         fetch(`${this.props.url}/game/${this.props.roomId}`, {
             method:"Get"} )
             .then(res => {
@@ -139,8 +140,8 @@ class Game extends React.Component {
 
                     }
                     else {
-                        if(this.general.gameOver === true) {
-                            let gameOverStatistics = this.setGameOverStatistics();
+                        if(this.general.gameOver === true)
+                             gameOverStatistics = this.setGameOverStatistics();
                         this.setState({
                             player: gamePackage.player,
                             enemies: gamePackage.enemies,

@@ -100,7 +100,7 @@ function calcAvg(player, time, room){
 
     let avg = player.statistics.sumTurnTime / player.statistics.countTurn;
     player.statistics.avgTurn =avg.toFixed(2);
-    
+
 }
 
 function createBoard() {
