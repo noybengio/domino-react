@@ -257,6 +257,7 @@ class Game extends React.Component {
         let res = this.splitBricks(bricksArr);
         let playerBricks = res.playerBricks;
         bricksArr = res.bricksArr;
+        
 
         this.setState({
             score1: 0,
@@ -278,6 +279,8 @@ class Game extends React.Component {
             interval:setInterval(this.setTime.bind(this), 1000),
             time: "00:00"
         });
+
+        
     }
 
     zoomIn() {
@@ -345,7 +348,6 @@ class Game extends React.Component {
             this.stopClock();
 
         let gameStart = this.state.status === "playing";
-        console.log("gameStart: ",gameStart);
         return (
             <div className="game">
                 {   gameStart === true &&
@@ -441,7 +443,7 @@ class Game extends React.Component {
                     numReq = {this.state.numReq}
                     status = {this.state.status}
                     lobby = {this.props.lobby}
-                    goLobby = {this.props.goLobby}
+                    exitRoom = {this.props.exitRoom}
                 />
                 }
             </div>

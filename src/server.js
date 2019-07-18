@@ -76,6 +76,12 @@ app.delete('/deleteRoom', auth.removeRoomFromAuthList, (req, res) => {
 
 });
 
+app.delete('/exitRoom', auth.removeUserFromRoom, (req, res) => {
+    
+    req.sendStatus(200);
+
+});
+
 app.get('/game/:id', (req, res) => {
 
     let roomID = req.params.id;
