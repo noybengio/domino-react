@@ -92,9 +92,6 @@ module.exports = {
     removeRoomFromAuthList,
     removeUserFromAuthList,
     addRoomToRoomsList,
-<<<<<<< HEAD
-    removeUserFromRoom
-=======
+    removeUserFromRoom,
     checkIfUserExist
->>>>>>> 269906dfd98270ed502fb3622bedc471383d0f6a
 };
