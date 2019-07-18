@@ -80,20 +80,27 @@ app.get('/game/:id', (req, res) => {
 
     let roomID = req.params.id;
     let gamePackage;
+    let room = roomsList[roomID];
+    let player = userList[req.session.index];
 
-    if(roomsList[roomID].numSigned !== roomsList[roomID].numReq) {
-        roomsList[roomID].players.push(userList[req.session.index]);
-        userList[req.session.index].location =  roomsList[roomID].name;
+        if(room.status === "waiting") {
+            if (auth.checkIfUserExist(room, player) === false) {
+                roomsList[roomID].players.push(player);
+                player.location = roomsList[roomID].name;
 
-        roomsList[roomID].numSigned++;
-    }
+                roomsList[roomID].numSigned++;
+            }
+            if (roomsList[roomID].data === null && roomsList[roomID].numSigned === roomsList[roomID].numReq) {//start playing
+                game.createGame(roomsList[roomID]);
+            }
+        }
 
-    if (roomsList[roomID].data === null && roomsList[roomID].numSigned === roomsList[roomID].numReq) {//start playing
-        game.createGame(roomsList[roomID]);
-    }
+
 
     gamePackage = game.setPackageGame(userList[req.session.index].name, roomsList[roomID]);
+    console.log("server game package: ", gamePackage);
     res.json(gamePackage);
+
 
 });
 

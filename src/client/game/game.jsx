@@ -14,6 +14,13 @@ class Game extends React.Component {
             numReq :this.props.numReq,
             numSigned: this.props.numSigned,
             status: this.props.status,
+            player: this.props.player,
+            enemies: this.props.enemies,
+            general: this.props.general,
+            board: this.props.board,
+            clockInterval: null,
+            dataInterval: setTimeout(this.getGameData.bind(this), 1000),
+
 
             onDragBrick: null,
 
@@ -24,6 +31,14 @@ class Game extends React.Component {
                 time: "00:00"
             }
         };
+
+        if(this.state.status === "playing") {
+            let today = new Date();
+            this.state.minutes = today.getMinutes() - this.state.general.clock.minutes;
+            this.state.seconds = today.getSeconds() - this.state.general.clock.seconds;
+            this.state.clockInterval = setInterval(this.setTime.bind(this), 1000);
+
+        }
 
     }
 
@@ -184,7 +199,7 @@ class Game extends React.Component {
 
                 console.log("get data gamer :",gamePackage);
                 if(gamePackage.status === "playing"){
-                    if(this.state.player === undefined){
+                    if(this.state.status === "waiting"){
                         this.startGame(gamePackage);
 
                     }
@@ -201,7 +216,11 @@ class Game extends React.Component {
                 }
                 else{
                     this.setState({
-                        numSigned: gamePackage.numSigned
+                        numSigned: gamePackage.numSigned,
+                        player: gamePackage.player,
+                        enemies: gamePackage.enemies,
+                        dataInterval: setTimeout(this.getGameData.bind(this), 1000)
+
                     });
                 }
 
@@ -216,7 +235,7 @@ class Game extends React.Component {
         let minutes = today.getMinutes() - gamePackage.minutes;
         let seconds = today.getSeconds() - gamePackage.seconds;
 
-        this.state = {
+        this.setState( {
             player: gamePackage.player,
             enemies: gamePackage.enemies,
             numReq :gamePackage.numReq,
@@ -224,18 +243,18 @@ class Game extends React.Component {
             general: gamePackage.general,
             status: gamePackage.status,
             board: gamePackage.board,
-
             dataInterval: setTimeout(this.getGameData.bind(this), 1000),
+
+
             onDragBrick: null,
 
-            zoom: 100,
             clock: {
                 minutes: minutes,
                 seconds: seconds,
-                time: "00:00"
             },
             clockInterval: setInterval(this.setTime.bind(this), 1000),
-        };
+
+        });
 
     }
 
@@ -422,6 +441,7 @@ class Game extends React.Component {
             this.stopClock();
 
         let gameStart = this.state.status === "Playing";
+        console.log("game render this.state.status:", this.state.status);
         return (
             <div className="game">
                 {   gameStart === true &&
@@ -480,7 +500,7 @@ class Game extends React.Component {
                         bricks= { this.state.status === "playing" ? this.state.player.bricksArr : undefined}
                         setDragBrick={this.setDragBrick}
                         game={this}
-                        isTurn = {this.state.status === "playing" ? this.state.general.turn === this.state.player.name : undefined}
+                        isTurn = {this.state.status === "playing" ? (this.state.general.turn === this.state.player.name) : undefined}
                     />
 
                 </div>
@@ -489,8 +509,8 @@ class Game extends React.Component {
                     belongTo = {"enemy"}
                     className = {this.state.numSigned === 2 ? "enemy-container-top" : "enemy-container-left"}
                     name = {this.state.enemies[0].name}
-                    bricks= { this.state.status === "playing" ? new Array(this.state.enemies[0]).fill(0) : undefined}
-                    isTurn = {this.state.status === "playing" ? this.state.general.turn === this.state.enemies[0].name : undefined}
+                    bricks= { this.state.status === "playing" ? new Array(this.state.enemies[0].numBricks).fill(0) : undefined}
+                    isTurn = {this.state.status === "playing" ? (this.state.general.turn === this.state.enemies[0].name) : undefined}
                     status = {this.state.status}
 
                 />
@@ -502,8 +522,8 @@ class Game extends React.Component {
                     belongTo = {"enemy"}
                     className = "enemy-container-right"
                     name = {this.state.enemies[1].name}
-                    bricks= { this.state.status === "playing" ? new Array(this.state.enemies[1]).fill(0) : undefined}
-                    isTurn = {this.state.status === "playing" ? this.state.general.turn === this.state.enemies[1].name : undefined}
+                    bricks= { this.state.status === "playing" ? new Array(this.state.enemies[1].numBricks).fill(0) : undefined}
+                    isTurn = {this.state.status === "playing" ? (this.state.general.turn === this.state.enemies[1].name) : undefined}
                     status = {this.state.status}
 
                 />

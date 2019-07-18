@@ -9,9 +9,7 @@ let url = 'http://192.168.1.107:3000';
 
 class gameManager extends React.Component {
     constructor(props) {
-        //  let res = getFirstScreen();
-
-        //console.log("constractior res:", res);
+        //let res = getFirstScreen();
 
         super(props);
         this.state = {
@@ -154,7 +152,7 @@ class gameManager extends React.Component {
                                 error = {this.state.error}
                                 signIn = {this.signIn}
                                 game = {this}
-                                ד                        />;
+                                                       />;
 
                         case("Lobby"):
                             return <Lobby
@@ -173,8 +171,8 @@ class gameManager extends React.Component {
                                 numSigned = {game.numSigned}
                                 player = {game.player}
                                 enemies = {game.enemies}
-                                general = {game.general}
-                                board = {game.board}
+                                general = {game.status === "playing" ? game.general : undefined}
+                                board = {game.status === "playing" ? game.board : undefined}
                                 status = {game.status}
                                 roomId = {game.id}
                                 url = {url}

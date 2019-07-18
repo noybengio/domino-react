@@ -37,11 +37,11 @@
     overflow: auto;
 }
 
-.enemie-container-top[isturn = true] { 
+.enemy-container-top[isturn = true] {
     border: 1px solid rgb(229, 255, 0); 
 }
 
-.enemie-container-left {
+.enemy-container-left {
     display: flex;
 	flex-direction: column;
     position: fixed;
@@ -58,11 +58,11 @@
 
 }
 
-.enemie-container-left[isturn = true] { 
+.enemy-container-left[isturn = true] {
     border: 1px solid rgb(229, 255, 0); 
 }
 
-.enemie-container-right {
+.enemy-container-right {
     display: flex;
 	flex-direction: column;
     position: fixed;
@@ -80,7 +80,7 @@
 
 }
 
-.enemie-container-right[isturn = true] { 
+.enemy-container-right[isturn = true] {
     border: 1px solid rgb(229, 255, 0); 
 }
 
