@@ -19,6 +19,7 @@ class Game extends React.Component {
             general: this.props.general,
             board: this.props.board,
             clockInterval: null,
+
             dataInterval: setTimeout(this.getGameData.bind(this), 1000),
 
 
@@ -32,7 +33,7 @@ class Game extends React.Component {
             }
         };
 
-        if(this.state.status === "playing") {
+        if(this.state.status === "playing"){
             let today = new Date();
             this.state.minutes = today.getMinutes() - this.state.general.clock.minutes;
             this.state.seconds = today.getSeconds() - this.state.general.clock.seconds;
@@ -89,78 +90,6 @@ class Game extends React.Component {
 
     }
 
-    createDroppedBrick(neighborIndex, offNum, onNum, num1, num2, scanDir) {
-        let res = null;
-        if (this.state.boardNumBricks > 0) {
-
-            if (num1 === num2) {
-                res = {
-                    up: (scanDir === "up" ? null : onNum),
-                    down: (scanDir === "down" ? null : onNum),
-                    right: (scanDir === "right" ? null : onNum),
-                    left: (scanDir === "left" ? null : onNum),
-                    num1: num1,
-                    num2: num2,
-                    direction: (this.state.boardCells[neighborIndex].brick.direction === "vertical" ? "horizontal" : "vertical"),
-                    sides: 4
-                };
-
-            } else {
-                let isVertical = this.state.boardCells[neighborIndex].brick.direction === "vertical";
-                let direction;
-                if (!isVertical && (scanDir === "up" || scanDir === "down"))
-                    direction = "vertical";
-                else {
-                    if (isVertical && (scanDir === "left" || scanDir === "right"))
-                        direction = "horizontal";
-                    else
-                        direction = this.state.boardCells[neighborIndex].brick.direction;
-                }
-                res = {
-                    up: (direction === "horizontal" || scanDir === "up" ? null : onNum),
-                    down: (direction === "horizontal" || scanDir === "down" ? null : onNum),
-                    right: (direction === "vertical" || scanDir === "right" ? null : onNum),
-                    left: (direction === "vertical" || scanDir === "left" ? null : onNum),
-                    num1: num1,
-                    num2: num2,
-                    direction: direction,
-                    sides: 2
-                };
-            }
-
-        } else {
-            if (this.state.onDragBrick.num1 === this.state.onDragBrick.num2) {
-                res = {
-                    up: num1,
-                    down: num1,
-                    right: num1,
-                    left: num1,
-                    num1: num1,
-                    num2: num2,
-                    direction: "vertical",
-                    sides: 4
-                };
-
-
-            } else {
-
-                res = {
-                    up: num1,
-                    down: num2,
-                    right: null,
-                    left: null,
-                    num1: num1,
-                    num2: num2,
-                    direction: "vertical",
-                    sides: 2
-                };
-
-            }
-
-        }
-
-        return res;
-    }
 
     grabBrick() {
         let date = new Date;
@@ -219,7 +148,7 @@ class Game extends React.Component {
                         numSigned: gamePackage.numSigned,
                         player: gamePackage.player,
                         enemies: gamePackage.enemies,
-                        dataInterval: setTimeout(this.getGameData.bind(this), 1000)
+                        dataInterval: setTimeout(this.getGameData.bind(this), 1000),
 
                     });
                 }
@@ -235,7 +164,7 @@ class Game extends React.Component {
         let minutes = today.getMinutes() - gamePackage.minutes;
         let seconds = today.getSeconds() - gamePackage.seconds;
 
-        this.setState( {
+        this.setState({
             player: gamePackage.player,
             enemies: gamePackage.enemies,
             numReq :gamePackage.numReq,
@@ -244,7 +173,6 @@ class Game extends React.Component {
             status: gamePackage.status,
             board: gamePackage.board,
             dataInterval: setTimeout(this.getGameData.bind(this), 1000),
-
 
             onDragBrick: null,
 

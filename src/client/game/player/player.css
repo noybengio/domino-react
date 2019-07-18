@@ -19,7 +19,7 @@
 
 }
 
-.enemie-container-top {
+.enemy-container-top {
     display: flex;
 	flex-direction: row;
     position: fixed;
@@ -37,8 +37,9 @@
     overflow: auto;
 }
 
-.enemy-container-top[isturn = true] {
-    border: 1px solid rgb(229, 255, 0); 
+
+.enemy-container-top[isturn = true] { 
+    border: 1px solid rgb(229, 255, 0);
 }
 
 .enemy-container-left {
@@ -58,8 +59,8 @@
 
 }
 
-.enemy-container-left[isturn = true] {
-    border: 1px solid rgb(229, 255, 0); 
+.enemy-container-left[isturn = true] { 
+    border: 1px solid rgb(229, 255, 0);
 }
 
 .enemy-container-right {
@@ -80,8 +81,9 @@
 
 }
 
-.enemy-container-right[isturn = true] {
-    border: 1px solid rgb(229, 255, 0); 
+
+.enemy-container-right[isturn = true] { 
+    border: 1px solid rgb(229, 255, 0);
 }
 
 .disable-player {

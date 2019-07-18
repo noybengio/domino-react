@@ -180,7 +180,10 @@ function setPackageGame(playerName, room) {
         gamePackage.player =  player;
         gamePackage.enemies = enemies;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 687ce44a77aa87f2b73b5bf8ba4188c94caa9f8c
     else{
         for (let i = 0; i < room.players.length; i++) {
             if (room.players[i].name === playerName)

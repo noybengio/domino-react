@@ -173,6 +173,7 @@ class gameManager extends React.Component {
                                 enemies = {game.enemies}
                                 general = {game.status === "playing" ? game.general : undefined}
                                 board = {game.status === "playing" ? game.board : undefined}
+
                                 status = {game.status}
                                 roomId = {game.id}
                                 url = {url}
