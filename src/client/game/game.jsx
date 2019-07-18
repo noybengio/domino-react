@@ -74,29 +74,6 @@ class Game extends React.Component {
 
     }
 
-
-
-    setDragBrick(num1, num2) {
-        this.setState({onDragBrick: {num1: num1, num2: num2}});
-    }
-
-    setUsedBrick(num1, num2) {
-        let playerBricks = this.state.playerBricks;
-
-        let index = playerBricks.map((brick, i) => {
-            if (brick !== null && brick.num1 === num1 && brick.num2 === num2)
-                return i;
-        });
-
-        playerBricks[index].brick.used = true;
-
-        return playerBricks;
-
-
-    }
-
-
-
     grabBrick() {
 
         fetch(`${this.props.url}/game/grabBrick/${this.props.roomId}`, {
@@ -116,7 +93,7 @@ class Game extends React.Component {
 
     getGameData()
     {
-        let gameOverStatistics = null;
+        let gameOverStatistics =[];
         fetch(`${this.props.url}/game/${this.props.roomId}`, {
             method:"Get"} )
             .then(res => {
@@ -166,10 +143,8 @@ class Game extends React.Component {
 
             })
             .catch(error => console.log("in catch error :" , error))
-
-
+        
     }
-
 
     startGame(gamePackage)
     {
@@ -186,8 +161,6 @@ class Game extends React.Component {
             status: gamePackage.status,
             board: gamePackage.board,
             dataInterval: setTimeout(this.getGameData.bind(this), 1000),
-
-            onDragBrick: null,
 
             clock: {
                 minutes: minutes,
@@ -217,7 +190,6 @@ class Game extends React.Component {
                 if (res.status !== 200) {
                     target.setAttribute('turn-red' , 'true');
                 }
-
             });
     }
 

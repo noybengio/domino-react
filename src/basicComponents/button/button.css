@@ -4,6 +4,10 @@
     padding: 3px 10px 3px 10px;
 }
 
+.button[disabled = false]{
+    cursor: no-drop;
+}
+
 button.square_btn {
     display: inline-block;
     padding: 7px 20px;
