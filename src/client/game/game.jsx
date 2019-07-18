@@ -19,6 +19,10 @@ class Game extends React.Component {
             general: this.props.general,
             board: this.props.board,
             clockInterval: null,
+
+            dataInterval: setTimeout(this.getGameData.bind(this), 1000),
+
+
             onDragBrick: null,
 
             zoom: 100,
@@ -34,6 +38,7 @@ class Game extends React.Component {
             this.state.minutes = today.getMinutes() - this.state.general.clock.minutes;
             this.state.seconds = today.getSeconds() - this.state.general.clock.seconds;
             this.state.clockInterval = setInterval(this.setTime.bind(this), 1000);
+
         }
 
     }
@@ -169,7 +174,6 @@ class Game extends React.Component {
             board: gamePackage.board,
             dataInterval: setTimeout(this.getGameData.bind(this), 1000),
 
-
             onDragBrick: null,
 
             clock: {
@@ -177,6 +181,7 @@ class Game extends React.Component {
                 seconds: seconds,
             },
             clockInterval: setInterval(this.setTime.bind(this), 1000),
+
         });
 
     }
@@ -367,7 +372,12 @@ class Game extends React.Component {
         if(this.state.general.gameOver === true)
             this.stopClock();
 
+<<<<<<< HEAD
         let gameStart = this.state.status === "playing";
+=======
+        let gameStart = this.state.status === "Playing";
+        console.log("game render this.state.status:", this.state.status);
+>>>>>>> 269906dfd98270ed502fb3622bedc471383d0f6a
         return (
             <div className="game">
                 {   gameStart === true &&
@@ -426,7 +436,7 @@ class Game extends React.Component {
                         bricks= { this.state.status === "playing" ? this.state.player.bricksArr : undefined}
                         setDragBrick={this.setDragBrick}
                         game={this}
-                        isTurn = {this.state.status === "playing" ? this.state.general.turn === this.state.player.name : undefined}
+                        isTurn = {this.state.status === "playing" ? (this.state.general.turn === this.state.player.name) : undefined}
                     />
 
                 </div>
@@ -435,8 +445,8 @@ class Game extends React.Component {
                     belongTo = {"enemy"}
                     className = {this.state.numSigned === 2 ? "enemy-container-top" : "enemy-container-left"}
                     name = {this.state.enemies[0].name}
-                    bricks= { this.state.status === "playing" ? new Array(this.state.enemies[0]).fill(0) : undefined}
-                    isTurn = {this.state.status === "playing" ? this.state.general.turn === this.state.enemies[0].name : undefined}
+                    bricks= { this.state.status === "playing" ? new Array(this.state.enemies[0].numBricks).fill(0) : undefined}
+                    isTurn = {this.state.status === "playing" ? (this.state.general.turn === this.state.enemies[0].name) : undefined}
                     status = {this.state.status}
 
                 />
@@ -448,8 +458,8 @@ class Game extends React.Component {
                     belongTo = {"enemy"}
                     className = "enemy-container-right"
                     name = {this.state.enemies[1].name}
-                    bricks= { this.state.status === "playing" ? new Array(this.state.enemies[1]).fill(0) : undefined}
-                    isTurn = {this.state.status === "playing" ? this.state.general.turn === this.state.enemies[1].name : undefined}
+                    bricks= { this.state.status === "playing" ? new Array(this.state.enemies[1].numBricks).fill(0) : undefined}
+                    isTurn = {this.state.status === "playing" ? (this.state.general.turn === this.state.enemies[1].name) : undefined}
                     status = {this.state.status}
 
                 />

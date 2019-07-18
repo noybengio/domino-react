@@ -78,10 +78,23 @@ function removeRoomFromAuthList(req, res, next) {
     }
 }
 
+function checkIfUserExist(room,player) {
+
+    for(let i = 0; i < room.players.length; i++) {
+        if(room.players[i].name === player.name)
+            return true;
+    }
+    return false;
+}
+
 
 module.exports = {
     removeRoomFromAuthList,
     removeUserFromAuthList,
     addRoomToRoomsList,
+<<<<<<< HEAD
     removeUserFromRoom
+=======
+    checkIfUserExist
+>>>>>>> 269906dfd98270ed502fb3622bedc471383d0f6a
 };

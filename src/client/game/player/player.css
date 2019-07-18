@@ -37,8 +37,9 @@
     overflow: auto;
 }
 
+
 .enemy-container-top[isturn = true] { 
-    border: 1px solid rgb(229, 255, 0); 
+    border: 1px solid rgb(229, 255, 0);
 }
 
 .enemy-container-left {
@@ -59,7 +60,7 @@
 }
 
 .enemy-container-left[isturn = true] { 
-    border: 1px solid rgb(229, 255, 0); 
+    border: 1px solid rgb(229, 255, 0);
 }
 
 .enemy-container-right {
@@ -80,8 +81,9 @@
 
 }
 
+
 .enemy-container-right[isturn = true] { 
-    border: 1px solid rgb(229, 255, 0); 
+    border: 1px solid rgb(229, 255, 0);
 }
 
 .disable-player {
