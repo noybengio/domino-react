@@ -186,7 +186,8 @@ app.get('/game/grabBrick/:id', (req, res) => {
 
 
     if (brick === true) {
-        game.changeTurn(roomsList[roomID], time);
+        if(roomsList[roomID].data.general.gameOver === false)
+            game.changeTurn(roomsList[roomID], time);
         res.sendStatus(200);
     }
     // else
@@ -207,7 +208,8 @@ app.post('/game/onDrop/:id', (req, res) => {
     let dropped = game.handleDrop(roomsList[roomID], dropData, userList[req.session.index]);
 
     if (dropped === true) {
-        game.changeTurn(roomsList[roomID], time);
+        if(roomsList[roomID].data.general.gameOver === false)
+            game.changeTurn(roomsList[roomID], time);
         res.sendStatus(200);
     }
     else

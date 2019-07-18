@@ -85,23 +85,11 @@ class Statistics extends React.Component {
                                 <hr/>
                                 <div className = "buttons-container">
                                     <Button
-                                        text="New Game"
-                                        buttonFunc={this.props.startNewGame}
+                                        text="Exit"
+                                        buttonFunc={this.props.exitLobby}
                                         game={this.props.game}
                                     />
                                     <div className = {"next-prev-container"}>
-                                        <Button
-                                            text="Prev Turn"
-                                            buttonFunc={this.props.setPrevHistory}
-                                            game={this.props.game}
-                                            disabled = { this.props.prevButton }
-                                        />
-
-                                        <Button
-                                            text="Next Turn"
-                                            buttonFunc={this.props.setNextHistory}
-                                            game={this.props.game}
-                                            disabled = { this.props.nextButton }
                                         />
                                     </div>
                                 </div>

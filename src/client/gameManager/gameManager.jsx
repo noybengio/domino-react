@@ -18,7 +18,8 @@ class gameManager extends React.Component {
             name: this.props.name,
             status: "", //where is the player - lobby/playing
             error: null,
-            game: {}
+            game: {},
+
         };
 
         window.addEventListener("unload", function (e) {

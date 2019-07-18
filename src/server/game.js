@@ -42,22 +42,22 @@ function splitBricks(bricksArr) {
 function changeTurn(room,time) {
     
     let turnPlayerIndex = room.data.general.turnCounter % room.data.players.length;
-    let curPlayer = room.data.players[turnPlayerIndex];
-    curPlayer.statistics.countTurn++;
+    let player = room.data.players[turnPlayerIndex];
+    player.statistics.countTurn++;
 
-    calcAvg(curPlayer, time, room);
+    calcAvg(player, time, room);
 
     room.data.general.turnCounter++;
 
     turnPlayerIndex = room.data.general.turnCounter % room.data.players.length;
 
+    player = room.data.players[turnPlayerIndex];
 
-    curPlayer = room.data.players[turnPlayerIndex];
-
-    if(curPlayer.gameOver === true){
+    while(player.gameOver === true){
         turnPlayerIndex++;
         if(turnPlayerIndex > room.data.players.length - 1)
             turnPlayerIndex = 0;
+        urPlayer = room.data.players[turnPlayerIndex];
     }
 
     room.data.general.turn = room.data.players[turnPlayerIndex].name;
@@ -71,9 +71,11 @@ function changeTurn(room,time) {
 function calcAvg(player, time, room){
 
     let timeInSec = (time.minutes * 60) + time.seconds;
+  
     player.statistics.sumTurnTime += timeInSec - room.data.general.turnStartTime;
 
-    player.statistics.avgTurn = player.statistics.sumTurnTime / player.statistics.countTurn;
+    let avg = player.statistics.sumTurnTime / player.statistics.countTurn;
+    player.statistics.avgTurn =avg.toFixed(2);
 
 
 }
@@ -209,6 +211,7 @@ function grabBrick(room, player) {
         player.statistics.score += grabedBrick.num1 + grabedBrick.num2;
 
         player.statistics.grabCount++;
+        room.data.general.bricksArrayLength = room.data.bricksArr.length;
 
         return true;
     }

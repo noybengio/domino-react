@@ -2,6 +2,8 @@ import React from 'react';
 import Player from "./player/player.jsx";
 import Board from "./board/board.jsx";
 import Statistics from "./statistics/statistics.jsx";
+import GameOverStatistics from "./gameOverStatistics/gameOverStatistics.jsx";
+
 import WaitingPopUp from "./waitingPopUp/waitingPopUp.jsx";
 import './game.css'
 
@@ -19,11 +21,10 @@ class Game extends React.Component {
             general: this.props.general,
             board: this.props.board,
             clockInterval: null,
+            showGameOverStatistics: true,
+            gameOverStatistics: [],
 
             dataInterval: setTimeout(this.getGameData.bind(this), 1000),
-
-
-            onDragBrick: null,
 
             zoom: 100,
             clock: {
@@ -69,7 +70,7 @@ class Game extends React.Component {
 
 
     grabBrick() {
-        let date = new Date;
+
         fetch(`${this.props.url}/game/grabBrick/${this.props.roomId}`, {
             method: "Get"
         })
@@ -138,8 +139,8 @@ class Game extends React.Component {
     startGame(gamePackage)
     {
         let today = new Date();
-        let minutes = today.getMinutes() - gamePackage.clock.minutes;
-        let seconds = today.getSeconds() - gamePackage.clock.seconds;
+        let minutes = today.getMinutes() - gamePackage.general.clock.minutes;
+        let seconds = today.getSeconds() - gamePackage.general.clock.seconds;
 
         this.setState({
             player: gamePackage.player,
@@ -163,11 +164,14 @@ class Game extends React.Component {
 
     }
 
-    handleDrop(index)
+    handleDrop(index, target)
     {
 
         let brickObject = {index: index,
             brick: this.state.onDragBrick};
+
+        if(target.getAttribute('turn-red') === 'true')
+            target.setAttribute('turn-red' , 'false')
 
         console.log("client handleDrop brick: ", brickObject.brick);
         fetch(`${this.props.url}/game/onDrop/${this.props.roomId}`, {
@@ -177,112 +181,10 @@ class Game extends React.Component {
             .then(res => {
 
                 if (res.status !== 200) {
-                    res.text().then(error => {
-                        console.log("on drop error: ", error);
-                        return;
-                    })
+                    target.setAttribute('turn-red' , 'true');
                 }
 
             });
-    }
-
-
-    setHistoryState() {
-        let newState = JSON.parse(JSON.stringify(this.state));
-        delete newState.historyState;
-        delete newState.historyIndex;
-        let historyState = this.state.historyState;
-        let historyIndex = this.state.historyIndex;
-
-        historyState.push(newState);
-        historyIndex = historyState.length - 1;
-
-
-        this.setState({
-            historyState: historyState,
-            historyIndex: historyIndex,
-        });
-    }
-
-    setPrevHistory() {
-        let historyIndex = this.state.historyIndex;
-        if (historyIndex > 0)
-            historyIndex--;
-
-        let prevState = this.state.historyState[historyIndex];
-
-        this.setState({
-            score1: prevState.score1,
-            score2: prevState.score2,
-            bricksArr: prevState.bricksArr,
-            playerBricks: prevState.playerBricks,
-            availableNumsOnBoard: prevState.availableNumsOnBoard,
-            historyIndex: historyIndex,
-            boardCells: prevState.boardCells,
-            boardNumBricks: prevState.boardNumBricks,
-            turnCounter: prevState.turnCounter,
-            minutes: prevState.minutes,
-            seconds: prevState.seconds,
-            time: prevState.time
-        });
-
-
-    }
-
-    setNextHistory() {
-        let historyIndex = this.state.historyIndex;
-        if (historyIndex < this.state.historyState.length - 1)
-            historyIndex++;
-
-        let nextState = this.state.historyState[historyIndex];
-
-        this.setState({
-            score1: nextState.score1,
-            score2: nextState.score2,
-            bricksArr: nextState.bricksArr,
-            playerBricks: nextState.playerBricks,
-            availableNumsOnBoard: nextState.availableNumsOnBoard,
-            historyIndex: historyIndex,
-            boardCells: nextState.boardCells,
-            boardNumBricks: nextState.boardNumBricks,
-            turnCounter: nextState.turnCounter,
-            minutes: nextState.minutes,
-            seconds: nextState.seconds,
-            time: nextState.time
-        });
-    }
-
-    startNewGame() {
-
-        let boardCells = this.createBoard();
-        let bricksArr = this.createBricksArray();
-        let res = this.splitBricks(bricksArr);
-        let playerBricks = res.playerBricks;
-        bricksArr = res.bricksArr;
-        
-
-        this.setState({
-            score1: 0,
-            score2: 0,
-            bricksArr: bricksArr,
-            playerBricks: playerBricks,
-            availableNumsOnBoard: [],
-            historyState: [],
-            historyIndex: -1,
-            boardCells: boardCells,
-            onDragBrick: null,
-            boardNumBricks: 0,
-            gameOver: false,
-            winner: "",
-            turnCounter: 0,
-            zoom: 100,
-            minutes: 0,
-            seconds: 0,
-            interval:setInterval(this.setTime.bind(this), 1000),
-            time: "00:00"
-        });
-
-        
     }
 
     zoomIn() {
@@ -333,15 +235,27 @@ class Game extends React.Component {
     }
 
   exitGame(){
-
     clearInterval(this.state.dataInterval);
+    this.props.exitRoom.bind(this.props.game)();
+
+  }
+
+  exitLobby(){
     this.props.exitRoom.bind(this.props.game)();
 
   }
 
     stopClock() {
         clearInterval(this.state.clockInterval);
-        this.setState({clockInterval:null});
+        //this.setState({clockInterval:null});
+    }
+
+    closeGameOverStatistics(){
+
+         this.setState({
+             showGameOverStatistics: false
+         })
+
     }
 
     render() {
@@ -368,35 +282,37 @@ class Game extends React.Component {
                     <Statistics
                         game={this}
 
-                    countTurns={this.state.general.turnCounter}
-                    gameOver={this.state.general.gameOver}
-                    bricksArrayLength={this.state.general.bricksArrayLength}
-                    winner={this.state.general.winner}
+                        countTurns={this.state.general.turnCounter}
+                        gameOver={this.state.general.gameOver}
+                        bricksArrayLength={this.state.general.bricksArrayLength}
+                        winner={this.state.general.winner}
 
-                    playerStatistics = {this.state.player.statistics}
+                        playerStatistics = {this.state.player.statistics}
 
-                    //nextButton={this.state.general.historyIndex === this.state.general.historyState.length - 1}
-                    nextButton = {true}
-                    setNextHistory={this.setNextHistory}
+                        //nextButton={this.state.general.historyIndex === this.state.general.historyState.length - 1}
+                        nextButton = {true}
+                        setNextHistory={this.setNextHistory}
 
-                    prevButton={this.state.general.historyIndex === 0}
-                    setPrevHistory={this.setPrevHistory}
+                        prevButton={this.state.general.historyIndex === 0}
+                        setPrevHistory={this.setPrevHistory}
 
-                    grabBrick={this.grabBrick}
+                        grabBrick={this.grabBrick}
 
-                    startNewGame={this.startNewGame}
+                        startNewGame={this.startNewGame}
 
-                    turnCounter={this.state.general.turnCounter}
+                        turnCounter={this.state.general.turnCounter}
 
-                    undoStep = {this.undoStep}
+                        undoStep = {this.undoStep}
 
-                    zoom = {this.state.zoom}
-                    zoomIn = {this.zoomIn}
-                    zoomOut = {this.zoomOut}
+                        zoom = {this.state.zoom}
+                        zoomIn = {this.zoomIn}
+                        zoomOut = {this.zoomOut}
 
-                    time = {this.state.clock.time}
-                    turn = {this.state.general.turn}
-                    name = {this.state.player.name}
+                        time = {this.state.clock.time}
+                        turn = {this.state.general.turn}
+                        name = {this.state.player.name}
+                        exitLobby = {this.exitLobby}
+                    
                     />
                 }
 
@@ -446,6 +362,17 @@ class Game extends React.Component {
                     game = {this}
                     exitRoom = {this.exitGame}
                 />
+                }
+
+                {
+                    (this.state.general.gameOver === true && this.state.showGameOverStatistics === true) && 
+                            <GameOverStatistics
+                                statistics = {this.state.gameOverStatistics}
+                                name = {this.state.player.name}
+                                winner = {this.state.general.winner}
+                                closeGameOverStatistics = {this.closeGameOverStatistics}
+                                game = {this}
+                            />
                 }
             </div>
         );
