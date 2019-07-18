@@ -126,10 +126,14 @@ app.get('/game/grabBrick/:id', (req, res) => {
 
     if(brick === true){
         game.changeTurn(roomsList[roomID], time);
-        res.sendStatus(200);
     }
-    // else
-////check if bricksArr.lenght =0 then call isGameOver()
+    else
+        if(roomsList[roomID].data.bricksArr.length ===0) {
+            game.isPlayerGameOver(roomsList[roomID], userList[req.session.index]);
+        }
+
+    res.sendStatus(200);
+
 });
 
 app.post('/game/onDrop/:id', (req, res) => {
@@ -153,6 +157,7 @@ app.post('/game/onDrop/:id', (req, res) => {
         res.sendStatus(400);
 
 });
+
 
 
 /*

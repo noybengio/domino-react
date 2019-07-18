@@ -70,7 +70,7 @@ class Lobby extends React.Component {
 
     addRoom() {
         let myRoom = null;
-        let stringifiedRoom = null;
+        let stringifiedRoom;
         let gameName = document.getElementById("roomName").value;
         let playersNum = document.getElementById("playerNum").value;
         console.log("addRoom:\n", "\troom name: ", gameName, "\n\tplayers num: ", playersNum);

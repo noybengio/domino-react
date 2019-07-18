@@ -133,6 +133,7 @@ class Game extends React.Component {
 
     }
 
+
     startGame(gamePackage)
     {
         let today = new Date();
@@ -344,10 +345,10 @@ class Game extends React.Component {
 
     render() {
         //const historyLength = this.state.general.historyState.length;
-        if(this.state.general.gameOver === true)
+        let gameStart = this.state.status === "playing";
+        if(gameStart && this.state.general.gameOver === true)
             this.stopClock();
 
-        let gameStart = this.state.status === "playing";
         return (
             <div className="game">
                 {   gameStart === true &&
