@@ -5,7 +5,6 @@ import Lobby from '../lobby/lobby.jsx';
 import Game from '../game/game.jsx';
 
 
-let url = 'http://192.168.1.104:3000';
 
 class gameManager extends React.Component {
     constructor(props) {
@@ -15,15 +14,15 @@ class gameManager extends React.Component {
         this.state = {
             //screen: res.location,
             //name: res.name,
-            screen: "signIn",
-            name: "",
+            screen: this.props.screen,
+            name: this.props.name,
             status: "", //where is the player - lobby/playing
             error: null,
             game: {}
         };
 
         window.addEventListener("unload", function (e) {
-            fetch(`${url}/logOut`, {
+            fetch(`${this.props.url}/logOut`, {
                 method: "DELETE"
             })
                 .then(res => {
@@ -50,7 +49,7 @@ class gameManager extends React.Component {
         console.log("game manager sign in name: " , name);
 
 
-        fetch(`${url}/signIn`, {
+        fetch(`${this.props.url}/signIn`, {
             method:"POST",
             mode: "no-cors",
             body: name,
@@ -85,7 +84,7 @@ class gameManager extends React.Component {
         console.log("e.target", e.target);
 
         console.log("roomId", roomId);
-        fetch(`${url}/game/${roomId}`, {
+        fetch(`${this.props.url}/game/${roomId}`, {
             method:"Get"} )
             .then(res => {
 
@@ -113,7 +112,7 @@ class gameManager extends React.Component {
     }
 
     logOut() {
-        fetch(`${url}/exitRoom`, {
+        fetch(`${this.props.url}/exitRoom`, {
             body: this.state.game.id,
             method:"DELETE"} )
             .then(res =>{
@@ -139,7 +138,7 @@ class gameManager extends React.Component {
     }
 
     exitRoom() {
-        fetch(`${url}/exitroom`, {
+        fetch(`${this.props.url}/exitroom`, {
             body: this.state.game.id,
             method:"DELETE"} )
             .then(res =>{
@@ -188,7 +187,7 @@ class gameManager extends React.Component {
                                 enterGame = {this.enterGame}
                                 logOut = {this.logOut}
                                 game = {this}
-                                url = {url}
+                                url = {this.props.url}
                             />;
 
                         case("Game"):
@@ -205,7 +204,7 @@ class gameManager extends React.Component {
 
                                 status = {game.status}
                                 roomId = {game.id}
-                                url = {url}
+                                url = {this.props.url}
                                 exitRoom = {this.exitRoom}
 
                             />;
@@ -216,31 +215,6 @@ class gameManager extends React.Component {
     }
 }
 
-function getFirstScreen() {
-    fetch(`${url}/a`, {
-        method:"GET",
-        mode: "no-cors",
-    })
-        .then(res =>{
-            console.log("in first then");
-            if(res.status !== 200)
-            {
-                res.text().then(error => {
-                    console.log("log in error from server - trying again", error);
-                    return this.getFirstScreen();
-                })
-            }
-            else {
-                return res.json();
 
-            }
-        })
-        .then(screen => {
-            console.log("screen", screen);
-            return screen;
-        })
-        .catch(error => console.log("in catch error :" , error));
-
-}
 
 export default gameManager;
