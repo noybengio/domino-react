@@ -222,6 +222,14 @@ app.post('/game/onDrop/:id', (req, res) => {
 
 });
 
+app.get('/game/gameOverStatistics/:id', (req, res) => {
+
+    let gameOverStatistics = game.setGameOverStatistics(roomsList[roomID]);
+    res.json(gameOverStatistics);
+
+});
+
+
 
 
 /*

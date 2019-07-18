@@ -26,6 +26,9 @@ class Game extends React.Component {
 
             dataInterval: setTimeout(this.getGameData.bind(this), 1000),
 
+            onDragBrick: null,
+
+
             zoom: 100,
             clock: {
                 minutes: 0,
@@ -43,6 +46,31 @@ class Game extends React.Component {
         }
 
         this.props.exitRoom.bind(this.props.game);
+
+    }
+
+    setGameOverStatistics()
+    {
+        let gameOverStatistics = [];
+        fetch(`${this.props.url}/game/gameOverStatistics/${this.props.roomId}`, {
+            method: "Get"
+        })
+            .then(res => {
+
+                if (res.status !== 200) {
+                    res.text().then(error => {
+                        console.log("cannot get gameOverStatistics error: ", error);
+
+                    })
+                }
+                return res.json();
+            })
+            .then(resStatistics => {
+                gameOverStatistics = resStatistics;
+
+            })
+            .catch(error => console.log("in catch error :" , error))
+        return gameOverStatistics;
 
     }
 
@@ -88,6 +116,7 @@ class Game extends React.Component {
 
     getGameData()
     {
+        let gameOverStatistics = null;
         fetch(`${this.props.url}/game/${this.props.roomId}`, {
             method:"Get"} )
             .then(res => {
@@ -111,6 +140,8 @@ class Game extends React.Component {
 
                     }
                     else {
+                        if(this.general.gameOver === true)
+                             gameOverStatistics = this.setGameOverStatistics();
                         this.setState({
                             player: gamePackage.player,
                             enemies: gamePackage.enemies,
@@ -118,6 +149,8 @@ class Game extends React.Component {
                             status: gamePackage.status,
                             board: gamePackage.board,
                             dataInterval: setTimeout(this.getGameData.bind(this), 1000),
+                            gameOverStatistics: gameOverStatistics
+
                         });
                     }
                 }
@@ -133,6 +166,13 @@ class Game extends React.Component {
 
             })
             .catch(error => console.log("in catch error :" , error))
+
+        if(this.general.gameOver === true) {
+            let gameOverStatistics = this.setGameOverStatistics();
+            this.setState({
+                gameOverStatistics: gameOverStatistics
+            });
+        }
 
     }
 
@@ -241,15 +281,15 @@ class Game extends React.Component {
 
   }
 
+    stopIntervals() {
+        clearInterval(this.state.clockInterval);
+        clearTimeout(this.state.dataInterval);
+    }
+
   exitLobby(){
     this.props.exitRoom.bind(this.props.game)();
 
   }
-
-    stopClock() {
-        clearInterval(this.state.clockInterval);
-        //this.setState({clockInterval:null});
-    }
 
     closeGameOverStatistics(){
 
@@ -263,7 +303,7 @@ class Game extends React.Component {
 
         let gameStart = this.state.status === "playing";
         if(gameStart && this.state.general.gameOver === true)
-            this.stopClock();
+            this.stopIntervals();
 
         return (
             <div className="game">
@@ -310,11 +350,11 @@ class Game extends React.Component {
                         zoomIn = {this.zoomIn}
                         zoomOut = {this.zoomOut}
 
+
                         time = {this.state.clock.time}
                         turn = {this.state.general.turn}
                         name = {this.state.player.name}
                         exitLobby = {this.exitLobby}
-                    
                     />
                 }
 
@@ -338,6 +378,7 @@ class Game extends React.Component {
                     bricks= { this.state.status === "playing" ? new Array(this.state.enemies[0].numBricks).fill(0) : undefined}
                     isTurn = {this.state.status === "playing" ? (this.state.general.turn === this.state.enemies[0].name) : undefined}
                     status = {this.state.status}
+
 
                 />
                 }

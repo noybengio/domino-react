@@ -33,7 +33,7 @@ class Player extends React.Component {
 
                                     this.props.bricks.map((brick, i) => {
                                         return (
-                                            !brick.used && <Brick
+                                              <Brick
                                                 direction={"vertical"}
                                                 key={`${this.props.name}-brick-${i}`}
                                                 num1={brick.num1}
