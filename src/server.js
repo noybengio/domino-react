@@ -186,13 +186,9 @@ app.get('/game/grabBrick/:id', (req, res) => {
 
 
     if (brick === true) {
-<<<<<<< HEAD
         if(roomsList[roomID].data.general.gameOver === false)
             game.changeTurn(roomsList[roomID], time);
         res.sendStatus(200);
-=======
-        game.changeTurn(roomsList[roomID], time);
->>>>>>> bd63c04674760750598af4480718906c5e153402
     }
     else
         if(roomsList[roomID].data.bricksArr.length ===0) {
