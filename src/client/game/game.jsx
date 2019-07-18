@@ -74,8 +74,9 @@ class Game extends React.Component {
 
     }
 
+
     setDragBrick(num1, num2) {
-        this.setState({onDragBrick: {num1:num1, num2:num2}});
+        this.setState({onDragBrick: {num1: num1, num2: num2}});
     }
 
     grabBrick() {
