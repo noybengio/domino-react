@@ -65,31 +65,6 @@ class Game extends React.Component {
     }
 
 
-    isLegalDrop(index) {
-
-        let res = null;
-        res = this.scanDown(index);
-        if (res !== null)
-            return res;
-
-        res = this.scanUp(index);
-
-        if (res !== null)
-            return res;
-
-        res = this.scanLeft(index);
-
-        if (res !== null)
-            return res;
-
-        res = this.scanRight(index);
-        if (res !== null)
-            return res;
-
-        return null;
-
-    }
-
 
     grabBrick() {
         let date = new Date;
@@ -161,8 +136,8 @@ class Game extends React.Component {
     startGame(gamePackage)
     {
         let today = new Date();
-        let minutes = today.getMinutes() - gamePackage.minutes;
-        let seconds = today.getSeconds() - gamePackage.seconds;
+        let minutes = today.getMinutes() - gamePackage.clock.minutes;
+        let seconds = today.getSeconds() - gamePackage.clock.seconds;
 
         this.setState({
             player: gamePackage.player,
@@ -361,15 +336,16 @@ class Game extends React.Component {
 
     stopClock() {
         clearInterval(this.state.clockInterval);
+        this.setState({clockInterval:null});
     }
 
     render() {
         //const historyLength = this.state.general.historyState.length;
-        if(this.state.gameOver === true)
+        if(this.state.general.gameOver === true)
             this.stopClock();
 
-        let gameStart = this.state.status === "Playing";
-        console.log("game render this.state.status:", this.state.status);
+        let gameStart = this.state.status === "playing";
+        console.log("gameStart: ",gameStart);
         return (
             <div className="game">
                 {   gameStart === true &&
@@ -384,7 +360,7 @@ class Game extends React.Component {
 
                 }
 
-                <div className = {"player-statistics-container"}>
+                <div className = "player-statistics-container">
                 {   gameStart === true &&
                     <Statistics
                         game={this}
@@ -428,6 +404,7 @@ class Game extends React.Component {
                         bricks= { this.state.status === "playing" ? this.state.player.bricksArr : undefined}
                         setDragBrick={this.setDragBrick}
                         game={this}
+                        status = {this.state.status}
                         isTurn = {this.state.status === "playing" ? (this.state.general.turn === this.state.player.name) : undefined}
                     />
 

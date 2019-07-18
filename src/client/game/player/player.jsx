@@ -52,11 +52,12 @@ class Player extends React.Component {
                                                 setDragBrick={this.props.setDragBrick}
                                                 belongTo={this.props.belongTo}
                                                 game={this.props.game}
+                                                className = {"enemy-brick"}
                                             />);
                                     })
                             }
                         </div>
-                        { this.props.isTurn === false && <div className="disable-player" />}
+                        { (this.props.isTurn === false && this.props.belongTo === "player") && <div className="disable-player" />}
                     </>
                     :
                         <div className={this.props.className ? this.props.className : "player-container"}/>

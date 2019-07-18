@@ -180,10 +180,7 @@ function setPackageGame(playerName, room) {
         gamePackage.player =  player;
         gamePackage.enemies = enemies;
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 687ce44a77aa87f2b73b5bf8ba4188c94caa9f8c
     else{
         for (let i = 0; i < room.players.length; i++) {
             if (room.players[i].name === playerName)
@@ -248,6 +245,7 @@ function isGameOver(room)
         if(room.data.players[i].gameOver === false)
             gameOverCounter++;
     }
+
     if(gameOverCounter === 1 && room.data.players.length > 1)
         room.data.general.gameOver = true;
     else{
@@ -272,9 +270,7 @@ function isPlayerGameOver(room,player) {
             player.gameOver = true;
         }
     }
-
    isGameOver(room);
-        //this.setHistoryState();
 }
 
 function isTurnPossible(room,player) {
