@@ -79,7 +79,7 @@ function changeTurn(room,time) {
         turnPlayerIndex++;
         if(turnPlayerIndex > room.data.players.length - 1)
             turnPlayerIndex = 0;
-        urPlayer = room.data.players[turnPlayerIndex];
+        player = room.data.players[turnPlayerIndex];
     }
 
 
@@ -100,6 +100,7 @@ function calcAvg(player, time, room){
 
     let avg = player.statistics.sumTurnTime / player.statistics.countTurn;
     player.statistics.avgTurn =avg.toFixed(2);
+
 
 }
 
@@ -281,7 +282,7 @@ function isGameOver(room)
 
         case(2):
         case(3):
-            if(stillPlaying === 0)
+            if(stillPlaying === 1)
                 room.data.general.gameOver = true;
             break;
 

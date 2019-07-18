@@ -140,7 +140,7 @@ class Game extends React.Component {
 
                     }
                     else {
-                        if(this.general.gameOver === true)
+                        if(this.state.general.gameOver === true)
                              gameOverStatistics = this.setGameOverStatistics();
                         this.setState({
                             player: gamePackage.player,
@@ -167,12 +167,6 @@ class Game extends React.Component {
             })
             .catch(error => console.log("in catch error :" , error))
 
-        if(this.general.gameOver === true) {
-            let gameOverStatistics = this.setGameOverStatistics();
-            this.setState({
-                gameOverStatistics: gameOverStatistics
-            });
-        }
 
     }
 
@@ -212,9 +206,8 @@ class Game extends React.Component {
             brick: this.state.onDragBrick};
 
         if(target.getAttribute('turn-red') === 'true')
-            target.setAttribute('turn-red' , 'false')
+            target.setAttribute('turn-red' , 'false');
 
-        console.log("client handleDrop brick: ", brickObject.brick);
         fetch(`${this.props.url}/game/onDrop/${this.props.roomId}`, {
             body: JSON.stringify(brickObject),
             method: "POST"
@@ -408,14 +401,14 @@ class Game extends React.Component {
                 }
 
                 {
-                    (this.state.general.gameOver === true && this.state.showGameOverStatistics === true) && 
+                    ( this.state.status === "playing" && (this.state.general.gameOver === true && this.state.showGameOverStatistics === true) &&
                             <GameOverStatistics
                                 statistics = {this.state.gameOverStatistics}
                                 name = {this.state.player.name}
                                 winner = {this.state.general.winner}
                                 closeGameOverStatistics = {this.closeGameOverStatistics}
                                 game = {this}
-                            />
+                            />)
                 }
             </div>
         );
