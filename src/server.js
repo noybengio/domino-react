@@ -6,7 +6,7 @@ const auth = require('./server/auth');
 const game = require('./server/game');
 
 const app = express();
-app.use(express.static(path.resolve(__dirname,"..",'public')));
+app.use(express.static(path.resolve(__dirname, "..", 'public')));
 
 app.use(bodyParser.text());
 app.use(express.static('public'));
@@ -19,14 +19,28 @@ app.use(session({
 global.userList = [];
 global.roomsList = [];
 
-app.get('/a', (req, res) => {
+app.get('/connect', (req, res) => {
+
+    let sendData = "";
     console.log("new user - cheching connection......");
-    if(req.session.index !== undefined) {
-        userList[req.session.index].location = "lobby";
-        res.json({  name: userList[req.session.index].name, location: userList[req.session.index].location});
-    }
+
+    if (req.session.index !== undefined)
+        sendData = { name: userList[req.session.index].name,
+                     location: "Lobby" };
+    
     else
-        res.json({  name: "", location: "signIn"});
+        sendData = { name: "", 
+                     location: "signIn" };
+    
+    
+    console.log("/ send data", sendData);
+
+    //res.status(200);
+    //res.write(sendData);
+    
+    //res.end()
+
+    res.json(sendData);
 });
 
 app.post('/signIn', (req, res) => {
@@ -35,18 +49,20 @@ app.post('/signIn', (req, res) => {
         return newUserName === user.name;
     });
 
-    if(isExists){
+    if (isExists) {
         res.sendStatus(403);
     }
     else {
-        req.session.index = Object.keys(userList).length;
-        userList[req.session.index] = {
-            name: req.body,
-            location: "lobby"
-        };
-        console.log("in addUserToAuthList before send req.session.index", req.session.index);
+        if(req.session.index === undefined)
+            req.session.index = Object.keys(userList).length;
 
-        console.log(" User added :", userList[req.session.index]);
+        userList[req.session.index] = {
+            name: newUserName,
+            location: "Lobby"
+        };
+
+
+        console.log("User added: ", userList[req.session.index]);
         console.log("userList: ", userList);
         res.sendStatus(200);
     }
@@ -56,7 +72,7 @@ app.post('/lobby/addRoom', auth.addRoomToRoomsList, (req, res) => {
 
 });
 
-app.get('/lobby',(req, res) => {
+app.get('/lobby', (req, res) => {
 
     let lobbyBody = {
         rooms: roomsList,
@@ -76,9 +92,53 @@ app.delete('/deleteRoom', auth.removeRoomFromAuthList, (req, res) => {
 
 });
 
-app.delete('/exitRoom', auth.removeUserFromRoom, (req, res) => {
-    
-    req.sendStatus(200);
+app.delete('/exitRoom', (req, res) => {
+
+    let roomID = parseInt(req.body, 10);
+    let room = roomsList[roomID];
+    let deletePlayer = userList[req.session.index];
+    let delPlayerIndex = -1;
+
+    if (room.status === "waiting") {
+        room.players.forEach((player, i) => {
+            if (player.name === deletePlayer.name) {
+                delPlayerIndex = i;
+            }
+        });
+        if (delPlayerIndex !== -1) {
+            room.players.splice(delPlayerIndex, 1);
+        }
+    }
+    else {
+        room.data.players.forEach((player, i) => {
+            if (player.name === deletePlayer.name) {
+                delPlayerIndex = i;
+            }
+        });
+        if (delPlayerIndex !== -1) {
+            room.data.players.splice(delPlayerIndex, 1);
+        }
+    }
+
+    if (delPlayerIndex !== -1){
+        room.numSigned--;
+        deletePlayer.location = "Lobby"
+
+        if(room.numSigned === 0) {
+            room.status = "waiting";
+            room.data = null;
+        }
+
+        console.log("room:", room);
+        console.log("users list:", userList);
+        res.sendStatus(204);
+    }
+    else
+        res.sendStatus(403);
+
+
+
+
 
 });
 
@@ -89,29 +149,30 @@ app.get('/game/:id', (req, res) => {
     let room = roomsList[roomID];
     let player = userList[req.session.index];
 
-        if(room.status === "waiting") {
-            if (auth.checkIfUserExist(room, player) === false) {
-                roomsList[roomID].players.push(player);
-                player.location = roomsList[roomID].name;
+    if (room.status === "waiting") {
+        if (auth.checkIfUserExist(room, player) === false) {//check if it's new player
 
-                roomsList[roomID].numSigned++;
-            }
-            if (roomsList[roomID].data === null && roomsList[roomID].numSigned === roomsList[roomID].numReq) {//start playing
-                game.createGame(roomsList[roomID]);
-            }
+            roomsList[roomID].players.push(player);
+            player.location = roomsList[roomID].name;
+
+            roomsList[roomID].numSigned++;
         }
+        if (roomsList[roomID].data === null && roomsList[roomID].numSigned === roomsList[roomID].numReq) {//start playing
+            game.createGame(roomsList[roomID]);
+        }
+    }
 
 
 
     gamePackage = game.setPackageGame(userList[req.session.index].name, roomsList[roomID]);
-    console.log("server game package: ", gamePackage);
+    //console.log("server game package: ", gamePackage);
     res.json(gamePackage);
 
 
 });
 
 app.get('/game/grabBrick/:id', (req, res) => {
-    
+
     let date = new Date;
     let time = {
         minutes: date.getMinutes(),
@@ -119,12 +180,12 @@ app.get('/game/grabBrick/:id', (req, res) => {
     };
 
     let roomID = req.params.id;
-    
-    
-    let brick = game.grabBrick(roomsList[roomID], userList[req.session.index]);
-   
 
-    if(brick === true){
+
+    let brick = game.grabBrick(roomsList[roomID], userList[req.session.index]);
+
+
+    if (brick === true) {
         game.changeTurn(roomsList[roomID], time);
     }
     else
@@ -143,13 +204,13 @@ app.post('/game/onDrop/:id', (req, res) => {
         minutes: date.getMinutes(),
         seconds: date.getSeconds()
     };
-    
+
     let roomID = req.params.id;
     let dropData = JSON.parse(req.body);
 
-    let dropped = game.handleDrop(roomsList[roomID],dropData,userList[req.session.index]);
+    let dropped = game.handleDrop(roomsList[roomID], dropData, userList[req.session.index]);
 
-    if(dropped === true){
+    if (dropped === true) {
         game.changeTurn(roomsList[roomID], time);
         res.sendStatus(200);
     }

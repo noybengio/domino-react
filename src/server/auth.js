@@ -19,22 +19,6 @@ function removeUserFromAuthList(req, res, next) {
     }
 }
 
-function removeUserFromRoom(req, res, next) {
-    let roomID = parseInt(req.body, 10);
-    let room = roomsList[roomID];
-    let deletePlayer = userList[req.session.index];
-
-    room.players.forEach(player => {
-        if(player.name === deletePlayer.name){
-            delete player;
-            room.numSigned--;
-            next();
-        }
-    });
-
-    res.sendStatus(403);
-}
-
 function getUserInfo(id) {
     return {name: userList[id]};
 }
@@ -81,8 +65,12 @@ function removeRoomFromAuthList(req, res, next) {
 function checkIfUserExist(room,player) {
 
     for(let i = 0; i < room.players.length; i++) {
-        if(room.players[i].name === player.name)
+        if(room.players[i].name === player.name){
+            console.log("player.name:", player.name);
+            console.log("room.players[i].name:", room.players[i].name);
+
             return true;
+        }
     }
     return false;
 }
@@ -92,6 +80,5 @@ module.exports = {
     removeRoomFromAuthList,
     removeUserFromAuthList,
     addRoomToRoomsList,
-    removeUserFromRoom,
     checkIfUserExist
 };

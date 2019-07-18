@@ -178,7 +178,6 @@ function setPackageGame(playerName, room) {
         gamePackage.player =  player;
         gamePackage.enemies = enemies;
     }
-
     else{
         for (let i = 0; i < room.players.length; i++) {
             if (room.players[i].name === playerName)
@@ -260,6 +259,7 @@ function isGameOver(room)
 
     if(room.data.general.gameOver === true && room.data.general.winner === null){
         setWinnerMinScore(room);
+
     }
 
 }
