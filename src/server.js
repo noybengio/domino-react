@@ -35,11 +35,6 @@ app.get('/connect', (req, res) => {
     
     console.log("/ send data", sendData);
 
-    //res.status(200);
-    //res.write(sendData);
-    
-    //res.end()
-
     res.json(sendData);
 });
 
@@ -135,11 +130,6 @@ app.delete('/exitRoom', (req, res) => {
     }
     else
         res.sendStatus(403);
-
-
-
-
-
 });
 
 app.get('/game/:id', (req, res) => {
@@ -188,7 +178,6 @@ app.get('/game/grabBrick/:id', (req, res) => {
     if (brick === true) {
         if(roomsList[roomID].data.general.gameOver === false)
             game.changeTurn(roomsList[roomID], time);
-        res.sendStatus(200);
     }
     else
         if(roomsList[roomID].data.bricksArr.length ===0) {
