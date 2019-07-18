@@ -156,8 +156,8 @@ class Game extends React.Component {
     startGame(gamePackage)
     {
         let today = new Date();
-        let minutes = today.getMinutes() - gamePackage.minutes;
-        let seconds = today.getSeconds() - gamePackage.seconds;
+        let minutes = today.getMinutes() - gamePackage.clock.minutes;
+        let seconds = today.getSeconds() - gamePackage.clock.seconds;
 
         this.setState({
             player: gamePackage.player,
@@ -277,6 +277,7 @@ class Game extends React.Component {
         let res = this.splitBricks(bricksArr);
         let playerBricks = res.playerBricks;
         bricksArr = res.bricksArr;
+        
 
         this.setState({
             score1: 0,
@@ -298,6 +299,8 @@ class Game extends React.Component {
             interval:setInterval(this.setTime.bind(this), 1000),
             time: "00:00"
         });
+
+        
     }
 
     zoomIn() {
@@ -356,14 +359,15 @@ class Game extends React.Component {
 
     stopClock() {
         clearInterval(this.state.clockInterval);
+
     }
 
     render() {
         //const historyLength = this.state.general.historyState.length;
-        if(this.state.gameOver === true)
+        if(this.state.general.gameOver === true)
             this.stopClock();
 
-        let gameStart = this.state.status === "Playing";
+        let gameStart = this.state.status === "playing";
         return (
             <div className="game">
                 {   gameStart === true &&
@@ -458,7 +462,7 @@ class Game extends React.Component {
                     numReq = {this.state.numReq}
                     status = {this.state.status}
                     lobby = {this.props.lobby}
-                    goLobby = {this.props.goLobby}
+                    exitRoom = {this.props.exitRoom}
                 />
                 }
             </div>

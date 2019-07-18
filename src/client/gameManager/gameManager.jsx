@@ -115,7 +115,33 @@ class gameManager extends React.Component {
     }
 
     logOut() {
-        fetch(`${url}/logOut`, {
+        fetch(`${url}/exitRoom`, {
+            body: this.state.game.id,
+            method:"DELETE"} )
+            .then(res =>{
+
+                if(res.status !== 204)
+                {
+                    res.text().then(error => {
+                        console.log("log in error from server");
+                        this.setState({
+                            error: error,
+                        })
+                    })
+                }
+                else {
+                    this.setState({
+                        screen: "Lobby",
+                        error: null
+
+                    });
+                }
+            }).catch(error => console.log("in catch error :" , error))
+
+    }
+
+    exitRoom() {
+        fetch(`${url}/exitroom`, {
             method:"DELETE"} )
             .then(res =>{
 
@@ -178,6 +204,7 @@ class gameManager extends React.Component {
                                 status = {game.status}
                                 roomId = {game.id}
                                 url = {url}
+                                exitRoom = {this.exitRoom}
 
                             />;
                     }

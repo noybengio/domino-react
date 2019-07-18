@@ -19,6 +19,22 @@ function removeUserFromAuthList(req, res, next) {
     }
 }
 
+function removeUserFromRoom(req, res, next) {
+    let roomID = parseInt(req.body, 10);
+    let room = roomsList[roomID];
+    let deletePlayer = userList[req.session.index];
+
+    room.players.forEach(player => {
+        if(player.name === deletePlayer.name){
+            delete player;
+            room.numSigned--;
+            next();
+        }
+    });
+
+    res.sendStatus(403);
+}
+
 function getUserInfo(id) {
     return {name: userList[id]};
 }
@@ -66,5 +82,6 @@ function removeRoomFromAuthList(req, res, next) {
 module.exports = {
     removeRoomFromAuthList,
     removeUserFromAuthList,
-    addRoomToRoomsList
+    addRoomToRoomsList,
+    removeUserFromRoom
 };
