@@ -32,7 +32,7 @@ class GameRoom extends React.Component {
 
                 <td belongto={this.props.id}>
                     {this.props.status}</td>
-            </tr>
+
                 {
                     canDelete ?
                         (
@@ -46,6 +46,7 @@ class GameRoom extends React.Component {
                             </td>
                         ) : <td className='empty-td' />
                 }
+            </tr>
             </>)
 
     }

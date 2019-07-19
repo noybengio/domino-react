@@ -69,7 +69,7 @@ class Lobby extends React.Component {
     }
 
     addRoom() {
-        let myRoom = null;
+        let myRoom = {};
         let stringifiedRoom;
         let gameName = document.getElementById("roomName").value;
         let playersNum = document.getElementById("playerNum").value;
@@ -89,12 +89,10 @@ class Lobby extends React.Component {
             mode: "no-cors"} )
             .then(res => {
                 if(res.status !== 200) {
-                    res.text().then(error => {
-                        console.log("add room error from server");
-                        this.setState({
-                            error: error,
-                        });
-                    })
+                    this.setState({
+                        error: "Room Name Already Exists",
+                    });
+
                 }
                 else {
                     this.setState({
@@ -108,6 +106,7 @@ class Lobby extends React.Component {
     goLobby() {
         this.setState({
             screen: "Lobby",
+            error: null
         });
 
     }

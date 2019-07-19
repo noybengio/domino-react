@@ -44,7 +44,7 @@ class gameManager extends React.Component {
 
 
 
-    signIn() {
+    signIn(){
 
         let name = document.getElementById("input").value;
         console.log("game manager sign in name: " , name);
@@ -56,15 +56,12 @@ class gameManager extends React.Component {
             body: name,
         } )
             .then(res =>{
-                console.log("getFirstScreen res: ", res)
                 if(res.status !== 200)
                 {
-                    res.text().then(error => {
-                        console.log("log in error from server");
                         this.setState({
-                            error: error,
+                            error:"Name Already Exists"
                         })
-                    })
+
                 }
                 else {
                     this.setState({
@@ -75,7 +72,6 @@ class gameManager extends React.Component {
                     });
                 }
             }).catch(error => console.log("in catch error :" , error))
-        //.then(finalRes => console.log(finalRes));
 
     }
 
@@ -113,8 +109,7 @@ class gameManager extends React.Component {
     }
 
     logOut() {
-        fetch(`${this.props.url}/exitRoom`, {
-            body: this.state.game.id,
+        fetch(`${this.props.url}/logOut`, {
             method:"DELETE"} )
             .then(res =>{
 
@@ -129,7 +124,7 @@ class gameManager extends React.Component {
                 }
                 else {
                     this.setState({
-                        screen: "Lobby",
+                        screen: "signIn",
                         error: null
 
                     });
@@ -139,7 +134,7 @@ class gameManager extends React.Component {
     }
 
     exitRoom() {
-        fetch(`${this.props.url}/exitroom`, {
+        fetch(`${this.props.url}/exitRoom`, {
             body: this.state.game.id,
             method:"DELETE"} )
             .then(res =>{

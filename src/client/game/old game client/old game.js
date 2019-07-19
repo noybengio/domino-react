@@ -15,7 +15,7 @@ class Game extends React.Component {
         this.state = {
             player: this.props.player,
             enemies: this.props.enemies,
-            numReq :this.props.numReq,
+            numReq: this.props.numReq,
             numSigned: this.props.numSigned,
             general: this.props.general,
             status: this.props.status,
@@ -131,6 +131,7 @@ class Game extends React.Component {
 
 
     }
+
     /*
         createDroppedBrick(neighborIndex, offNum, onNum, num1, num2, scanDir) {
             let res = null;
@@ -221,18 +222,20 @@ class Game extends React.Component {
 
             });
     }
-    noy(){
+
+    noy() {
         console.log("noy");
     }
-    getGameData()
-    {
+
+    getGameData() {
         fetch(`${this.props.url}/game/${this.props.roomId}`, {
-            method:"Get"} )
+            method: "Get"
+        })
             .then(res => {
 
                 if (res.status !== 200) {
                     res.text().then(error => {
-                        console.log("get game data error :" ,error );
+                        console.log("get game data error :", error);
                         this.setState({
                             dataInterval: setTimeout(this.getGameData.bind(this), 1000)
                         });
@@ -242,7 +245,7 @@ class Game extends React.Component {
             })
             .then(gamePackage => {
 
-                console.log("get data game player :",gamePackage);
+                console.log("get data game player :", gamePackage);
 
                 this.setState({
                     player: gamePackage.player,
@@ -253,15 +256,16 @@ class Game extends React.Component {
                     dataInterval: setTimeout(this.getGameData.bind(this), 1000),
                 });
             })
-            .catch(error => console.log("in catch error :" , error))
+            .catch(error => console.log("in catch error :", error))
 
     }
 
-    handleDrop(index)
-    {
+    handleDrop(index) {
         let noy;
-        let brickObject = {index: index,
-            brick: this.state.onDragBrick};
+        let brickObject = {
+            index: index,
+            brick: this.state.onDragBrick
+        };
 
         console.log("client handleDrop brick: ", brickObject.brick);
         fetch(`${this.props.url}/game/onDrop/${this.props.roomId}`, {
@@ -288,16 +292,15 @@ class Game extends React.Component {
         if (this.state.playerBricks.length === 0) {
             res.gameOver = true;
             res.winner = "player1"
-        }
-        else if (this.state.bricksArr.length === 0 && this.state.boardNumBricks > 0) {
+        } else if (this.state.bricksArr.length === 0 && this.state.boardNumBricks > 0) {
             if (this.isTurnPossible() === false)
                 res.gameOver = true;
 
         }
 
-        if( res.gameOver === true) {
+        if (res.gameOver === true) {
             this.setState({
-                gameOver:res.gameOver,
+                gameOver: res.gameOver,
                 winner: res.winner
             });
 
@@ -308,16 +311,16 @@ class Game extends React.Component {
     getAvailableBoardNums() {
         let availableNums = [];
         this.state.boardCells.map(cell => {
-            if (cell.brick!== null && cell.brick.up !== null && availableNums.includes(cell.brick.up)===false)
+            if (cell.brick !== null && cell.brick.up !== null && availableNums.includes(cell.brick.up) === false)
                 availableNums.push(cell.brick.up);
 
-            if (cell.brick!== null && cell.brick.down!== null && availableNums.includes(cell.brick.down)===false)
+            if (cell.brick !== null && cell.brick.down !== null && availableNums.includes(cell.brick.down) === false)
                 availableNums.push(cell.brick.down);
 
-            if (cell.brick!== null && cell.brick.right !== null&& availableNums.includes(cell.brick.right)===false)
+            if (cell.brick !== null && cell.brick.right !== null && availableNums.includes(cell.brick.right) === false)
                 availableNums.push(cell.brick.right);
 
-            if (cell.brick!== null && cell.brick.left !== null&& availableNums.includes(cell.brick.left)===false)
+            if (cell.brick !== null && cell.brick.left !== null && availableNums.includes(cell.brick.left) === false)
                 availableNums.push(cell.brick.left);
         });
 
@@ -326,8 +329,8 @@ class Game extends React.Component {
 
     isTurnPossible() {
         let availableNumsOnBoard = this.getAvailableBoardNums();
-        for (let i = 0 ; i < this.state.playerBricks.length ; i++){
-            if (availableNumsOnBoard.includes( this.state.playerBricks[i].num1) || availableNumsOnBoard.includes(this.state.playerBricks[i].num2))
+        for (let i = 0; i < this.state.playerBricks.length; i++) {
+            if (availableNumsOnBoard.includes(this.state.playerBricks[i].num1) || availableNumsOnBoard.includes(this.state.playerBricks[i].num2))
                 return true;
         }
 
@@ -424,7 +427,7 @@ class Game extends React.Component {
             zoom: 100,
             minutes: 0,
             seconds: 0,
-            interval:setInterval(this.setTime.bind(this), 1000),
+            interval: setInterval(this.setTime.bind(this), 1000),
             time: "00:00"
         });
     }
@@ -451,14 +454,14 @@ class Game extends React.Component {
         this.setState({zoom: zoom});
     }
 
-    setTime(){
+    setTime() {
         let minutes = this.state.minutes;
         let seconds = this.state.seconds;
         let time = "";
 
         seconds++;
 
-        if(seconds === 60){
+        if (seconds === 60) {
             minutes++;
             seconds = 0;
         }
@@ -487,7 +490,7 @@ class Game extends React.Component {
 
     render() {
         const historyLength = this.state.general.historyState.length;
-        if(this.state.gameOver === true)
+        if (this.state.gameOver === true)
             this.stopClock();
 
         return (
@@ -500,10 +503,10 @@ class Game extends React.Component {
                     boardCells={this.state.board.boardCells}
                     handleDrop={this.handleDrop}
                     numBricks={this.state.board.boardNumBricks}
-                    roomId = {this.state.roomId}
+                    roomId={this.state.roomId}
                 />
 
-                <div className = {"player-statistics-container"}>
+                <div className={"player-statistics-container"}>
                     <Statistics
                         //to bind button funciton
                         game={this}
@@ -525,19 +528,19 @@ class Game extends React.Component {
 
                         turnCounter={this.state.general.turnCounter}
 
-                        undoStep = {this.undoStep}
+                        undoStep={this.undoStep}
 
-                        zoom = {this.state.zoom}
-                        zoomIn = {this.zoomIn}
-                        zoomOut = {this.zoomOut}
+                        zoom={this.state.zoom}
+                        zoomIn={this.zoomIn}
+                        zoomOut={this.zoomOut}
 
-                        time = {this.state.general.time}
+                        time={this.state.general.time}
                     />
 
                     <Player
                         id="player"
-                        belongTo = {"player"}
-                        name = {this.state.player.name}
+                        belongTo={"player"}
+                        name={this.state.player.name}
                         bricks={this.state.player.bricksArr}
                         setDragBrick={this.setDragBrick}
                         game={this}
@@ -547,12 +550,12 @@ class Game extends React.Component {
                 {this.state.enemies[0] !== undefined &&
                 <Player
                     id="enemy1"
-                    belongTo = {"enemy"}
-                    className = {this.state.numPlayers === 2 ? "enemy-container-top" : "enemy-container-left"}
-                    name = {this.state.enemies[0].name}
-                    numOfBricks = {this.state.enemies[0].numBricks}
-                    bricks= {this.state.enemies[0].bricks}
-                    score = {this.state.enemies[0].score}
+                    belongTo={"enemy"}
+                    className={this.state.numPlayers === 2 ? "enemy-container-top" : "enemy-container-left"}
+                    name={this.state.enemies[0].name}
+                    numOfBricks={this.state.enemies[0].numBricks}
+                    bricks={this.state.enemies[0].bricks}
+                    score={this.state.enemies[0].score}
                 />
                 }
 
@@ -560,24 +563,26 @@ class Game extends React.Component {
                 {this.state.enemies[1] !== undefined &&
                 <Player
                     id="enemy2"
-                    belongTo = {"enemy"}
-                    className = "enemy-container-right"
-                    name = {this.state.enemies[1].name}
-                    numOfBricks = {this.state.enemies[1].numBricks}
-                    bricks= {this.state.enemies[1].bricks}
-                    score = {this.state.enemies[1].score}
+                    belongTo={"enemy"}
+                    className="enemy-container-right"
+                    name={this.state.enemies[1].name}
+                    numOfBricks={this.state.enemies[1].numBricks}
+                    bricks={this.state.enemies[1].bricks}
+                    score={this.state.enemies[1].score}
 
                 />
                 }
 
                 {this.state.status === "waiting" &&
-                <WaitingPopUp
-                    numSigned = {this.state.numSigned}
-                    numReq = {this.state.numReq}
-                    status = {this.state.status}
-                    lobby = {this.props.lobby}
-                    goLobby = {this.props.goLobby}
-                />
+                (
+                    <WaitingPopUp
+                        numSigned={this.state.numSigned}
+                        numReq={this.state.numReq}
+                        status={this.state.status}
+                        lobby={this.props.lobby}
+                        goLobby={this.props.goLobby}
+                    />
+                )
                 }
             </div>
         );

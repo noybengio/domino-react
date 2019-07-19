@@ -63,8 +63,35 @@ app.post('/signIn', (req, res) => {
     }
 });
 
-app.post('/lobby/addRoom', auth.addRoomToRoomsList, (req, res) => {
+app.post('/lobby/addRoom',  (req, res) => {
+    let roomObject = JSON.parse(req.body);
+    let numReq =parseInt(roomObject.numReq,10);
+    let isRoomAdded = true;
 
+    console.log("roomObject:", roomObject);
+    roomsList.map(room => {
+        if (room.name === roomObject.name) {
+            console.log("inside for - user already exist");
+            isRoomAdded = false;
+        }
+    });
+    if(isRoomAdded === true) {
+        roomObject.numReq = numReq;
+        roomObject.admin = userList[req.session.index].name;
+        roomObject.numSigned = 0;
+        roomObject.status = "waiting";
+        roomObject.data = null;
+        roomObject.id = Object.keys(roomsList).length;
+        roomObject.players = [];
+
+        roomsList[roomObject.id] = roomObject;
+
+        res.json(roomsList[roomObject.id]);
+    }
+
+    else{
+        res.sendStatus(403);
+    }
 });
 
 app.get('/lobby', (req, res) => {
@@ -117,11 +144,12 @@ app.delete('/exitRoom', (req, res) => {
 
     if (delPlayerIndex !== -1){
         room.numSigned--;
-        deletePlayer.location = "Lobby"
+        deletePlayer.location = "Lobby";
 
         if(room.numSigned === 0) {
             room.status = "waiting";
             room.data = null;
+            room.players = [];
         }
 
         console.log("room:", room);
@@ -178,10 +206,6 @@ app.get('/game/grabBrick/:id', (req, res) => {
     if (brick === true) {
         if(roomsList[roomID].data.general.gameOver === false)
             game.changeTurn(roomsList[roomID], time);
-<<<<<<< HEAD
-=======
-
->>>>>>> b5e2d4b303d3d38ecb3e0371684ca92e889ce18c
     }
     else
         if(roomsList[roomID].data.bricksArr.length ===0) {
@@ -217,6 +241,7 @@ app.post('/game/onDrop/:id', (req, res) => {
 
 app.get('/game/gameOverStatistics/:id', (req, res) => {
 
+    let roomID = req.params.id;
     let gameOverStatistics = game.setGameOverStatistics(roomsList[roomID]);
     res.json(gameOverStatistics);
 

@@ -44,21 +44,18 @@ function splitBricks(bricksArr) {
 
 function setGameOverStatistics(room) {
 
-    let statisticsArray = [room.players.length];
-    let minScore = room.players[0].statistics.score;
+    let statisticsArray = [];
 
-    for(let i = 0; i < statisticsArray.length; i++) {
-        if(room.players[i].statistics.score <= minScore) {
-            statisticsArray[i] = {
-                statistics: room.players[i].statistics,
-                name: room.players[i].name
-            }
+    for(let i = 0; i < room.data.players.length; i++) {
+            statisticsArray.push({
+                statistics: room.data.players[i].statistics,
+                name: room.data.players[i].name
+            })
         }
-    }
 
-    statisticsArrray.sort(function(a, b){return (a.statistics.score < b.statistics.score)});
+    statisticsArray.sort(function(a, b){return (a.statistics.score > b.statistics.score)});
 
-    return statisticsArrray;
+    return statisticsArray;
 }
 
 function changeTurn(room,time) {
@@ -207,6 +204,10 @@ function setPackageGame(playerName, room) {
         gamePackage.board = room.data.board;
         gamePackage.player =  player;
         gamePackage.enemies = enemies;
+        gamePackage.gameOverStatistics = [];
+        if(gamePackage.general.gameOver === true){
+            gamePackage.gameOverStatistics = setGameOverStatistics(room);
+        }
     }
     else{
         for (let i = 0; i < room.players.length; i++) {
@@ -223,6 +224,7 @@ function setPackageGame(playerName, room) {
         gamePackage.enemies = enemies;
 
     }
+
     return gamePackage;
 }
 
