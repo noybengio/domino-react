@@ -1,0 +1,22 @@
+p {
+    margin: 0;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 0 3px;
+}
+
+.info,.red-info {
+    display: flex;
+    align-items: baseline;
+    position: sticky;
+
+}
+.info[belongto="zoom"] {
+    flex-direction: column;
+    align-items: center;
+}
+
+.red-info {
+    color: red;
+
+}

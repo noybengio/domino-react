@@ -1,0 +1,54 @@
+.addRoom-background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color:rgba(12, 12, 12, 0.75);
+    background-size: cover;
+    overflow: hidden;
+    z-index: 100;
+}
+
+
+.addRoom-container {
+    background-image: linear-gradient(45deg, #FFC107 0%, #ff8b5f 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    position: relative;
+    height: 250px;
+    width: 430px;
+    margin: 20px auto 0 auto;
+    border-radius: 10px;
+    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: all .5s ease;
+}
+
+.addRoom-form {
+
+    font-size: 16px;
+    font-weight: 300;
+    transition: opacity .5s ease, transform .5s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.addRoom-inputs{
+    display: flex;
+    justify-content: space-evenly;
+
+}
+.addRoom-buttons{
+    display: flex;
+    justify-content: center;
+
+}
+
+.addRoom-select-container{
+
+    display: flex;
+    justify-content: space-evenly;
+    
+
+}

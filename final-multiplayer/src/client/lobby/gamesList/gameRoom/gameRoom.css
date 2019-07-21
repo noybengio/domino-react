@@ -1,0 +1,35 @@
+.gameroom-container {
+    display: flex;
+    border: 1px solid black;
+    margin: 5px;
+}
+
+tr {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+    z-index: 100;
+}
+
+td {
+    width: 20%;
+}
+
+tr:hover {
+    background: rgb(71, 71, 71, 0.5);
+    cursor: pointer;
+}
+
+tbody {
+    width: 100%;
+}
+
+.table-close-button:hover {
+    background: transparent;
+}
+
+.empty-td {
+    width: 20%;
+}
